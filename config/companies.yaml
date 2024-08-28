@@ -1,0 +1,19 @@
+vendor1:
+  company_a:
+    name: Company A
+    website: https://www.companya.com
+    email: info@companya.com
+    products:
+      - name: Product X
+        template: product-template.mdx
+      - name: Product Y
+        template: product-template.mdx
+
+vendor2:
+  company_b:
+    name: Company B
+    website: https://www.companyb.com
+    email: info@companyb.com
+    products:
+      - name: Service Z
+        template: product-template.mdx
