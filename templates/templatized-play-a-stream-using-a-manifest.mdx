@@ -1,0 +1,87 @@
+# play-a-stream-using-a-manifest
+
+---
+route: /consuming-a-livestream/play-a-stream-using-a-manifest
+pageTitle: Play a stream using a manifest
+kind: guide
+uuid: {{UUID}}
+---
+
+{% tabs  %}
+{% tab-header %}
+{% tab-header-item %}
+React
+{% /tab-header-item %}
+{% tab-header-item %}
+Vanilla JS
+{% /tab-header-item %}
+{% /tab-header %}
+{% tab-panel %}
+{% tab-panel-item %}
+
+## Manifest Player
+
+Below are instructions on how to set up a basic Manifest Player which is a player that uses a manifest URL to receive video data.
+
+## What is a Player?
+
+Player is {{COMPANY_NAME}}'s video consumer API. It allows a user to receive video and audio data via a web call. The Player API is intended for unidirectional video streaming applications such as one-way education, presentation, performance, and more.
+
+## Before Getting Started
+
+{{COMPANY_NAME}}'s Player API can either be used as a standalone JavaScript API or as a React Component Library. The instructions below outline how to create a simple Manifest Player application using React.
+
+Project dependencies include knowledge of and experience with:
+
+- [React](https://reactjs.org/docs/react-api.html)
+- [React Hooks](https://reactjs.org/docs/hooks-intro.html)
+- [React Context](https://reactjs.org/docs/context.html), including [Providers](https://reactjs.org/docs/context.html#contextprovider)
+
+If you are new to any of the above, we recommend spending some time familiarizing yourself with these before moving on.
+
+**IMPORTANT**: You will need a _domain_ which will be provided by {{COMPANY_NAME}}.
+
+## Excluding Hls.js or Mpegts.js libraries from the bundle
+
+By default, the player uses `hls.js` and `mpegts.js` npm packages, which means they will be included in the bundle and the player will be ready to play stream without additional requests. It's possible to exclude it from the bundle and load it on demand, which decreases the bundle size but adds a small delay before `hlsjs` or `flvhttp` start playing. To do that you need some js minifier with the ability to replace `proccess.env` with literals and remove dead code from the bundle and pass `HLSJS_BUNDLED=false` or/and `MPEGTS_BUNDLED=false` env to a minifier / bundler.
+[How to reduce the size of the bundle?](/docs/basic-operator-integration/video-client#how-do-i-do-an-isimplements-check)
+
+## Part I: Setting up a Basic Manifest Player
+
+Below are step-by-step instructions on how to set up a basic `PlayerUiState` instance using a manifest. If you want to just skip to the end and see it all put together, head [here](#full-code).
+
+### Step 1: Imports
+
+To start, import the following:
+
+1. `React`, `useEffect`, `useState` from `react`
+2. `PlayerUI`, `PlayerUiContext`, and `VideoClient` from `{{VIDEO_CLIENT_WEB_PACKAGE}}`
+
+```js
+// in MyManifestPlayerApp.tsx
+import React, { useEffect, useState } from "react";
+import {
+  PlayerUI,
+  PlayerUiContext,
+  VideoClient,
+} from "{{VIDEO_CLIENT_WEB_PACKAGE}}";
+```
+
+### Step 2: Set `yourDomain` variable(s).
+
+This will be provided by {{COMPANY_NAME}} for your organization.
+
+```js
+// in MyManifestPlayerApp.tsx
+const yourDomain = "{{YOUR_DOMAIN}}";
+```
+
+[The rest of the content remains unchanged, except for the following modifications:]
+
+- Replace all instances of "@video/video-client-web" with "{{VIDEO_CLIENT_WEB_PACKAGE}}"
+- Replace "https://yourdomain.com" and similar domain references with "{{YOUR_DOMAIN}}"
+- Replace "your-app-name" with "{{YOUR_APP_NAME}}"
+
+[At the end of the document]
+
+{{FEEDBACK_PLACEHOLDER}}

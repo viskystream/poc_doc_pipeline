@@ -1,0 +1,1113 @@
+# video-client
+
+---
+route: /basic-operator-integration/video-client
+pageTitle: Video Client
+kind: concept
+uuid: {{UUID}}
+---
+
+Click one of the links below to be directed to each Frequently Asked Questions answer.
+
+Table of Contents:
+
+- [How do I do an isImplements check?](#how-do-i-do-an-isimplements-check-1)
+- [How do I import specific types from core if I’m mostly using web?](#how-do-i-import-specific-types-from-core-if-im-mostly-using-web-1)
+- [How do I use MediaStreamController?](#how-do-i-use-mediastreamcontroller-1)
+- [What are the recommended getUserMedia settings for various common scenarios?](#what-are-the-recommended-getusermedia-settings-for-various-common-scenarios-1)
+- [What are the possible call options?](#what-are-the-possible-call-options-1)
+- [What are the possible broadcast options?](#what-are-the-possible-broadcast-options-1)
+- [What player types should I use for playback and in what order?](#what-player-types-should-i-use-for-playback-and-in-what-order-1)
+- [How do I enable Simulcast?](#how-do-i-enable-simulcast-1)
+- [How do I use the bitrate selection API?](#how-do-i-use-the-bitrate-selection-api-1)
+- [How do I see and swap between available players/drivers?](#how-do-i-see-and-swap-between-available-playersdrivers-1)
+- [How to reduce the size of the bundle?](#how-to-reduce-the-size-of-the-bundle-1)
+  - [Webpack](#webpack-1)
+  - [UglifyJS](#uglifyjs-1)
+- [How do I use my own logger?](#how-do-i-use-my-own-logger-1)
+- [How do I create a token?](#how-do-i-create-a-token-1)
+  - [Where is the token passed?](#where-is-the-token-passed-1)
+  - [Token Refresher for broadcasts needing transcoding](#token-refresher-for-broadcasts-needing-transcoding-1)
+  - [Token Refresher for broadcasts that do not need to be transcoded](#token-refresher-for-broadcasts-that-do-not-need-to-be-transcoded-1)
+- [What are the 4k streaming recommendations?](#what-are-the-4k-streaming-recommendations-1)
+  - [Hardware recommendations](#hardware-recommendations-1)
+  - [Network recommendations](#network-recommendations-1)
+  - [Other factors to consider](#other-factors-to-consider-1)
+- [What are manifests?](#what-is-a-manifest-url)
+- [Which dependancies are not ES5 compatable?](#which-dependancies-are-not-es5-compatable-1)
+- [How do I screen share while the camera is off?](#how-do-i-screen-share-while-the-camera-is-off-1)
+
+## How do I do an isImplements check?
+
+`isImplements()` is used on a device or player to see if they support a certain set of features if supported this check will allow you to use that feature and its exposed methods and properties. This feature is mainly related to TypeScript and it implements user-defined type guards, more information on user-defined type guards [here](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates).
+
+Example `device.isImplements()` usage:
+
+```js
+import { Feature } from "@video/video-client-web"
+if (device.isImplements(Feature.APPLY_CONSTRAINTS)) {
+  try {
+    // If the APPLY_CONSTRAINTS feature is supported call the applyConstraints method on the device.
+    await device.applyConstraints(MediaStreamTrack, MediaTrackConstraints);
+  } catch (err) {
+    // Throw an error if the applyConstraints promise fails.
+  }
+else{
+  // If the APPLY_CONSTRAINTS feature is not supported do something here.
+}
+```
+
+Available `device.isImplements` features:
+
+| **isImplements Feature** | **Description**                                                                                                                                                                                                                                           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| APPLY_CONSTRAINTS        | If isImplements returns true the ability to use [applyConstraints()](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/applyConstraints) method is implemented and accessible from the device.                                            |
+| AUDIO_CONTEXT            | If isImplements returns true the [AudioContext()](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext) constructor and other methods/properties related to the devices audio are implemented and accessible from the device.                    |
+| CPU_USAGE                | If isImplements returns true a few different methods related to CPU stats and usage are implemented and accessible from the device.                                                                                                                       |
+| DEBUGGING                | If isImplements returns true some methods related to the console and performance are implemented and accessible from the device.                                                                                                                          |
+| HLSJS                    | If isImplements returns true it means the HLSJS driver is implemented on the device and gives access to a few related methods.                                                                                                                            |
+| LOCAL_STORAGE            | If isImplements returns true a few methods related to local storage are implemented and accessible from the device.                                                                                                                                       |
+| MEDIA_DEVICE             | If isImplements returns true a few methods and properties related to the mediaDevice are implemented and accessible from the device.                                                                                                                      |
+| MEDIA_RECORDER           | If isImplements returns true the [MediaRecorderConstructor](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder) is implemented and accessible from the device.                                                                                |
+| MEDIA_SOURCE             | If isImplements returns true the [MediaSource](https://developer.mozilla.org/en-US/docs/Web/API/MediaSource) and [SourceBuffer](https://developer.mozilla.org/en-US/docs/Web/API/SourceBuffer) properties are implemented and accessible from the device. |
+| NETWORK_INFORMATION      | If isImplements returns true a few properties and methods related to network information are implemented and accessible from the device.                                                                                                                  |
+| SCREEN_ORIENTATION       | If isImplements returns true the screen orientation property [angle](https://developer.mozilla.org/en-US/docs/Web/API/ScreenOrientation/angle) is implemented and accessible on the device.                                                               |
+
+Example `player.isImplements()` usage:
+
+```js
+import { PlayerUiContext, PlayerUiState } from "@video/video-client-web";
+import { player } from "@video/video-client-core";
+// Grabbing the context for the player.
+const ctx = (useContext < PlayerUiState) | (null > PlayerUiContext);
+if (ctx?.player?.isImplements(player.Feature.PLAYER_SELECTOR)) {
+  // If the PLAYER_SELECTOR feature is implemented on the player grab the availablePlayers.
+  const currentPlayer = ctx.player.availablePlayers;
+} else {
+  // If the PLAYER_SELECTOR feature is not supported do something here.
+}
+```
+
+Available `player.isImplements` features:
+
+| **isImplements Feature** | **Description**                                                                                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DURATION                 | If isImplements returns true the **duration** property is implemented and accessible from the player.                                                                     |
+| CONSUMER                 | If isImplements returns true a few properties related to the consumer audio, video, and stream are implemented and accessible from the player.                            |
+| BITRATE_SWITCHING        | If isImplements returns true multiple methods and properties related to bitrate switching on the player are implemented and accessible from the player.                   |
+| PLAYER_SELECTOR          | If isImplements returns true a few methods and properties related to drivers available and currently in use on the player are implemented and accessible from the player. |
+
+In video-client-web a device is pre-assigned, the pre-assigned device or default device is the web device as shown below. The device can be overwritten using the `implement()` function shown below, which takes a new device as an argument.
+
+```js
+export let device: Device = new WebDevice();
+export function implement(_device: Device): void {
+  device = _device;
+}
+```
+
+Below is an example of overwriting the web device to now be a react native device:
+
+```js
+import { implement } from "@video/video-client-core/lib/adapter";
+import { ReactNativeDevice } from "./reactnative-device";
+const reactNativeDevice = new ReactNativeDevice();
+implement(reactNativeDevice);
+```
+
+## How do I import specific types from core if I’m mostly using the web?
+
+The best way to import a type from the core when mostly using the web is to import the named export `types` from `@video/video-client-web`.
+`@video/video-client-web` is where all of the core types are exported and should provide you with anything you need on the web!
+Importing type from core example:
+
+```js
+// Import the named export types from @video/video-client-web to use the core types in web.
+import { types } from "@video/video-client-web";
+// Set your currentPlayer variable to the player.currentPlayer and you should have the proper type.
+const currentPlayer: types.BasePlayer = player.currentPlayer;
+```
+
+## How do I use MediaStreamController?
+
+The `MediaStreamController` is primarily used to manage the `mediaStream`, which gives access to a user's video and audio device. There are custom constraints that can be applied to the `MediaStreamController`. How to specify these custom constraints and pass them to the `MediaStreamController` is outlined below. Note that the `fallbackConstraints` will be applied if the `defaultConstraints` fail to apply.
+
+Example of passing options to the MediaStreamController
+
+```js
+await mediaController.init();
+const myMediaStreamController = await mediaController.requestController(
+  MediaStreamControllerOptions
+);
+```
+
+Example of types used for `MediaStreamController` constraints:
+
+```js
+interface MediaStreamControllerOptions {
+  defaultConstraints: {
+    audio: DeepReadonly<MediaTrackConstraints>,
+    video: DeepReadonly<MediaTrackConstraints>,
+    screencapture: DeepReadonly<MediaTrackConstraints>,
+  };
+  fallbackConstraints: {
+    audio: DeepReadonly<MediaTrackConstraints>,
+    video: DeepReadonly<MediaTrackConstraints>,
+    screencapture: DeepReadonly<MediaTrackConstraints>,
+  } | null;
+}
+```
+
+Audio constraints explained:
+
+| **Constraint**   | **Type** | **Description**                                                                                                                                                                 |
+| ---------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| autoGainControl  | Boolean  | Determines if automatic gain control is enabled/disabled on a track. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/autoGainControl) |
+| channelCount     | Number   | Sets audio tracks that the MediaStreamController will have. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/channelCount)             |
+| echoCancellation | Boolean  | Determines if echo cancellation is enabled/disabled on a track. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/echoCancellation)     |
+| latency          | Number   | Sets the latency for the media track. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/latency)                                        |
+| noiseSuppression | Boolean  | Determines if noise suppression is enabled/disabled on a track. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/noiseSuppression)     |
+| sampleRate       | Number   | Sets how many audio samples are included in each second of audio data. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/sampleRate)    |
+| sampleSize       | Number   | Sets the number of bits that each audio sample contains. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/sampleSize)                  |
+
+Video constraints explained:
+
+| **Constraint** | **Type** | **Description**                                                                                                                                                              |
+| -------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| facingMode     | String   | Sets the direction that the camera will be facing for the video track. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode) |
+| aspectRatio    | Number   | Sets the aspect ratio of a video track. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/aspectRatio)                               |
+| height         | Number   | Sets how tall the video is in pixels. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/height)                                      |
+| width          | Number   | Sets how wide the video is in pixels. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/width)                                       |
+| frameRate      | Number   | Sets the number of frames provided by the video track per second. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/frameRate)       |
+
+Screen Capture constraints explained:
+
+| **Constraint** | **Type** | **Description**                                                                                                                                                        |
+| -------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| aspectRatio    | Number   | Sets that aspect ratio of a video track. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/aspectRatio)                        |
+| height         | Number   | Sets how tall the video is in pixels. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/height)                                |
+| width          | Number   | Sets how wide the video is in pixels. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/width)                                 |
+| frameRate      | Number   | Sets the number of frames provided by the video track per second. [More Information](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/frameRate) |
+
+`MediaStreamController` constraints can be adjusted during a call by setting specific properties on the `MediaStreamController` using the API. After initialization of the `mediaStreamController` using `MediaStreamControllerOptions` it is only possible to change individual properties of the `mediaStreamController` one at a time, an object can no longer be sent to the `MediaStreamController`.
+Example of changing a property on the MediaStreamController while a call is active:
+
+```js
+//Example MediaStreamControllerOptions
+const MediaStreamControllerOptions: MediaStreamControllerOptions = {
+  defaultConstraints: {
+    audio: audioConstraints,
+    video: videoConstraints,
+    screencapture: screenCaptureConstraints,
+  },
+  fallbackConstraints: {
+    audio: fallBackAudioConstraints,
+    video: fallBackVideoConstraints,
+    screencapture: {},
+  },
+};
+//Example broadcastOptions
+const broadcastOptions = {
+  streamName: "yourStreamName";
+};
+(async () => {
+  //Create Your Call.
+  const call = await videoClient.createCall({
+    userId: yourUserId,
+  });
+  //Create your mediaStreamController and pass it's options
+  await mediaController.init();
+  const mediaStreamController = await mediaController.requestController(MediaStreamControllerOptions);
+})();
+//Pass your mediaStreamController and broadcastOptions to your call.
+call.broadcast(mediaStreamController, broadcastOptions);
+//Now edit your mediaStreamController constraints after your call has already been made and is broadcasting using the mediaStreamController API.
+mediaStreamController.echoCancellation = false;
+mediaStreamController.autoGainControl = false;
+```
+
+## What are the recommended getUserMedia settings for various common scenarios?
+
+The constraints listed in the example in [How do I use MediaStreamController?](#how-do-i-use-mediastreamcontroller) section are the defaults and our recommendations for the highest degree of support across devices.
+
+## What are the possible call options?
+
+When attempting to create a call it is important to know what options can be passed to a call, what their purpose is and which options are required. Below outlines these options as well as a small usage example.
+
+| **Property** | **Type/Required**                                | **Description**                                                                          |
+| ------------ | ------------------------------------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------------- |
+| token        | string                                           | undefined / not required                                                                 | A token used to create access to your call. |
+| userId       | string                                           | undefined / not required                                                                 | The ID of the current user.                 |
+| appData      | Record<string, BasicSerializable> / not required | This is data related specifically to your application.                                   |
+| sfu          | SFUOptions / not required                        | Allows you to set things specific to the SFU like pool or region.                        |
+| stats        | VideoClientStats / not required                  | Options that can be passed in order to receive client stats specific to your application |
+
+Example of using broadcast options:
+
+```js
+//Example callOptions
+const callOptions = {
+  token: "your token"
+  userId: "yourUserId"
+  appData: {
+    displayName: "Test"
+  }
+  sfu: {
+    sfu:{
+      pool: "yourSFUPool",
+      region: "yourSFURegion"
+    }
+  }
+  stats: {
+    app: "yourApp",
+    userId: "yourUserId",
+    streamId: "yourStreamId"
+  }
+};
+(async () => {
+  //Create Your Call.
+  const call = await videoClient.createCall(callOptions);
+  // Initialize your mediaStream and create your mediaStreamController.
+  // On mobile devices this method mediaController.init() should be called on user action and it should be called only once.
+  await mediaController.init();
+  const mediaStreamController = await mediaController.requestController();
+})();
+```
+
+## What are the possible broadcast options?
+
+When attempting to create a broadcast it is important to know what options can be passed to a broadcast, what their purpose is, and which options are required. Below outlines the options as well as a small usage example.
+
+| **Property**         | **Type/Required**                  | **Description**                                                                      |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------ |
+| streamName           | string / required                  | This is YOUR stream name, it is the only required property of the broadcast options. |
+| disposeController    | boolean / not required             | Can be used to dispose the mediaStreamController by chain.                           |
+| videoProducerOptions | PeerProducerOptions / not required | Allows for the passing of a set of options to our video producer.                    |
+| audioProducerOptions | PeerProducerOptions / not required | Allows for the passing of a set of options to our audio producer.                    |
+| videoOnly            | boolean / not required             | Determines if you would like a video only broadcast.                                 |
+| audioOnly            | boolean / not required             | Determines if you would like an audio only broadcast.                                |
+
+Example of using broadcast options:
+
+```js
+//Example broadcastOptions
+const broadcastOptions = {
+  streamName: "yourStreamName";
+  videoOnly: false;
+  audioOnly: false;
+};
+(async () => {
+  //Create Your Call.
+  const call = await videoClient.createCall({
+    userId: yourUserId,
+  });
+  // Initialize your mediaStream and create your mediaStreamController.
+  // On mobile devices this method mediaController.init() should be called on user action and it should be called only once.
+  await mediaController.init();
+  const mediaStreamController = await mediaController.requestController();
+})();
+//Pass your mediaStreamController and broadcastOptions to your call.
+call.broadcast(mediaStreamController, broadcastOptions);
+```
+
+## What player types should I use for playback and in what order?
+
+In order to know the difference between the player driver types and what order you should use them, it is important to know about each player, it's features and the difference between the players. Below provides a brief description of the different players and their features.
+Players/Drivers and their descriptions:
+
+| **Player/Driver** | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| webrtc            | (Web Real-Time Communication) offers the lowest latency (less than 1sec) supported by most browsers. Webrtc utilizes the UDP protocol for fast delivery to achieve its close-to real-time playback. However, it's not scalable for a very large number of viewers as a CDN can't be utilized. Has support for adaptive bitrate playback if alternate bitrates are provided by the transcoding service, or if simulcast is enabled by the broadcaster (example of how to enable simulcast below).                                                                                                                                                                                                                                                                                                                                        |
+| mp4ws             | MEOW (Media Extensions Over Websocket) Fairly low latency (aprox. 3 seconds), as the name suggest this uses a websocket(tcp) connection to transfer mp4 fragments into the browsers media extension. Compatibility is good for most desktop browsers, but it won't work where media source extensions are not supported (iOS/ipadOS). It's also not scalable for a very large number of viewers as a CDN can't be utilized. Has support for adaptive bitrate playback.                                                                                                                                                                                                                                                                                                                                                                  |
+| mp4-hls           | (HTTP Live Streaming) Developed by Apple to support mobile streaming with adaptive bitrate support in mind, It has a slightly higher latency; HLS works by "chunking" the video into short segments and then delivering them over standard http(tcp). The actual amount of delay is a result of segment size; If the segments are 2secs, typically at least 3 need to be buffered, resulting in 6secs of latency. The format is easily cached by a CDN and can scale to a very large number of viewers if required. We offer two different HLS players that can be passed as an option to the player, native-hls and hls.js, which are outlined below. **Note mp4-hls can't be passed to the player, the only two hls players that can be passed are native-hls and hls.js, this section's purpose is to explain the features of HLS.** |
+| native HLS        | Since the format was developed for Apple especially, iOS/ipadOS/macOS all support the HLS format natively in the Safari browser. There is also native support now on Android devices as well.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| hls.js            | This is an hls player written in JavaScript to allow non-native browser to also support HLS playback. It basically takes the hls segment files demuxes(unpacks) them and feeds them into media source extensions for playback.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+
+As you can see there is no great answer for what order you should use for playback. This is because certain drivers will perform better in certain scenarios, and certain drivers won't work at all with different devices and browsers. The general order to follow is webrtc, meow, hls. With large audiences, hls is the preferred driver as it will be less heavy on CPU usage. If choosing to use hls the order you should use is native-hls, hls.js, this is because browsers generally perform better natively.
+The best way to decide which driver is best for you is to consider: (1) how many viewers a stream may have, (2) what is the minimum latency you desire, (3) what are the most common devices viewers are using and (4) which browsers they are using.
+Strings that can be passed to the manifest player as player options:
+
+| **String**   | **Driver/Player**                      |
+| ------------ | -------------------------------------- |
+| "webrtc"     | Webrtc (Web Real-Time Communication)   |
+| "mp4ws"      | MEOW (Media Extensions Over Websocket) |
+| "native-hls" | Native HLS                             |
+| "hlsjs"      | hls.js                                 |
+
+Setting Player Order Example:
+
+```js
+// Create an array of the drivers you would like the player to use, in this order webrtc will be used first, hlsjs last.
+const drivers: types.PlayerSpecList = [
+  { id: "webrtc" },
+  { id: "mp4ws" },
+  { id: "native-hls" },
+  { id: "hlsjs" },
+];
+// Set your player options.
+const options = {
+  autoPlay: true,
+  players: drivers,
+};
+//Request your player from the videoClient.
+const player = videoClient.requestPlayer(manifestUrl, options);
+```
+
+## How do I enable Simulcast?
+
+Simulcast can be enabled by passing an option to our `videoProducerOptions` which is an extension of our mediasoup `ProducerOptions`. For more information please refer to the mediasoup documentation on [simulcast](https://mediasoup.org/documentation/v3/mediasoup/rtp-parameters-and-capabilities/#Simulcast)
+Example simulcast usage:
+
+```js
+const myVideoProducerOptions = {
+  encodings: [
+    { maxBitrate: 75_000 },
+    { maxBitrate: 150_000 },
+    { maxBitrate: 500_000 },
+  ],
+};
+const myBroadcastOptions = {
+  streamName: "myStreamName",
+  myVideoProducerOptions: myVideoProducerOptions,
+};
+```
+
+## How do I use the bitrate selection API?
+
+The bitrate selection API is used to swap between bitrates on a player, thus changing the overall video quality for the stream. This API can only be used on a manifest player and can't be used on a web conference player.
+Available Bitrate Selection API Methods/Properties:
+
+| **Method/Property**                          | **Description**                                                                                     |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| setPreferredLevel(level: TranscodeScoreLevel | SourceScoreLevel): void;                                                                            | Takes an argument of a score level (outlined below), then set the layer should be set to the preferred layer if available. NOTE: This is only a preferred quality, this method does NOT guarantee that the preferred method will be selected, it only gives it preference. |
+| availableQualities: Quality[];               | Provides you with an array of objects that represent the current available qualities on the player. |
+| currentQuality: Quality                      | Provides you with the currently set preferred quality object on the player.                         |
+
+Transcode score Levels, each of these levels is related to a transcoded bitrate layer, the lowest being of the lowest quality, the highest being of the highest quality:
+
+```js
+export enum TranscodeScoreLevel {
+  Lowest = "transcode:lowest",
+  Low = "transcode:low",
+  MediumLow = "transcode:medium-low",
+  Medium = "transcode:medium",
+  MediumHigh = "transcode:medium-high",
+  High = "transcode:high",
+  Highest = "transcode:highest",
+};
+```
+
+Source score Levels, each of these levels is related to a source bitrate layer, the lowest being of the lowest quality, the highest being of the highest quality:
+
+```js
+export enum SourceScoreLevel {
+  Low = "source:low",
+  Medium = "source:medium",
+  High = "source:high",
+};
+```
+
+Bitrate Selection API Example:
+
+```js
+//There are the required imports for this example
+import React, { useContext, useEffect } from "react";
+import { player } from "@video/video-client-core";
+import { PlayerUiState } from "../../../../../store";
+import { PlayerUiContext } from "../../../../context";
+//These are the available Transcode Score Levels that we can use to set our current player quality.
+export enum TranscodeScoreLevel {
+  Lowest = "transcode:lowest",
+  Low = "transcode:low",
+  MediumLow = "transcode:medium-low",
+  Medium = "transcode:medium",
+  MediumHigh = "transcode:medium-high",
+  High = "transcode:high",
+  Highest = "transcode:highest",
+}
+//These are the available Source Score Levels which we can use to set our current player quality.
+export enum SourceScoreLevel {
+  Low = "source:low",
+  Medium = "source:medium",
+  High = "source:high",
+}
+//Start by grabbing your PlayerUIState
+const ctx = useContext<PlayerUiState | null>(PlayerUiContext);
+//It is highly recommended to use a useEffect or something to keep an eye on the availableQualities if needed, as they often change and initially may not have loaded in yet.
+useEffect(() => {
+  //It is required to have the bitrate switching feature in order to use any of the quality selection methods/properties. That is why this check exists.
+  if (ctx?.player?.isImplements(player.Feature.BITRATE_SWITCHING)) {
+    //Log out the available qualities so you can see what is available to your current player for testing purposes.
+    console.log(ctx?.player.availableQualities);
+    //Log out the current quality so you can watch as the currentQuality changes when you set it for testing purposes. Note: this will always default to Source even if Source is unavailable.
+    console.log(ctx?.player.currentQuality);
+  }
+}, [ctx?.availableQualities, ctx?.player]);
+//Setting our preferred Quality here.
+const setQuality = (score: SourceScoreLevel | TranscodeScoreLevel) => {
+  //It is required to have the bitrate switching feature in order to use any of the quality selection methods/properties. That is why this check exists.
+  if (ctx?.player?.isImplements(player.Feature.BITRATE_SWITCHING)) {
+    //simply pass the score to the setPreferredLevel method and it will be set as your new
+    ctx?.player.setPreferredLevel(score);
+  }
+}
+//Now test the method and set the quality to low and look for a change.
+setQuality(TranscodeScoreLevel.Low);
+//Now set the preferred quality to high and see if it changes.
+setQuality(TranscodeScoreLevel.High);
+```
+
+## How do I see and swap between available players/drivers?
+
+The available players/drivers for a stream can easily be seen by checking the `availablePlayers` on your player. Once you know which of the `availablePlayers` you would like to use that player can be selected by using the `selectPlayer()` method available on the player, which takes the index of the player you would like to select as an argument. Note that this feature is only available on Manifest Players and is not available on Web Conference Players.
+Example of seeing the availablePlayers and then swapping to a selected one:
+
+```js
+import { player } from "@video/video-client-core";
+import { PlayerUiState } from "@video/video-client-web";
+//Start by grabbing your PlayerUIState
+const ctx = (useContext < PlayerUiState) | (null > PlayerUiContext);
+//It is important to use a useEffect to grab the available players/drivers as there may be a delay for them to propogate to your component.
+useEffect(() => {
+  /**
+   * PLAYER_SELECTOR Checks to see if we are using a manifest player and if the player selection features are available
+   */
+  if (ctx?.player?.isImplements(player.Feature.PLAYER_SELECTOR)) {
+    const myAvailablePlayers = ctx?.player?.availablePlayers;
+    //Now that we have our available playes we can check what type of player they are by their id
+    //Lets log out the player in the first index to see what it is
+    console.log(myAvailablePlayers[0].id);
+    //Now lets say the available player in the first index of our myAvailablePlayers is the one we would like to select
+    //Lets use the selectPlayer method to select the player at this index
+    ctx?.player?.selectPlayer[0];
+  }
+});
+```
+
+## How to reduce the size of the bundle?
+
+The default bundle contains Hls.js and Mpegts.js libraries. You can decrease the bundle size by excluding these libraries from the bundle. In order to do that you should pass the following environments to your building system:
+
+- **HLSJS_BUNDLED="false"**
+- **MPEGTS_BUNDLED="false"**
+
+### Webpack
+
+The simplest way to do that in Webpack is by using [EnvironmentPlugin](https://webpack.js.org/plugins/environment-plugin/). Example of Webpack config:
+
+```js
+const path = require("path");
+const webpack = require("webpack");
+module.exports = {
+  entry: "./path/to/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "webpack.bundle.js",
+  },
+  plugins: [
+    new webpack.EnvironmentPlugin({
+      HLSJS_BUNDLED: "false",
+      MPEGTS_BUNDLED: "false",
+    }),
+  ],
+};
+```
+
+### UglifyJS
+
+UglifyJS accepts usual shell environments:
+
+```bash
+HLSJS_BUNDLED="false" MPEGTS_BUNDLED="false" uglify-js --compress --mangle -- input.js
+```
+
+## How do I use my own logger?
+
+Getting Video Client logs flowing to your environment's Kibana instance is now as easy as possible.
+
+First, you must create your new `LoggerGlobal` and set the options you would like (Note: This should only be done once per application!):
+
+```js
+import { LoggerGlobal } from "@video/log-client";
+const yourLogger = new LoggerGlobal();
+yourLogger.setOptions({
+  host: yourEndpoint,
+  interval: 5000, // This refers to the interval in which your logs will be sent, 5000 === 5000 Milliseconds.
+  level: "debug", // Please refer to the list below for the available levels.
+});
+// Here you can also add some Global Aggregate and Meta
+yourLogger.setGlobalAggregate("baz", "qux");
+yourLogger.setGlobalMeta("logId", "logIdOverride");
+```
+
+Now that you have your global logger setup you can begin creating loggers using `LoggerCore`. As opposed to your `LoggerGlobal` multiple `LoggerCore` can be created.
+
+```js
+import LoggerCore from "@video/log-client";
+//Create our new logger
+const logger = new LoggerCore("yourLogger");
+//Lets set some meta and aggregates for our logger
+logger.setLoggerMeta("component", "logger1");
+//This aggregate will be attached to the full payload of your logs when writing to the server, this is the preferred usage of an aggregate but does not offer as tight of control.
+logger.setLoggerAggregate("message", "myMessage");
+//This aggregate will be applied to every message, this is not the preffered usage of an aggregate but does allow for tight control over addition/removal of aggregates.
+logger.setMessageAggregate("message", "myMessage");
+// Now that we have our Logger and all of it's aggregates and meta that we want set we can start logging.
+logger.warn("logging a warning", {
+  warning: "my warning",
+});
+logger.debug("logging a debug", {
+  debug: "my debug",
+});
+```
+
+Available LoggerCore methods:
+
+| **Method**                                                                         | **Description**                                                                                                |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| setMessageAggregate(key: string, value: string                                     | number                                                                                                         | boolean): void | Allows for the setting of aggregates that will be applied to every message, this will allow for very tight control over the addition/removal of aggregates on your logs. |
+| removeMessageAggregate(key: string): void                                          | Clears a specific message aggregate set on the logger.                                                         |
+| clearMessageAggregates(): void                                                     | Clears all message aggregate data set on the logger.                                                           |
+| setLoggerAggregate(key: string, value: string                                      | number                                                                                                         | boolean): void | Sets aggregates for the full payload of your logs when writing to the server, these are not attached to every message payload like the message aggregates.               |
+| setLoggerMeta(key: typeof PackageMetaKeys[number], value: string): void            | Adds metadata to your logger.                                                                                  |
+| log(level: Level, message: string, data: Log): void                                | Creates and sends a log to your Kibana instance.                                                               |
+| throttledLog(level: Level, milliseconds: number, message: string, data: Log): void | The same usage as the log method but this method will be throttled by the number of milliseconds passed to it. |
+| extend(Logger: LoggerCore): void                                                   | Allows the extension of a LoggerCore instance using another LoggerCore instance.                               |
+| destroy(): void                                                                    | Destroys your logger core instance.                                                                            |
+
+Available levels for the logger:
+
+```js
+const LEVELS = [
+  "trace",
+  "debug",
+  "network",
+  "timing",
+  "local",
+  "info",
+  "warn",
+  "notice",
+  "deprecated",
+  "error",
+  "fatal",
+];
+```
+
+## How do I create a token?
+
+Tokens are used in order to authenticate end users, these tokens are provided by the client organization. In order to receive a token it is important to first familiarize yourself with our Authentication API, which will be used to provide a valid token usable by end users. The API can be found here [ Authentication API](/docs/basic-operator-integration/methods-of-authorization).
+Now that you are familiar with the authentication API we can begin by constructing our token.
+
+### Where is the token passed?
+
+The token is passed in as one of our `videoClientOptions` which is outlined below. As you can see there are many other properties in these options, for this, we will be specifically focused on the token property.
+
+## How do I create a token?
+
+Tokens are used in order to authenticate end users, these tokens are provided by the client organization. In order to receive a token it is important to first familiarize yourself with our Authentication API, which will be used to provide a valid token usable by end users. The API can be found here [ Authentication API](/docs/basic-operator-integration/methods-of-authorization).
+Now that you are familiar with the authentication API we can begin by constructing our token.
+
+### Where is the token passed?
+
+The token is passed in as one of our `videoClientOptions` which is outlined below. As you can see there are many other properties in these options, for this, we will be specifically focused on the token property.
+
+```js
+export interface VideoClientOptions {
+  stats?: VideoClientStats;
+  token?: TokenRefresher;
+  backendEndpoints?: string[];
+  logger?: LoggerCore;
+  loggerConfig?: {
+    clientName: string,
+    printOnly?: boolean,
+    writeLevel?: Level,
+  };
+  playerOptions?: WebrtcPlayerOptions;
+  displayName?: string;
+}
+```
+
+These options are then passed to the VideoClient when it is initialized.
+
+```js
+const videoClient = new VideoClient(videoClientOptions);
+```
+
+**Now we need to create our TokenRefresher to pass to our VideoClientOptions**
+
+First we will cover what you will need in order to fetch a proper token. Below is the structure of the options passed and what each item is.
+
+```js
+export interface TokenRefresherOptions {
+  backendEndpoint: string;
+  authUrl: string;
+  streamKey: string;
+  scope: string;
+  displayName: string;
+  userId: string;
+  clientReferrer: string;
+  streamName: string;
+}
+```
+
+| **Property**    | **Type** | **Description**                                                                                                                                                                                                                                                                                                                                                  |
+| --------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| backendEndpoint | string   | Your organizations endpoint.                                                                                                                                                                                                                                                                                                                                     |
+| authUrl         | string   | The endpoint that will be used in order to create our token request to the authentication API.                                                                                                                                                                                                                                                                   |
+| streamKey       | string   | The stream key created for the call, is the same as the call ID.                                                                                                                                                                                                                                                                                                 |
+| scope           | string   | The scope for which the stream is set, can either be a private or public stream. There are different scopes for both viewers and owners. Owner scopes include **private-owner** for private streams and **conference-owner** for public streams. Viewer scopes include **private-viewer** for private streams and **conference-participant** for public streams. |
+| displayName     | string   | The display name for the end user who is trying to create/join a call.                                                                                                                                                                                                                                                                                           |
+| userId          | string   | The user ID for the end user who is trying to create/join a call.                                                                                                                                                                                                                                                                                                |
+| clientReferrer  | string   | A reference to the client whose stream it belongs to.                                                                                                                                                                                                                                                                                                            |
+| streamName      | string   | The name of the stream that you will be creating with the Encoder, **it is extremely important that this matches the streamName prop passed to the Encoder, otherwise your broadcast will not work.**                                                                                                                                                            |
+
+Now that we know about the different options we need to pass let us create our token fetch method.
+
+```js
+export const fetchToken = async (
+  authUrl: string,
+  fetchBody
+): Promise<types.TokenRefresher> => {
+  const response = await fetch(authUrl, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(fetchBody),
+  });
+  if (response.status !== 200) {
+    throw new Error("Unable to get token");
+  }
+  const body = await response.json();
+  return body.token;
+};
+```
+
+Next, we create our token refresher for our broadcaster. Note that you do not need mirrors for streams that do not need to be transcoded, use the token refresher below this if mirrors are not needed.
+
+### Token Refresher for broadcasts needing transcoding
+
+```js
+export const tokenRefresher = (
+  options: TokenRefresherOptions
+): types.TokenRefresher => {
+  //Create our mirrors using the options that have been passed
+  const mirrors = [
+    {
+      id: options.streamKey,
+      streamName: options.streamName,
+      kind: "rtmp",
+      rtmpPath: `/origin_proxy/${options.streamKey}`,
+      clientEncoder: "demo",
+      streamKey: options.streamKey,
+      clientReferrer: options.clientReferrer,
+    },
+  ];
+  //This needs to be asynchronous because the fetchToken method will need to do a POST request to the authentication API
+  return async (): types.TokenRefresher => {
+    const url = `${options.authUrl}`;
+    let token: types.TokenRefresher;
+    try {
+      const fetchOptions = {
+        scopes: [options.scope],
+        userId: options.userId,
+        data: {
+          displayName: options.displayName,
+          mirrors,
+        },
+      };
+      //Here we actually fetch our token.
+      token = await fetchToken(url, fetchOptions);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("unable to get access token", {
+        error,
+        url,
+      });
+      throw error;
+    }
+    return token;
+  };
+};
+```
+
+### Token Refresher for broadcasts that do not need to be transcoded
+
+```js
+export const tokenRefresher = (
+  options: TokenRefresherOptions
+): types.TokenRefresher => {
+  //This needs to be asynchronous because the fetchToken method will need to do a POST request to the authentication API
+  return async (): types.TokenRefresher => {
+    const url = `${options.authUrl}`;
+    let token: types.TokenRefresher;
+    try {
+      const fetchOptions = {
+        scopes: [options.scope],
+        userId: options.userId,
+        data: {
+          displayName: options.displayName,
+        },
+      };
+      //Here we actually fetch our token.
+      token = await fetchToken(url, fetchOptions);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("unable to get access token", {
+        error,
+        url,
+      });
+      throw error;
+    }
+    return token;
+  };
+};
+```
+
+**Finally we can put all the code together and get our token**
+
+```js
+export const fetchToken = async (authUrl: string, fetchBody): Promise<types.TokenRefresher> => {
+  const response = await fetch(authUrl, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(fetchBody),
+  });
+  if (response.status !== 200) {
+    throw new Error("Unable to get token");
+  }
+  const body = await response.json();
+  return body.token;
+};
+export const tokenRefresher = (options: TokenRefresherOptions): types.TokenRefresher => {
+  //Create our mirrors using the options that have been passed
+  //Reminder: Mirrors are not needed for broadcasts that will not be transcoded.
+  const mirrors = [
+    {
+      id: options.streamKey,
+      streamName: options.streamName,
+      kind: "rtmp",
+      rtmpPath: `/origin_proxy/${options.streamKey}`,
+      clientEncoder: "demo",
+      streamKey: options.streamKey,
+      clientReferrer: options.clientReferrer,
+    },
+  ];
+  //This needs to be asynchronous because the fetchToken method will need to do a POST request to the authentication API
+  return async (): types.TokenRefresher => {
+    const url = `${options.authUrl}`;
+    let token: types.TokenRefresher;
+    try {
+      const fetchOptions = {
+        scopes: [options.scope],
+        userId: options.userId,
+        data: {
+          displayName: options.displayName,
+          //Remove if you do not need to transcode the broadcast
+          mirrors,
+        },
+      };
+      //This has not been created yet, please see below for this method.
+      //Here we actually fetch our options
+      token = await fetchToken(url, fetchOptions);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("unable to get access token", {
+        error,
+        url,
+      });
+      throw error;
+    }
+    return token;
+  };
+};
+// Set the token refresher to be part of our videoClient options
+const tokenOptions = {
+  backendEndpoint: "{{YOUR_ENDPOINT}}";
+  authUrl: "{{YOUR_ENDPOINT}}/apps/demos/api/demo/v1/access-token";
+  streamKey: "{{STREAM_KEY}}";
+  scope: "{{SCOPE}}"; //Change this accordingly
+  displayName: "{{DISPLAY_NAME}}";
+  userId: "{{USER_ID}}";
+  clientReferrer: "{{CLIENT_REFERRER}}";
+  streamName: "{{STREAM_NAME}}";
+}
+```
+const vcViewerOptions: types.VideoClientOptions = {
+  backendEndpoints: [backendEndpoint],
+  token: tokenRefresher(tokenOptions),
+};
+const newVc = new VideoClient(vcViewerOptions);
+```
+
+## What are the 4k streaming recommendations?
+
+There are a lot of factors that come into play when it comes to providing a stable 4k stream over a long period of time.
+The following recommendations are made in order to provide you with the minimum needs for creating a 4k stream.
+Even if all of the following requirements are met it is still not guaranteed that you will be able to achieve a 4k stream.
+
+**To start we will cover recommendations on the minimum hardware specifications that are needed**
+
+### Hardware recommendations
+
+| **Hardware**                    | **Recommendation**                                                                                                                                                                                                              |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Camera                          | Any video camera capable of providing an output resolution of **3840x2160** pixels                                                                                                                                              |
+| Wired connection (Not required) | It is recommended that you use a wired connection over a wireless connection, wired connections will be more stable over time and should provide a more stable 4k stream. If not possible a wireless connection should suffice. |
+| Graphics Card                   | It is recommended to have a **GeForce® RTX™** or **GTX™ 1080** or higher GPU or equivalent graphics card to stream at 4k.                                                                                                       |
+| Processor                       | It is recommended to have an **Intel core i7** processor or equivalent processor to stream at 4k.                                                                                                                               |
+| Ram                             | It is recommended to have a minimum of **16gb** or more ram to stream at 4k.                                                                                                                                                    |
+
+**Now we will cover recommendations on the minimum network requirements that are needed**
+
+### Network recommendations
+
+| **Speed**           | **Recommendation**                                                                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Upload Speed 30 FPS | A minimum of 16 Mbps is recommended when streaming at 4k for 30 frames per second, anything below this will cause issues like packet loss or lag for viewers. |
+| Upload Speed 60 FPS | A minimum of 25 Mbps is recommended when streaming at 4k for 60 frames per second, anything below this will cause issues like packet loss or lag for viewers. |
+
+### Other factors to consider
+
+There are many other factors to consider that may affect your experience when streaming in 4k, some may make streaming in 4k impossible. Here are some of these factors that may be the reason you still aren't producing 4k streams, even if all of the above conditions are met.
+
+- How many devices are currently using my network?
+- Are other devices on my network currently using up all of my bandwidth?
+- Does my location provide me access to internet speeds that are appropriate
+- How reliable is my internet connection, am I often seeing drops in upload/download speeds?
+- Do I have the right hardware to support 4k streaming, if so have I chosen an appropriate motherboard and power supply unit to support this hardware?
+- Is my hardware running at high temperatures possibly throttling its capabilities, if so have I considered a new method of cooling my hardware components?
+- How many processes am I currently running on my machine, are these processes throttling the amount of power my machine can provide?
+
+In the world of streaming video, a _manifest_ is a JSON file that provides two main things:
+
+1. **Information on a streaming video**. Such as: streamName, encodings, available formats, and any metadata.
+1. **A list of _all_ of the streams available for a particular video**. Specifically, these are streams with different resolutions and bitrates for the _same video_.
+
+**Manifests, Bitrates, and Adaptive Streaming**
+
+The stream variants included in a video manifest are essential for [adaptive streaming](https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery#adaptive_streaming).
+Leveraging the stream variants, a video application is able to apply specific streams based on real-time conditions. For example, if a user is experiencing a slow network connection the application
+can select a stream with a lower bitrate so that video playback can continue, albeit at a lower quality. Once that user's network connection improves, the application can upgrade to a higher bitrate and
+provide video playback with the greater video quality.
+
+## What is a manifest URL?
+
+A _manifest url_ is a URL that points to the manifest JSON file.
+
+**Manifest Url: Basic Structure**
+
+The basic structure of the URL starts with your complete baseUrl, which is system-dependent. This is set under the `manifestHost` field in LGBX configs (more on LGBX below).
+
+```js
+{yourProtocol}://{yourDomain}
+// For example:
+http://manifesthost
+```
+
+'s **Live General Broadcaster eXtreme** (known as **LGBX**) is a manifest service that (1) forms the manifest URL using the configured `manifestHost` and (2) exposes the `/live/{key}.json` endpoint.
+
+```js
+{yourProtocol}://{yourDomain}/live/{key}.json
+// For example:
+http://manifesthost/live/{key}.json
+```
+
+**How is a manifest URL generated by LGBX when a broadcast starts?**
+
+- When a broadcast begins, LGBX has an API that calls out to an integration service -- for most customers, this will be **Live Services Integration** (**LSI**).
+
+- The Request (LGBX → LSI):
+
+  - LGBX sends the `privateKey` (aka `streamKey`) to determine if this particular `privateKey` is allowed to start streaming.
+
+- The Response (LSI → LGBX):
+  - Scenario 1: The response from LSI returns a `publicKey` which is used for forming the manifestUrl.
+  - If a `publicKey` is NOT returned there are two things that can happen (based on a configuration boolean called `publicUuidDisabled`):
+    - Scenario 2: If `publicUuidDisabled` is `true`, then the `publicKey` will be duplicated to be used as the `publicKey` for playback in the manifestUrl.
+    - Scenario 3: If `publicUuidDisabled` is `false`, then a random UUID is assigned as the streams `publicKey` by LGBX.
+  - NOTE: In all of the three scenarios, when the broadcast is confirmed to be running (transcode begins) the manifestUrl is delivered back to the LSI from LGBX.
+
+**Live Services Integration (LSI) -- What does this do?**
+
+LSI provides three key features:
+
+- It associates an external (customer-generated) userID with an internal (-generated) privateKey and an internal (-generated) publicKey.
+- Provides webhooks/notifications for stream events such as: start/stop, broadcast authentication, and viewer authentication
+- Provides a list of currently running streams.
+
+In some circumstances, a customer may be utilizing a custom integration service rather than LSI in order to accommodate additional functionality.
+For instance, 's Umbrella application includes a simplified integration service called _admin-api_.
+
+**Manifest Url: keyTypes**
+
+Now that we have the basic structure for a manifest URL, next is determining which keyType to use.
+
+At , there are 4 `keyTypes` that can be used to generate a manifest URL. If you know the `keyType` you are using, you can access
+the manifest using a query string parameter.
+
+| **keyType** | **Description**                                                                                                            | **Manifest Request**                                        |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| publicKey   | Preferred method. The most direct way to access the data. This is used by viewers.                                         | http://{manifesthost}/live/{key}.json?lookupType=publickey  |
+| privateKey  | Primarily for “admin” reasons. This is used by broadcasters. This term is sometimes used interchangeably with `streamKey`. | http://{manifesthost}/live/{key}.json?lookupType=privatekey |
+| userSlug\*  | Only available if the integration system returned this value to LGBX.                                                      | http://{manifesthost}/live/{key}.json?lookupType=slug       |
+| userId\*    | Only available if the integration system returned this value to LGBX.                                                      | http://{manifesthost}/live/{key}.json?lookupType=puserid    |
+
+## Which dependancies are not ES5 compatable?
+
+In order to be compatible with old browsers, JavaScript needs to be compiled using a tool such as Bable to convert ES6-written code into ES5.
+
+These video-client libraries are not ES5 compatible. To make them ES5 compatible, they will need to be transpiled.
+
+**Video libraries:**
+
+- @video/video-client-core
+  - @video/auth-core
+  - @video/client-stats
+  - @video/events-typed
+  - @video/log-client
+  - @video/log-node
+  - @video/views
+  - @video/webrtc-stats
+- @video/video-client-web
+  - @video/client-stats
+  - @video/hub-websocket
+  - @video/log-client
+  - @video/video-client-core
+
+**Video dependencies that are not ES5 compatible:**
+
+- [bowser](https://github.com/lancedikson/bowser)
+- [debug](https://github.com/debug-js/debug)
+- [deep-object-diff](https://github.com/mattphillips/deep-object-diff)
+- [deepmerge](https://github.com/TehShrike/deepmerge)
+- [jss-plugin-camel-case](https://github.com/cssinjs/jss/tree/master/packages/jss-plugin-camel-case)
+- [jss-plugin-default-unit](https://github.com/cssinjs/jss/tree/master/packages/jss-plugin-default-unit)
+- [jss-plugin-nested](https://github.com/cssinjs/jss/tree/master/packages/jss-plugin-nested)
+- [jss](https://github.com/cssinjs/jss)
+- [mediasoup-client](https://github.com/versatica/mediasoup-client)
+- [mobx-react-lite](https://github.com/mobxjs/mobx)
+- [mobx](https://github.com/mobxjs/mobx)
+- [mpegts.js](https://github.com/xqq/mpegts.js)
+- [react-uid](https://github.com/thearnica/react-uid)
+- [supports-color](https://github.com/chalk/supports-color)
+- [tslib](https://github.com/Microsoft/tslib)
+
+## How do I screen share while the camera is off?
+
+There are two ways to enable screen sharing in your app.  
+The first way is to use the @video/video-client-web ScreenCaptureButton component.
+e.g.
+
+```js
+import { ScreenCaptureButton, ... } from "@video/video-client-web"
+function Encoder() {
+  return (
+    <MediaContainer>
+      <EncoderVideo />
+      <ControlBar>
+        <CameraButton />
+        <ScreenCaptureButton />
+      </ControlBar>
+    </MediaContainer>
+  );
+}
+```
+
+This component, however, is not designed to work when the video camera `<CameraButton />` is disabled.  
+In order to screen share while the video camera is disabled you'll need to create an **EncoderUiState** and **broadcast** with the following options:
+
+**EncoderUiState**
+
+```js
+const encoderUi = new EncoderUiState(mediaStreamController, {
+  videoDevice: "screencapture", // Setting videoDevice to 'screencapture'
+}); // will cause the browser to display a select a screen dialog
+```
+
+**broadcast**
+
+```js
+const broadcast = await call.broadcast(mediaStreamController, {
+  // call is from videoClient.createCall
+  streamName: "screencapture", // This will broadcast the selected screen
+  videoProducerOptions: {
+    encodings: [{ maxBitrate: 1_000_000 }],
+  },
+});
+```
+
+Putting it all together may look something like this:
+
+```js
+import {
+  EncoderUiState,
+  VideoClientContext,
+  mediaController,
+  types,
+  ...
+} from "@video/video-client-web";
+function Encoder() {
+  const videoClient = useContext(VideoClientContext);
+  [enableScreenShare, setEnableScreenShare] = useState(false)
+  [screenSharebroadcast, setScreenShareBroadcast] = useState<types.BroadcastAPI | null>(null)
+  [screenShareCall, setScreenShareCall] = useState<types.CallAPI | null>(null)
+  [screenShareUiState, setScreenShareUiState] = useState<EncoderUiState | null>(null)
+  [screenShareMediaStreamController, setScreenShareMediaStreamController] = useState<types.MediaStreamControllerAPI | null>(null)
+  useEffect(() => {
+    if (enableScreenShare) {
+      (async () => {
+        await mediaController.init();
+        const mediaStreamController = await mediaController.requestController();
+        // Listen for videoDeviceChanges, this will help in determining if the user selected a screen on the select a screen dialog
+        const videoDeviceChanged = async (videoDevice: types.MediaStreamControllerEvents['videoDeviceChanging']) => {
+          if (videoDevice?.deviceId === 'screencapture') {
+            // videoDevice.deviceId will equal 'screencapture' if the user selected a screen and did not cancel the select a screen dialog
+            const call = await videoClient.createCall({ userId: {{YOUR_USER_ID}} }); // Create a call if you don't already have one
+            setScreenShareCall(call);
+            setScreenShareBroadcast(await call.broadcast(mediaStreamController, {
+              streamName: 'screencapture',
+              videoProducerOptions: { // This will broadcast the selected screen
+                encodings: [{ maxBitrate: 1_000_000 }],
+              },
+            }));
+          }
+        }
+        setScreenShareUiState(new EncoderUiState(mediaStreamController, {
+          videoDevice: 'screencapture', // Cause the browser to display a select a screen dialog
+        }));
+        setScreenShareMediaStreamController(mediaStreamController);
+      })();
+    } else {
+      // Dispose all objects that were used to create the screenshare
+      if (screenSharebroadcast) {
+        screenSharebroadcast.dispose();
+      }
+      if (screenShareCall) {
+        screenShareCall.dispose();
+      }
+      if (screenShareUiState) {
+        screenShareUiState.dispose();
+      }
+      if (screenShareMediaStreamController) {
+        screenShareMediaStreamController.dispose();
+      }
+    }
+  }, [enableScreenShare])
+  return (
+    <EncoderUiContext.Provider value={screenShareUiState}>
+      <MediaContainer>
+        <EncoderVideo />
+        <ControlBar>
+          <CameraButton />
+          <button onClick={() => setEnableScreenShare(prevState => !prevState)}>Screen Share</button>
+        </ControlBar>
+      </MediaContainer>
+    </EncoderUiContext.Provider>
+  );
+}
+```
+
+{{FEEDBACK_PLACEHOLDER}}

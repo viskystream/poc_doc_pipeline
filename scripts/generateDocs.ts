@@ -2,24 +2,61 @@ import fs from 'fs-extra';
 import path from 'path';
 import yaml from 'js-yaml';
 
-interface Product {
+interface Placeholder {
+    [key: string]: string;
+  }
+  
+  interface Product {
     name: string;
     template: string;
-}
-
-interface Company {
+    placeholders: Placeholder;
+  }
+  
+  interface Company {
     name: string;
     website: string;
     email: string;
     products: Product[];
+  }
+  
+  interface Config {
+    [vendor: string]: {
+      [company: string]: Company;
+    };
+  }
+
+  abstract class TransformationStep {
+    abstract transform(content: string, context: any): Promise<string>;
 }
 
-interface VendorConfig {
-    [company: string]: Company;
+class PlaceholderReplacement extends TransformationStep {
+    async transform(content: string, context: { companyConfig: Company, product: Product }): Promise<string> {
+        const placeholders: { [key: string]: string } = {
+            COMPANY_NAME: context.companyConfig.name,
+            COMPANY_WEBSITE: context.companyConfig.website,
+            COMPANY_EMAIL: context.companyConfig.email,
+            PRODUCT_NAME: context.product.name,
+            ...context.product.placeholders
+        };
+        return content.replace(/\{\{(\w+)\}\}/g, (match, placeholder) => {
+            return placeholders[placeholder] || match;
+        });
+    }
 }
 
-interface Config {
-    [vendor: string]: VendorConfig;
+class DocumentProcessor {
+    private steps: TransformationStep[] = [];
+
+    addStep(step: TransformationStep) {
+        this.steps.push(step);
+    }
+
+    async process(content: string, context: any): Promise<string> {
+        for (const step of this.steps) {
+            content = await step.transform(content, context);
+        }
+        return content;
+    }
 }
 
 async function generateDocs() {
@@ -43,20 +80,19 @@ async function generateDocs() {
 
     const sidebarItems = [];
 
+    // Create and configure the document processor
+    const processor = new DocumentProcessor();
+    processor.addStep(new PlaceholderReplacement());
+
     for (const product of companyConfig.products) {
         const templateContent = await fs.readFile(`templates/${product.template}`, 'utf8');
-        const filledContent = templateContent
-            .replace(/\{\{COMPANY_NAME\}\}/g, companyConfig.name)
-            .replace(/\{\{COMPANY_WEBSITE\}\}/g, companyConfig.website)
-            .replace(/\{\{COMPANY_EMAIL\}\}/g, companyConfig.email)
-            .replace(/\{\{PRODUCT_NAME\}\}/g, product.name);
+        const filledContent = await processor.process(templateContent, { companyConfig, product });
 
-        const fileName = `${product.name.toLowerCase().replace(/ /g, '-')}.mdx`;
+        const fileName = `${path.parse(product.template).name.toLowerCase().replace(/ /g, '-')}.mdx`;
         const outputPath = path.join(docsDir, fileName);
         await fs.outputFile(outputPath, filledContent);
         console.log(`Generated: ${outputPath}`);
 
-        // Add to sidebar items with full path
         sidebarItems.push(`${vendor}/${company.toLowerCase()}/${fileName.replace('.mdx', '')}`);
     }
 

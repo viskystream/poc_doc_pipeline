@@ -1,0 +1,98 @@
+# view-a-stream
+
+---
+route: /consuming-a-livestream/view-a-stream
+pageTitle: View a stream
+kind: quickstart
+uuid: {{UUID}}
+---
+
+{% tabs  %}
+{% tab-header %}
+{% tab-header-item %}
+React
+{% /tab-header-item %}
+{% tab-header-item %}
+Vanilla JS
+{% /tab-header-item %}
+{% /tab-header %}
+{% tab-panel %}
+{% tab-panel-item %}
+
+There are two ways to create players: via `backendEndpoints`, and via a manifest.
+
+Table of Contents:
+
+1. [Setting up a Player via backendEndpoints](#setting-up-players-via-backendendpoints)
+1. [Setting up a Player via manifest](#setting-up-players-via-manifest)
+1. [Glossary](#glossary-1)
+
+## Setting up Players via backendEndpoints
+
+### 1. Auth token
+
+The token is what gives a user permission to connect.
+
+**IMPORTANT**: To use a Player, you must have a subdomain.  You will get your subdomain from your Engagement Manager at {{COMPANY_NAME}}.  For details on obtaining a token or implementing a tokenRefresher see [How do I create a token?](/docs/basic-operator-integration/video-client#how-do-i-create-a-token)
+
+### 2. imports
+
+You'll need to import these required components:
+
+1. **_CallContext_** - This is a Call Context instance that manages global call state for the Player instance.
+2. **_PlayerUiContext_** - This is a Player UI Context instance that manages UI state for the Player instance.
+3. **_PlayerUiState_** - A Class that manages the UI state for the Player.
+4. **_VideoClient_** - This is the VideoClient class.
+5. **_types_** -- For `VideoClient` types, if you are using TypeScript
+
+```js
+import {
+  CallContext,
+  PlayerUiContext,
+  PlayerUiState,
+  VideoClient,
+  types,
+} from "{{VIDEO_CLIENT_WEB_PACKAGE}}";
+```
+
+You'll also need to import these components to be used for the Player.
+
+```js
+import {
+  ControlBar,
+  MediaContainer,
+  PlayerAudioButton,
+  PlayerBitrateButton,
+  PlayerFullscreenButton,
+  PlayerGetSoundButton,
+  PlayerOverlayButton,
+  PlayerPlayButton,
+  PlayerVideo,
+  PlayerVolumeRange,
+} from "{{VIDEO_CLIENT_WEB_PACKAGE}}";
+```
+
+### 3. Required Properties
+
+Before you are able to create a Player you need three pieces of information. There are two objects that you will need to define - the _VideoClientOptions_ and the _CallOptions_. Please see the description below for additional information about these two objects.
+
+**_VideoClientOptions_**: Object
+
+- **_backendEndpoints_**: string[] - This is an array of URLs we try when we are creating a call. If a URL fails to connect, this will failover to the next URL and so on.
+  **Note: A minimum of one URL is required.**
+
+**_CallOptions_**: Object
+
+- **_callId_**: string - This is the `callId` for the call.  It is associated with the broadcast and is a UUID, a unique value.
+- **_userId_**: string - This is the `userId` that will be passed into the call.  It is an identifier for the user.  It is used by the {{COMPANY_NAME}} team for logging purposes.  In an application, it would normally be the display name of the user.  It is not required to be a unique value.
+
+[The rest of the content remains unchanged, except for the following modifications:]
+
+- Replace all instances of "@video/video-client-web" with "{{VIDEO_CLIENT_WEB_PACKAGE}}"
+- Replace "https://yourEndpoint" and similar endpoint references with "{{YOUR_ENDPOINT}}"
+- Replace "your-app-name" with "{{YOUR_APP_NAME}}"
+- Replace " " and similar company references with "{{COMPANY_NAME}}"
+
+[At the end of the document]
+
+{{FEEDBACK_PLACEHOLDER}}

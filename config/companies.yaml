@@ -6,8 +6,20 @@ vendor1:
     products:
       - name: Product X
         template: product-template.mdx
+        placeholders:
+          - name: Product X
+            uuid: 123
+            endpoint: todo
+            streamname: 1a
+            feedback: todo
       - name: Product Y
         template: product-template.mdx
+        placeholders:
+          - name: Product Y
+            uuid: 124
+            endpoint: todo
+        streamname: 1ay
+        feedback: todo
 
 vendor2:
   company_b:
@@ -17,3 +29,157 @@ vendor2:
     products:
       - name: Service Z
         template: product-template.mdx
+        placeholders:
+          - name: Service Z
+            uuid: 125
+            endpoint: todo
+        streamname: 2ab
+        feedback: todo
+
+LivelyVideo:
+  lively:
+    name: LivelyVideo
+    website: https://www.livelyvideo.com
+    email: info@livelyvideo.com
+    products:
+      - name: LivelyVideo
+        template: setup-a-livestream-video.mdx
+        placeholders:
+          COMPANY_NAME: LivelyVideo
+          COMPANY_WEBSITE: https://www.livelyvideo.com
+          COMPANY_EMAIL: info@livelyvideo.com
+          PRODUCT_NAME: LivelyVideo
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44b
+          YOUR_ENDPOINT: https://yourEndpoint
+          STREAM_NAME: lively
+          YOUR_APP_NAME: LivelyVideo
+          FEEDBACK_PLACEHOLDER: feedback
+      - name: LivelyVideo
+        template: templatized-auth-token-guide.mdx
+        placeholders:
+          COMPANY_NAME: LivelyVideo
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44c
+          BACKEND_ENDPOINT: https://backend.livelyvideo.com
+          AUTH_URL: https://auth.livelyvideo.com
+          STREAM_KEY: 1234567890
+          SCOPE: broadcaster
+          DISPLAY_NAME: LivelyVideo
+          USER_ID: 12
+          CLIENT_REFERRER: https://www.livelyvideo.com
+          STREAM_NAME: LivelyVideo
+          FEEDBACK_PLACEHOLDER: feedback
+      - name: LivelyVideo
+        template: templatized-blur-a-stream.mdx
+        placeholders:
+          COMPANY_NAME: LivelyVideo
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+          FEEDBACK_PLACEHOLDER: feedback
+      - name: LivelyVideo
+        template: templatized-consuming-a-livestream.mdx
+        placeholders:
+          COMPANY_NAME: LivelyVideo
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44e
+          FEEDBACK_PLACEHOLDER: feedback
+      - name: LivelyVideo
+        template: templatized-core-concepts.mdx
+        placeholders:
+          YOUR_ENDPOINT: https://yourEndpoint
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+          LOGGER_NAME: log
+          FEEDBACK_PLACEHOLDER: feedback
+      - name: LivelyVideo
+        template: templatized-create-a-group-call.mdx
+        placeholders:
+          COMPANY_NAME: LivelyVideo
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44e
+          FEEDBACK_PLACEHOLDER: feedback
+      - name: LivelyVideo
+        template: templatized-customizing-a-stream-overview.mdx
+        placeholders:
+          COMPANY_NAME: LivelyVideo
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44e
+          FEEDBACK_PLACEHOLDER: feedback
+      - name: LivelyVideo
+        template: templatized-direct-streaming-broadcaster.mdx
+        placeholders:
+          COMPANY_NAME: LivelyVideo
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44f
+          FEEDBACK_PLACEHOLDER: feedback
+      - name: LivelyVideo
+        template: templatized-direct-streaming-viewer.mdx
+        placeholders:
+          COMPANY_NAME: LivelyVideo
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e45a
+          FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-event-handling.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e45b
+      #     FEEDBACK_PLACEHOLDER: feedback
+      - name: LivelyVideo
+        template: templatized-livestream-a-canvas-element.mdx
+        placeholders:
+          COMPANY_NAME: LivelyVideo
+          UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e45c
+          FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback        
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback
+      # - name: LivelyVideo
+      #   template: templatized-blur-a-stream.mdx
+      #   placeholders:
+      #     COMPANY_NAME: LivelyVideo
+      #     UUID: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+      #     FEEDBACK_PLACEHOLDER: feedback

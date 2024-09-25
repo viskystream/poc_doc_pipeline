@@ -1,0 +1,111 @@
+# livestream-a-canvas-element
+
+---
+route: /broadcasting-a-livestream/streaming-with-a-web-browser/livestream-a-canvas-element
+pageTitle: Livestream a canvas element
+kind: guide
+uuid: {{UUID}}
+---
+
+## Introduction
+
+The `mediaStreamController` has many capabilities. Using it, a broadcaster may stream data from a video device, they may stream a video of their screen, and may even broadcast changes that occur on an HTML canvas element. This tutorial will guide you through the steps of creating a stream that broadcasts an HTML canvas element.
+
+## Prerequisites
+
+To continue in this tutorial, it is important that you understand the basic principles of setting up a `VideoClient` instance and `encoderUI`. If you have not already done so, it is advised that you first follow and understand the [Set up a livestream video](/docs/broadcasting-a-livestream/streaming-with-a-web-browser/set-up-a-livestream-video) tutorial.
+
+## Setup a mediaStreamController to broadcast an HTML canvas
+
+The main difference between a broadcast that streams a video from a device or screen and a broadcast that streams an HTML canvas element is that the `mediaStreamController` has the option `capturable: { element }` passed into it when it is initialized. Refer to the code snippets below to see how to create a `mediaStreamController` that broadcasts an HTML canvas.
+
+### Create canvas
+
+Create a canvas element that the `mediaStreamController` can use
+
+```js
+export interface MockColors {
+  circle: string;
+  rectangle: string;
+}
+export const getMockCanvas = async (
+  width: number,
+  height: number,
+  color?: MockColors,
+): Promise<types.CanvasElement> => {
+  const canvas: HTMLCanvasElement = window.document.createElement("canvas");
+  canvas.setAttribute("width", `${width}px`);
+  canvas.setAttribute("height", `${height}px`);
+  const context = canvas.getContext("2d");
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  const circleColor = color !== undefined ? color.circle : "#006699";
+  let gain = true;
+  let radius = 0;
+  let stream: MediaStream;
+  function drawCircle(): void {
+    if (stream !== undefined && !stream.active) {
+      return;
+    }
+    context?.clearRect(0, 0, canvasWidth, canvasHeight);
+    // color in the background
+    if (context != null) {
+      context.fillStyle = color !== undefined ? color.rectangle : "#EEEEEE";
+    }
+    context?.fillRect(0, 0, canvasWidth, canvasHeight);
+    // draw the circle
+    context?.beginPath();
+    const maxCircleWidth = 100;
+    gain = (gain && radius < maxCircleWidth) || radius === 0;
+    radius = gain ? radius + 1 : radius - 1;
+    context?.arc(canvasWidth / 2, canvasHeight / 2, radius, 0, Math.PI * 2, false);
+    context?.closePath();
+    // color in the circle
+    if (context != null) {
+      context.fillStyle = circleColor;
+    }
+    context?.fill();
+    setTimeout(drawCircle, 16);
+  }
+  drawCircle();
+  return canvas;
+};
+```
+
+### Initialize the mediaStreamController
+
+Set up the `mediaStreamController` to broadcast the canvas element
+
+```js
+/*
+* 3. Create MediaStreamController + EncoderUiState for Broadcaster.
+*/
+useEffect(() => {
+  if (encoderUi == null) {
+    (async () => {
+      mediaControllerEvents(mediaController);
+      await mediaController.init();
+      let mscOptions: Partial<types.MediaStreamControllerOptions> = {};
+      const encoderUIOptions: Partial<EncoderUiOptions> = {};
+      const element: HTMLCanvasElement = await getMockCanvas(600, 400);
+      mscOptions = { capturable: { element } };
+      encoderUIOptions.audioDevice = null;
+      const mediaStreamController = await mediaController.requestController({
+        ...mscOptions,
+        displayName: "demoUser",
+      });
+      mediaStreamControllerEvents(mediaStreamController);
+      setEncoderUi(new EncoderUiState(mediaStreamController, encoderUIOptions));
+    })();
+  }
+  return () => {
+    if (encoderUi != null) {
+      encoderUi.mediaStreamController?.close("Closed by unmounting/re-render");
+      encoderUi.dispose("Component unmounting/re-render");
+      setEncoderUi(null);
+    }
+  };
+}, [encoderUi]);
+```
+
+{{FEEDBACK_PLACEHOLDER}}

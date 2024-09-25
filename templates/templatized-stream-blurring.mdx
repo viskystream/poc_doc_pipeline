@@ -1,0 +1,24 @@
+---
+route: /customizing-a-stream/stream-blurring
+pageTitle: Stream Blurring
+kind: concept
+uuid: {{UUID}}
+---
+
+It may become necessary for you to blur the stream for a viewer. There are three use cases for you to consider doing this in your broadcasts and in your applications.
+
+## Use Cases
+
+### Viewers are Watching too Long
+
+This case is manually controlled through props by blurring the video wrapper element after a specified time. The implementor would be responsible for creating this.
+
+### Policy Violation
+
+The system needs to be able to blur the stream in case the broadcaster is violating one of your policies.
+
+### Unauthorized Viewer
+
+If users have an invalid authToken for a private/paid stream, users will get a blurred stream with no audio.
+
+{{FEEDBACK_PLACEHOLDER}}

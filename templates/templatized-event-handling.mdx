@@ -1,0 +1,299 @@
+# event-handling
+
+---
+route: /basic-operator-integration/video-client/event-handling
+category: Event handling
+pageTitle: Event handling
+kind: concept
+uuid: {{UUID}}
+---
+
+
+## Player
+
+### PlayerUiStateEvents
+
+These events are available off of the **PlayerUiState** Class exported with **@video/video-client-web**.
+
+| **Event**            | **Arg**                    | **Description**                                                   | **Example**                                                                                                                                                                       |
+| -------------------- | -------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| availablePlayers     | PlayerAnySpec[]            |                                                                   |                                                                                                                                                                                   |
+| availableQualities   | Quality[]                  |                                                                   |                                                                                                                                                                                   |
+| controlMouseOver     | boolean                    |                                                                   |                                                                                                                                                                                   |
+| currentPlayer        | undefined, null, PlayerAPI |                                                                   |                                                                                                                                                                                   |
+| encoderMuted         | boolean                    | Is emitted when the broadcaster has muted/unmuted their audio.    | ```playerUiState.on("encoderMuted", (bool) => { if(bool) { // show a muted icon } })                                                                                     ```      |
+| encoderNoVideo       | boolean                    | Deprecated: Use playerUiState.player.consumerVideoEnabled         | ```playerUiState.on("encoderNoVideo", (bool) => { if(bool) { // show a video poster } })                                                                                 ```      |
+| isFullscreen         | boolean                    | Is emitted when the player video is/is not in fullscreen mode.    | ```playerUiState.on("isFullscreen", (bool) => { if(bool) { // use fullscreen styles} }); encoderUiState.on("isFullscreen", (bool) => { if(bool) { // use fullscreen styles} }) ```|
+| newWindow            |                            |                                                                   |                                                                                                                                                                                   |
+| newWindowElement     | null, VideoElement         |                                                                   |                                                                                                                                                                                   |
+| portal               | boolean                    |                                                                   |                                                                                                                                                                                   |
+| portalElement        | null, HTMLDivElement       |                                                                   |                                                                                                                                                                                   |
+| qualityMouseOver     | boolean                    |                                                                   |                                                                                                                                                                                   |
+| screenShareSupported | boolean                    | Is emitted when screenshare component is supported.               | ```playerUiState.on("screenShareSupported", (bool) => { if(bool) { // render screenshare button} })                                                                            ```|
+| videoMouseOver       | boolean                    | Is emitted when the user hovers mouse over/off the video element. | ```playerUiState.on("videoMouseOver", (bool) => { if(bool) { // show controls} })                                                                                              ```|
+| viewGetSound         | boolean                    |                                                                   |                                                                                                                                                                                   |
+| viewSettings         | boolean                    |                                                                   |                                                                                                                                                                                   |
+| viewVideoCallSlider  | boolean                    |                                                                   |                                                                                                                                                                                   |
+| volumeRangeSupported | boolean                    | Is emitted when volumeRange component is supported.               | ```playerUiState.on("volumeRangeSupported", (bool) => { if(bool) { // render volumeRange component} })                                                                         ```|
+
+### PlayerEvents
+
+These events are available off of the **BasePlayer** Class exported with **@video/video-client-core**. If using **PlayerUiState**, you can access the **BasePlayer** via **PlayerUiState.player** property.
+
+| **Event**            | **Arg**             | **Description**                                                               | **Example**                                                                       |
+| -------------------- | ------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| availableQualities   | Quality[]           | Is emitted when the player is disposed of.                                    | player.on("disposed", () => { //do some cleanup})                                 |
+| consumerAudioEnabled | boolean             | Is emitted when the remote peer's audio track active state changes.           | player.on("consumerAudioEnabled", (bool) => { if(!bool) { // handle no audio } }) |
+| consumerVideoEnabled | boolean             | Is emitted when the remote peer's video track active state changes.           | player.on("consumerVideoEnabled", (bool) => { if(!bool) { // handle no video } }) |
+| currentQuality       | Quality, null       |                                                                               |                                                                                   |
+| disposed             | void                |                                                                               |                                                                                   |
+| driver               | string              | Emits the current driver in use by a manifestPlayer                           | player.on("driver", (driver) => { console.log(driver)})                           |
+| driverFailover       | boolean             | Is emitted when a timeout has occurred and driverFailover is true.            | player.on("driverFailover", () => { // switch to next driver)                     |
+| error                | IVideoClientError   |                                                                               |                                                                                   |
+| forcedMute           | boolean             | Is emitted when an autoplaying player has been forced to mute by the browser. | player.on("forcedMute", () => { // show unmute button)                            |
+| hostElementAttached  | { el: HostElement } | Is emitted when the HTMLVideoElement supplied receives a src or srcObject.    | player.on("hostElementAttached", ({el}) => { // display element})                 |
+| implementation       | void                |                                                                               |                                                                                   |
+| localAudioMuted      | boolean             | Is emitted when the audio is muted.                                           | player.on("localAudioMuted", (bool) => { if(bool) { // show a no-audio icon } })  |
+| localAudioVolume     | number              | Is emitted when the player volume is changed.                                 | player.on("localAudioVolume", (number) => { //set volume range to number})        |
+| localVideoPaused     | boolean             | Is emitted when the video is paused.                                          | player.on("localVideoPaused", (bool) => { if(bool) { // show a paused icon } })   |
+| progress             | void                | Is emitted as the player progresses.                                          | player.on("progress", () => { console.log("progress")})                           |
+| restartDriver        | { timeout: number } |                                                                               |                                                                                   |
+| timeupdate           | void                | Is emitted when the player's time updates.                                    | player.on("timeupdate", () => { console.log("timeupdate")})                       |
+| videoFirstPlay       | void                | Is emitted when the player is played for the first time.                      | player.on("videoFirstPlay", () => { //do some cleanup})                           |
+
+### BitrateSwitchingEvents
+
+| **Event**          | **Arg**            | **Description**                                                 | **Example**                                                                 |
+| ------------------ | ------------------ | --------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| activeLayer        | null, BitrateLayer | Deprecated: Use `currentQuality` instead                        |                                                                             |
+| availableQualities | Quality[]          | Is emitted when the array of availableQualities is set/changes. | player.on("availableQualities", (arr) => { // display available qualities}) |
+| blurred            | boolean            |                                                                 |                                                                             |
+| currentQuality     | null, Quality      | Is emitted when the currentQuality is updated.                  | player.on("currentQuality", (val) => { // handle quality update})           |
+| layers             | BitrateLayer[]     | Deprecated: Use `availableQualities` instead                    |                                                                             |
+
+### PlayerSelectorEvents
+
+| **Event**     | **Arg**                                                | **Description**                           | **Example**                                                                                                                |
+| ------------- | ------------------------------------------------------ | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| currentPlayer | null, PlayerAPI                                        | Is emitted when the currentPlayer is set. | player.on("currentPlayer", (val) => { // handle current player})                                                           |
+| info          | { code: string }                                       | Is emitted when an info event occurs.     | player.on("info", ({code}) => { console.log(code)})                                                                        |
+| manifest      | { code: number formats: ManifestFormats state: State } | Is emitted when the manifest is set.      | player.on("manifest", ({ state: State; code?: number; formats: ManifestFormats }) => { console.log(state, code, formats)}) |
+
+### ConsumerEvents
+
+These events are available on any player that has the Consumer Feature and are available off of the **PlayerAPI** Class exported with **@video/video-client-core**.
+
+If using **PlayerUiState**, you can access the **PlayerApi** via **PlayerUiState.player** property. To check if a player utilizes the Consumer Feature, use the following code snippet:
+
+For a web conference player:
+
+```js
+import { player as vcPlayer } from "@video/video-client-core";
+// OR  import { player as vcPlayer } from "@video/video-client-web";
+if (player?.isImplements(vcPlayer.Feature.CONSUMER)) {
+  player.on("consumerAudioEnabled", (bool) => {
+    // your code here
+  });
+  player.on("consumerVideoEnabled", (bool) => {
+    // your code here
+  });
+}
+```
+
+For a manifest player:
+
+```js
+import { player as vcPlayer } from "@video/video-client-core";
+// OR  import { player as vcPlayer } from "@video/video-client-web";
+const player = await vc.requestPlayer(...);
+player.on("implementation", () => {
+  if (player.isImplements(vcPlayer.Feature.CONSUMER)) {
+    player.on("consumerAudioEnabled", (bool) => {
+       // your code here
+    });
+    player.on("consumerVideoEnabled", (bool) => {
+      // your code here
+    });
+  }
+});
+```
+
+| **Event**            | **Arg**    | **Description**                                                     | **Example**                                                                       |
+| -------------------- | ---------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| consumerAudioEnabled | boolean    | Is emitted when the remote peer's audio track active state changes. | player.on("consumerAudioEnabled", (bool) => { if(!bool) { // handle no audio } }) |
+| consumerVideoEnabled | boolean    | Is emitted when the remote peer's video track active state changes. | player.on("consumerVideoEnabled", (bool) => { if(!bool) { // handle no video } }) |
+| webrtcStats          | { stats: } | Is emitted when webrtc stats are sent.                              | player.on("webrtcStats", ({stats}) => { console.log(stats) })                     |
+
+## Encoder
+
+### EncoderUiStateEvents
+
+These events are available off of the **EncoderUiState** Class exported with **@video/video-client-web**.
+
+| **Event**             | **Arg**                     | **Description**                                                                                                                                | **Example**                                                                                                              |
+| --------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| mediaStreamController | MediaStreamController, null | Is emitted when the mediaStreamController has been set.                                                                                        | encoderUiState.on("mediaStreamController", (ctrl) => { if(ctrl) { // do something with mediaStreamController})           |
+| prevVideoDeviceId     | string, null                | Is emitted when the previous videoDeviceId changes (e.g. when a user changes their video devices, this will keep track of the previous state). | encoderUiState.on("prevVideoDeviceId", (val) => { if(val === "screencapture") { // handle exiting screencapture mode} }) |
+| testMic               | boolean                     | Is emitted when the user tests/stops testing their microphone.                                                                                 | encoderUiState.on("testMic", (bool) => { if(bool) { // show correct "test mic" button state} })                          |
+
+## Media Controller
+
+### MediaStreamControllerEvents
+
+These events are available off of the **mediaController** Class exported with **@video/video-client-web** and **@video/video-client-core**. See below for implementation options.
+
+| **Event**             | **Arg**                                                                    | **Description**                                                                            | **Example**                                                                                                            |
+| --------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| aspectRatio           |                                                                            | Is emitted when the aspectRatio changes.                                                   | mediaController.on("aspectRatio", (val) => { if(val){ // do something with aspectRatio }})                             |
+| audioConstraintsError | { constraints: MediaTrackConstraints diff: Json err: isFallback: boolean } | Is emitted when there is an error with the audio constraints.                              | mediaController.on("audioConstraintsError", ({constraints, error}) => { // do something with constraints/error })      |
+| audioDeviceChanged    | Readonly, null                                                             | Is emitted when the audio device has changed.                                              | mediaController.on("audioDeviceChanged", (info) => { if(info) { // do something with MediaDeviceInfo} })               |
+| audioDeviceChanging   | Readonly, null                                                             | Is emitted when the audio device is changing.                                              | mediaController.on("audioDeviceChanging", (info) => { if(info) { // do something with MediaDeviceInfo} })              |
+| audioDeviceRemoved    | string, null                                                               | Is emitted when the audio device has been removed.                                         | mediaController.on("audioDeviceRemoved, (device) => { if(device) { // do something with device} })                     |
+| audioMuted            | boolean                                                                    | Is emitted when the audio stream is muted/unmuted.                                         | mediaController.on("audioMuted", (bool) => { if(bool) { // do something when audio stream is muted } })                |
+| autoGainControl       |                                                                            |                                                                                            |                                                                                                                        |
+| availableResolutions  | number[]                                                                   | Lists the available resolutions.                                                           |                                                                                                                        |
+| changeDevicesError    | { audio: err: Error video: }                                               | Is emitted when there is an error during device changing.                                  | mediaController.on("changeDevicesError", ({audio, video, error}) => { // do something with info/error })               |
+| echoCancellation      | boolean                                                                    | Indicates whether echo cancellation is enabled or not.                                     | mediaController.on("echoCancellation", (val) => { if(val) {// do something when video echoCancellation is enabled } }) |
+| error                 | VideoClientError                                                           | Is emitted when there is a mediacontroller error.                                          | mediaController.on("error", (err) => { // handle error })                                                              |
+| facingMode            | 'back', 'front', 'environment', 'user', null                               | Current facing mode, for mobile devices.                                                   | mediaController.on("facingMode", (val) => { if(val === "back") { // do something when phone is facing back} })         |
+| frameRate             | number, [number, number], Current framerate.                               | mediaController.on("framerate", (val) => { // do something when video framerate changes }) |
+| gain                  | number                                                                     | Current volume level.                                                                      | mediaController.on("gain", (val) => { // do something when volume level changes })                                     |
+| maxHeight             | number, null                                                               |                                                                                            |                                                                                                                        |
+| maxWidth              | number, null                                                               |                                                                                            |                                                                                                                        |
+| noiseSuppression      | boolean                                                                    | Indicates whether noise suppression is enabled or not.                                     |                                                                                                                        |
+| resolution            | number, [number, number], null                                             | Current video resolution.                                                                  | mediaController.on("resolution", (val) => { // do something when video resolution changes })                           |
+| source                | MediaStream                                                                |                                                                                            |                                                                                                                        |
+| videoConstraintsError | { constraints: MediaTrackConstraints diff: Json err: isFallback: boolean } | Is emitted when there is an error with the video constraints.                              | mediaController.on("videoConstraintsError", ({constraints, error}) => { // do something with constraints/error })      |
+| videoDeviceChanged    | Readonly, null                                                             | Is emitted when the video device has changed.                                              | mediaController.on("videoDeviceChanged", (info) => { if(info) { // do something with MediaDeviceInfo} })               |
+| videoDeviceChanging   | Readonly, null                                                             | Is emitted when the video device is changing.                                              | mediaController.on("videoDeviceChanging", (info) => { if(info) { // do something with MediaDeviceInfo} })              |
+| videoDeviceRemoved    | string, null                                                               | Is emitted when the video device has been removed.                                         | mediaController.on("videoDeviceRemoved", (device) => { if(device) { // do something with device} })                    |
+| videoDisabled         |                                                                            |                                                                                            |                                                                                                                        |
+| videoPaused           | boolean                                                                    | Is emitted when the video stream is paused/unpaused.                                       | mediaController.on("videoPaused", (bool) => { if(bool) { // do something when video stream is paused } })              |
+
+## Call
+
+### CallEvents
+
+These events are available off of the **Call** Class exported with **@video/video-client-web** and **@video/video-client-core**. See below for implementation options. A Call Class instance is created by calling either **videoClient.createCall()** or **videoClient.joinCall**().
+
+| **Event**        | **Arg**                                                     | **Description**                                               | **Example**                                                                         |
+| ---------------- | ----------------------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| accessDenied     | { message: string }                                         | Is emitted when an accessToken is used more than once.        | call.on("accessDenied", () => { // do something })                                  |
+| callClosed       | { callId: string }                                          | Is emitted when the call is closed.                           | call.on("peerRemoved", ({callId}) => { // handle cleanup })                         |
+| callId           | { callId: string user: }                                    | Is emitted when the callId is set.                            | call.on("callId", ({callId, user}) => { // do something with callId and user info}) |
+| callJoinEndpoint | void                                                        |                                                               |                                                                                     |
+| disposed         | void                                                        | Is emitted when the call is disposed.                         | call.on("disposed", () => { // handle dispose })                                    |
+| dominantSpeaker  | DominantSpeaker                                             | Is emitted when the dominantSpeaker changes.                  | call.on("dominantSpeaker", (speaker) => { // do something with the speaker })       |
+| error            | IVideoClientError                                           | Is emitted when a call error occurs.                          | call.on("error", (err) => { // handle err })                                        |
+| peerAdded        | { call: CallAPI peer: PeerAPI }                             | Is emitted when a new peer joins the call.                    | call.on("peerAdded", ({args}) => { // handle new peer })                            |
+| peerRemoved      | { call: CallAPI peer: PeerAPI }                             | Is emitted when a peer leaves the call.                       | call.on("peerRemoved", ({args}) => { // handle removed peer })                      |
+| playerAdded      | { peer: PeerAPI player: PlayerAPI streamName: string }      | Is emitted when a new player is added to the call.            | call.on("playerAdded", ({args}) => { // add player to DOM })                        |
+| playerRemoved    | { peer: PeerAPI player: PlayerAPI streamName: string }      | Is emitted when a player is removed from the call.            | call.on("playerRemoved", ({args}) => { // remove player from DOM })                 |
+| sfuConnection    | void                                                        |                                                               |                                                                                     |
+| streamAdded      | { peer: PeerAPI stream: SourceProvider streamName: string } | Is emitted when a stream is added to the call.                | call.on("streamAdded", ({args}) => { // handle new stream })                        |
+| streamRemoved    | { peer: PeerAPI stream: SourceProvider streamName: string } | Is emitted when a stream is removed from the call.            | call.on("streamRemoved", ({args}) => { // handle removed stream })                  |
+| videoConsumer    | void                                                        |                                                               |                                                                                     |
+| viewerKicked     | void                                                        | Is emitted when the a viewer is kicked from a private stream. | call.on("viewerKicked", () => { // do something })                                  |
+| webrtcStats      | { stats: }                                                  |                                                               |                                                                                     |
+| webrtcStatsRaw   | { stats: CombinedStats }                                    |                                                               |                                                                                     |
+| zeroBitrate      |                                                             |                                                               |                                                                                     |
+
+### Example
+
+Access Denied
+
+```js
+/**
+ * Set local state.
+ */
+const [playerUi, setPlayerUi] = useState<PlayerUiState | null>(null);
+const [accessDenied, setaccessDenied] = useState<boolean>(false);
+/**
+ * 2. Create VideoClient instance.
+ */
+const vc = useMemo(() => {
+    return new VideoClient({
+      backendEndpoints: [https://yourEndpoint],
+      stats: {
+        // your stats here
+      },
+    });
+  }
+  return undefined;
+}, []);
+/**
+ * 3. Request manifest player.
+ */
+useEffect(() => {
+  if (
+    vc != null &&
+    playerUi == null &&
+    !accessDenied
+  ) {
+    (async () => {
+      let player: types.BasePlayer | null = null;
+      try {
+        player = vc.requestPlayer(manifestUrl, options);
+      } catch (err) {
+        throw err;
+      }
+      const newPlayerUi = new PlayerUiState(player, options);
+      setPlayerUi(newPlayerUi);
+  return () => {
+    if (playerUi != null) {
+      playerUi.dispose("demo unmounting/re-render");
+      setPlayerUi(null);
+    }
+  };
+}, [
+  vc,
+  manifestUrl,
+  playerUi,
+  accessDenied,
+]);
+/**
+ * 4. Attach accessDenied event listener (proxied to VideoClient instance from call, could also attach directly to call.)
+ *  and disposer for vc instance.
+ */
+useEffect((): (() => void) | void => {
+    const handleAccessDenied = (msg): void => {
+      setaccessDenied(true);
+    };
+    if (vc != null) {
+      vc.on("accessDenied", handleAccessDenied);
+    }
+    return () => {
+      if (vc != null) {
+        vc.off("accessDenied", handleAccessDenied);
+        vc.dispose("demo unmounting/re-render");
+      }
+    };
+  }, [vc]);
+  return (
+    <PlayerUiContext.Provider value={playerUi}>
+      {playerUi == null && accessDenied && <h1>Access Kicked: Auth token is being used by another user. ☹️ </h1>}
+      {playerUi != null && (
+        <YourPlayerHere />
+      )}
+    </PlayerUiContext.Provider>
+  );
+```
+
+## Peer
+
+### PeerEvents
+
+These events are available off of the **Peer** Class exported with **@video/video-client-web** and **@video/video-client-core**. See below for implementation options. A new Peer Class instance is created as an arg when the **videoClient.peerAdded({peer: newPeer})** event is emitted.
+
+| **Event**     | **Arg**                                                     | **Description**                           | **Example**                                                       |
+| ------------- | ----------------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------------- |
+| disposed      | void                                                        | Is emitted when the peer is disposed of.  | peer.on("disposed", () => { // handle dispose })                  |
+| error         | IVideoClientError                                           |                                           |                                                                   |
+| playerAdded   | { peer: PeerAPI player: PlayerAPI streamName: string }      | Is emitted when a peer adds a new player. | peer.on("playerAdded", ({args}) => { // add player to DOM })      |
+| playerRemoved | { peer: PeerAPI player: PlayerAPI streamName: string }      | Is emitted when a peer removes a player.  | peer.on("playerRemoved", ({args}) => { // remove player })        |
+| streamAdded   | { peer: PeerAPI stream: SourceProvider streamName: string } | Is emitted when a peer adds a stream.     | peer.on("streamAdded", ({args}) => { // handle new stream })      |
+| streamRemoved | { peer: PeerAPI stream: SourceProvider streamName: string } | Is emitted when a peer removes a stream.  | peer.on("streamRemoved", ({args}) => { // handle removed stream}) |
+| videoConsumer | void                                                        |             
+
+
+{{FEEDBACK_PLACEHOLDER}}

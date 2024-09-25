@@ -1,0 +1,213 @@
+# set-up-a-livestream-video
+
+---
+route: /broadcasting-a-livestream/streaming-with-a-web-browser/set-up-a-livestream-video
+pageTitle: Set up a Livestream Video
+kind: quickstart
+uuid: {{ UUID }}
+---
+
+## Setting up an Encoder
+
+An Encoder is a video-client component for streaming audio and/or video by a broadcaster. The encoder converts your video/audio stream into a digital format understood by browsers and players (see more on Player) .
+
+### 1. authToken
+
+The authToken is what gives a user permission to connect.
+
+**IMPORTANT**: To use an Encoder, you must have a subdomain which is provided by {{ COMPANY_NAME }}.
+
+### 2. Imports
+
+You'll need to import these required components for Context:
+
+1. **_EncoderUiState_** - A Class that manages the `mediaStreamController` and ui state for the Encoder.
+2. **_VideoClientContext_** - This is a React Context instance that manages global state for your VideoClient instance.
+3. **_EncoderUiContext_** - This is a React Context instance that manages global state for your Encoder Ui instance.
+4. **_CallContext_** - This is a React Context instance that manges global state for your call instance.
+5. **_CallState_** - This is used to create our CallState which is used to start, stop and join broadcasts.
+6. **_VideoClient_** -- This is the VideoClient class.
+7. **_mediaController_** -- This controls the MediaStream.
+8. **_types_** -- For `VideoClient` types, if you are using TypeScript
+
+```js
+import {
+  EncoderUiState,
+  VideoClientContext,
+  EncoderUiContext,
+  CallContext,
+  CallState,
+  VideoClient,
+  mediaController,
+  types,
+} from "@video/video-client-web";
+```
+
+You'll also need to import these components to be used for the Encoder.
+
+```js
+import {
+  JoinBroadcastButton,
+  CameraButton,
+  ControlBar,
+  EncoderAudioDeviceSelect,
+  EncoderEchoCancellationCheckbox,
+  EncoderNoiseSuppressionCheckbox,
+  EncoderVideo,
+  EncoderVideoDeviceSelect,
+  FullscreenButton,
+  MediaContainer,
+  MicrophoneButton,
+  SettingsButton,
+  SettingsSidebar,
+  TestMicButton,
+} from "@video/video-client-web";
+```
+
+### 3. Required Properties
+
+Before you are able to create an Encoder, there are a few required values you will need to have.
+
+**_VideoClientOptions_**: Object
+
+- **_backendEndpoints_**: string[] - This is an array of URLs we try when we are creating a call. If a URL fails to connect, this will failover to the next URL and so on.  
+  **Note: A minimum of one URL is required.**
+
+**_BroadcastOptions_**: Object
+
+- **_streamName_**: string - Name of the stream (see more on streamName).
+
+### 4. Setting up state
+
+Once you have your imports and required properties, you are ready to create your state. For the Encoder, you will
+need to setup a `vc`, `call` and a `encoderUi` to manage state.
+
+The `vc` manages the `VideoClient` state, which is the Class that gives us access to create or join a call and manages peer state.
+
+The `encoderUi` manages the UI state of the Encoder, including the `mediaController` (see more on mediaController).
+
+The `callState` manages the state for your created `call`. Note that the call will not be defined here until a call has been started or joined.
+
+```ts
+const [vc, setVc] = useState<types.VideoClientAPI | null>(null);
+const [encoderUi, setEncoderUi] = useState<EncoderUiState | null>(null);
+const [callState, setCallState] = useState<CallState | null>(null);
+```
+
+### 5. Create your Video Client instance and CallState
+
+`VideoClient` is a video-client class that connects to the server and enables either creating a call or joining
+an existing call. A `VideoClient` instance is required for _each_ user.
+
+`CallState` which will be used as the provider for our `CallContext` is used to start, stop and join active broadcasts. It is required for use with the joinBroadcast button but can also be helpful if you choose to create your own component.
+
+When creating the useEffect for your `VideoClient` instance be sure to only include things in your dependency array that will allow for disposal and cleanup of the `VideoClient` instance to occur when the `VideoClient` instance has changed or is removed. Failure to do so may result in cleanup code running more often than desired.
+
+**Be sure to **dispose** the `VideoClient` instance on unmount!**
+
+```ts
+import React, { useEffect } from "react";
+
+useEffect(() => {
+  if (vc == null) {
+    const opts: types.VideoClientOptions = {
+      backendEndpoints: ["https//:yourEndpoint"], // If you do not have a {{ COMPANY_NAME }} subdomain, contact {{ COMPANY_NAME }}.
+      token: tokenRefresher(tokenOptions),
+      loggerConfig: {
+        clientName: "your-app-name",
+        writeLevel: "debug", // Defaults to debug, but can be info, warn, notice, deprecated, network, local, timing, or trace. Recommend leaving this as debug.
+      },
+    };
+    setVc(new VideoClient(opts));
+    setCallState(new CallState());
+  }
+  return () => {
+    if (vc != null) {
+      vc.dispose();
+      setVc(null);
+    }
+  };
+  /*
+   * Remember to only include things in your dependency array that are related to the state of your `VideoClient` instance, otherwise disposal may occur at undesired times.
+   */
+}, [vc]);
+```
+
+For details on obtaining a token or implementing a tokenRefresher see [How do I create a authToken?](/docs/basic-operator-integration/methods-of-authorization/authentication-tokens/using-an-auth-token-in-the-browser)
+
+### 6. Create the `mediaController` and set the `encoderUi` store.
+
+A `mediaController` is a video client class which controls accessing audio and video streams from your browser. This
+gets passed into the `EncoderUiState` constructor.
+
+**Be sure to dispose of the `EncoderUi` instance on unmount!**
+
+```ts
+useEffect(() => {
+  if (encoderUi == null) {
+    (async () => {
+      await mediaController.init();
+      const mediaStreamController = await mediaController.requestController();
+      setEncoderUi(new EncoderUiState(mediaStreamController));
+    })();
+  }
+
+  return () => {
+    if (encoderUi != null) {
+      encoderUi.dispose();
+      setEncoderUi(null);
+    }
+  };
+}, [encoderUi]);
+```
+
+### 7. Render imported components.
+
+Now that you have set up your state, you can construct your UI.
+
+```js
+<VideoClientContext.Provider value={vc}>
+  <CallContext.Provider value={callState}>
+    <EncoderUiContext.Provider value={encoderUi}>
+      {encoderUi != null && (
+        <MediaContainer>
+          <EncoderVideo />
+          <ControlBar>
+            <CameraButton />
+            <MicrophoneButton />
+            // When the broadcast button is pressed on the UI, the id (UUID) //
+            that was generated in the tokenRefresher method will be returned. //
+            Video-Client players may use this id to join the stream.
+            <JoinBroadcastButton
+              setCallId={(id) => {}}
+              broadcastOptions={{ streamName: "name" }}
+            />
+            <ScreenCaptureButton />
+            <FullscreenButton />
+            <SettingsButton />
+          </ControlBar>
+          <SettingsSidebar>
+            <EncoderVideoDeviceSelect />
+            <EncoderAudioDeviceSelect />
+            <EncoderResolutionSelect />
+            <EncoderNoiseSuppressionCheckbox />
+            <EncoderEchoCancellationCheckbox />
+            <TestMicButton />
+          </SettingsSidebar>
+        </MediaContainer>
+      )}
+    </EncoderUiContext.Provider>
+  </CallContext.Provider>
+</VideoClientContext.Provider>
+```
+
+### Next Steps?
+
+To learn more about customizing the Encoder component, you can find all the information you'd need in the link below:
+
+{% link-grid  %}
+{% link-grid-link title="Encoder Documentation" href="/broadcasting-a-livestream/streaming-with-a-web-browser" icon="PlayIcon" description="Learn how to customize the Encoder" /%}
+{% /link-grid  %}
+
+&nbsp;
+{{ FEEDBACK_PLACEHOLDER }}

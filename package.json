@@ -15,6 +15,7 @@
     "generate-docs": "ts-node --project ./scripts/tsconfig.json scripts/generateDocs.ts",
     "start:vendor1:company_a": "cross-env VENDOR=vendor1 COMPANY=company_a npm run generate-docs && cross-env VENDOR=vendor1 COMPANY=company_a npm start",
     "start:vendor2:company_b": "cross-env VENDOR=vendor2 COMPANY=company_b npm run generate-docs && cross-env VENDOR=vendor2 COMPANY=company_b npm start",
+    "start:lv": "cross-env VENDOR=LivelyVideo COMPANY=lively npm run generate-docs && cross-env VENDOR=LivelyVideo COMPANY=lively npm start",
     "typecheck": "tsc"
   },
   "dependencies": {

@@ -1,0 +1,1835 @@
+# streaming-with-a-web-browser
+
+---
+route: /broadcasting-a-livestream/streaming-with-a-web-browser
+pageTitle: Streaming with a web browser
+kind: concept
+uuid: {{ UUID }}
+---
+
+{% tabs  %}
+{% tab-header %}
+{% tab-header-item %}
+React
+{% /tab-header-item %}
+{% tab-header-item %}
+Vanilla JS
+{% /tab-header-item %}
+{% /tab-header %}
+{% tab-panel %}
+{% tab-panel-item %}
+
+The encoder is {{ COMPANY_NAME }}'s video encoding API. It allows a user to configure and send video and audio data via a web call. The Encoder API is intended for applications such as one-way education, presentation, performance, and more.
+
+## Before Getting Started
+
+{{ COMPANY_NAME }}'s Encoder API can either be used as a standalone JavaScript API or as a React Component Library. The instructions below outline how to create a simple Encoder application using React.
+
+Project dependencies include knowledge of and experience with:
+
+- [React](https://reactjs.org/docs/react-api.html)
+- [React Hooks](https://reactjs.org/docs/hooks-intro.html)
+- [React Context](https://reactjs.org/docs/context.html), including [Providers](https://reactjs.org/docs/context.html#contextprovider)
+
+If you are new to any of the above, we recommend spending some time familiarizing yourself with these before moving on.
+
+ℹ️ **IMPORTANT**: You will also need _your domain_ which will be provided by {{ COMPANY_NAME }}.
+
+## Part I: Setting up a Basic Encoder
+
+Below are step-by-step instructions on how to set up a basic `EncoderUiState` instance. If you want to just skip to the end and see it all put together, head [here](#full-code).
+
+### Step 1: Imports
+
+To start, import the following:
+
+1. `React`, `useEffect`, and `useState` from `react`
+1. `EncoderUiState`, `EncoderUiContext`, `VideoClientContext`, `CallContext`, `VideoClient` and `mediaController` from `@video/video-client-web`
+
+```js
+// in MyEncoderApp.tsx
+import React, { useEffect, useState } from "react";
+import {
+  EncoderUiState,
+  VideoClientContext,
+  EncoderUiContext,
+  CallContext,
+  types,
+  VideoClient,
+  mediaController,
+} from "@video/video-client-web";
+```
+
+### Step 2: Set `yourDomain` variable(s)
+
+This will be provided by {{ COMPANY_NAME }} for your organization.
+
+```ts
+// in MyEncoderApp.tsx
+const yourDomain = "https://yourdomain.com";
+```
+
+### Step 3: Configure VideoClient Options
+
+Begin configuring your `VideoClient` options. A new `VideoClient` instance takes as a parameter an _optional_ `VideoClientOptions` object comprised of
+five optional properties:
+
+1. `backendEndpoints` - _Optional_ - An array of loadbalancer urls. These are optional when using a manifest player, but are **_NOT_** optional when broadcasting. [Appendix](#videoclientoptionsbackendendpoints).
+2. `token` - _Optional_ - A token. For more info, see [Appendix](#videoclientoptionstoken).
+3. `autoPlay` - _Optional_ - A boolean that determines if players should autoplay (`autoPlay: true`) or not (`autoPlay: false`).
+4. `stats` - _Optional_ - A `VideoClientStats` options object. For more info, see [Appendix](#videoclientoptionsstats).
+5. `logger` - _Optional_ - A `LoggerCore` instance. For more info, see [Appendix](#videoclientoptionsstats).
+6. `loggerClientName` - _Optional_ - Passing this option appends the preferred app name to Video Client logs, i.e. "videoclient:loggerClientName"
+
+```ts
+interface VideoClientOptions {
+  backendEndpoints?: string[];
+  token?: TokenGetter;
+  autoPlay?: boolean;
+  stats?: VideoClientStats;
+  logger?: LoggerCore;
+  loggerClientName?: string;
+}
+```
+
+### Step 4: Create a VideoClient instance
+
+The VideoClient class is the foundation of the Video web encoder and player. It provides access
+to a Call as well as manages peer state.
+
+- 4.1. Set up your main React component.
+
+  ```ts
+  // in MyEncoderApp.tsx
+
+  const MyEncoderApp = ({ props }) => {
+    return <h1>Placeholder for Encoder</h1>;
+  };
+  export default MyEncoderApp;
+  ```
+
+- 4.2. Use the React `useState` hook to manage the `VideoClient` state.
+
+  ```ts
+  // in MyEncoderApp.tsx
+
+  /*
+   * 4.2a Set local state.
+   */
+  const [vc, setVc] = useState<types.VideoClient | null>(null);
+  /*
+   * 4.2b For dev purposes only, let's console our our state to make sure we
+   * have the right data.
+   */
+  console.log("VideoClient State", vc);
+  ```
+
+- 4.3. Use the React `useEffect` hook to create a new `VideoClient` instance.
+
+  When creating the `useEffect` for your `VideoClient` instance be sure to only include things in your dependency array that will allow for disposal and cleanup of the `VideoClient` instance to occur when the `VideoClient` instance has changed or is removed. Failure to do so may result in cleanup code running more often than desired.
+
+  Using your configured options from Step 3 we will create a `VideoClient` instance.
+
+```ts
+// in MyEncoderApp.tsx
+
+useEffect(() => {
+  /*
+   * 4.3a) Setup a VideoClient instance. Be sure to include a state check to avoid
+   * an infinite loop.
+   */
+  if (vc == null) {
+    const opts: types.VideoClientOptions = {
+      backendEndpoints: [yourDomain],
+      token: yourToken,
+      loggerConfig: {
+        clientName: "your-app-name",
+        writeLevel: "debug", // Defaults to debug, but can be info, warn, notice, deprecated, network, local, timing, or trace. Recommend leaving this as debug.
+      },
+    };
+    /*
+     * 4.3b) Set local state.
+     */
+    setVc(new VideoClient(opts));
+    setCallState(new CallState());
+  }
+  /*
+   * 4.3c) On unmount, be sure to dispose the VideoClient and set state to `null`.
+   */
+  return () => {
+    if (vc != null) {
+      vc.dispose();
+      setVc(null);
+    }
+  };
+  /*
+   * 4.3d) Remember to only include things in your dependency array related to the state of your `VideoClient` instance, otherwise disposal may occur at undesired times.
+   */
+}, [vc]);
+```
+
+- 4.4. Putting it all together, your code should look like this at this point:
+
+```tsx
+// in MyEncoderApp.tsx
+
+import React, { useEffect, useState } from "react";
+import {
+  EncoderUiState,
+  VideoClientContext,
+  EncoderUiContext,
+  types,
+  VideoClient,
+  mediaController,
+  CallState,
+} from "@video/video-client-web";
+
+const MyEncoderApp = ({ props }) => {
+  const yourDomain = "https://yourdomain.com";
+
+  /*
+   * 4.2a Set local state.
+   */
+  const [vc, setVc] = useState<types.VideoClient | null>(null);
+  const [callState, setCallState] = useState<CallState | null>(null);
+
+  /*
+   * 4.2b For dev purposes only, let's console our our state to make sure we
+   * have the right data.
+   */
+  console.log("VideoClient State", vc);
+
+  useEffect(() => {
+    /*
+     * 4.3a) Setup a VideoClient instance. Be sure to include a state check to avoid
+     * an infinite loop.
+     */
+    if (vc == null) {
+      const opts: types.VideoClientOptions = {
+        backendEndpoints: [yourDomain],
+        token: yourToken,
+        loggerConfig: {
+          clientName: "your-app-name",
+          writeLevel: "debug", // Defaults to debug, but can be info, warn, notice, deprecated, network, local, timing, or trace. Recommend leaving this as debug.
+        },
+      };
+      /*
+       * 4.3b) Set local state.
+       */
+      setVc(new VideoClient(opts));
+      setCallState(new CallState());
+    }
+    /*
+     * 4.3c) On unmount, be sure to dispose the VideoClient and set state to `null`. Remember to only have this useEffect trigger on change or removal of the `VideoClient` or this cleanup may happen more than desired.
+     */
+    return () => {
+      if (vc != null) {
+        vc.dispose();
+        setVc(null);
+      }
+    };
+    /*
+     * 4.3d) Include vc in the dependency array.
+     */
+  }, [vc]);
+
+  /*
+   * 4.1) Return placeholder UI.
+   */
+  return <h1>Placeholder for Encoder</h1>;
+};
+
+export default MyEncoderApp;
+```
+
+- 4.5. If you are on the right track, this is what you should be seeing in your console output and in the UI after you set your `vc` state.
+
+  _Expected console output at the end of Step 4._
+  ![Expected console output at the end of Step 4.](https://video-client-main.ci.devspace.lsea4.livelyvideo.tv/images/encoder-1.png)
+  _Expected UI at the end of Step 4._
+  ![Expected console output at the end of Step 4.](https://video-client-main.ci.devspace.lsea4.livelyvideo.tv/images/encoder-2.png)
+
+### Step 5: Create a mediaController
+
+A `mediaController` is how we manage a broadcaster's `MediaStream`, which gives access to a user's video and audio devices.
+For more information on `mediaController`, please see the [Appendix](#videoclientoptionsmediacontroller) at the bottom of this doc.
+
+- 5.1. Using the React `useEffect` hook, we will use an `async` IIFE to initialize and request a `mediaController` -- which we will set to a new variable to use later.
+
+  ```ts
+  // in MyEncoderApp.tsx
+
+    useEffect(() => {
+      /*
+      * 5.1a. Async IIFE
+      */
+        (async () => {
+          /*
+          * 5.1b. Initialize mediaController.
+          */
+          await mediaController.init();
+          /*
+          * 5.1c. Request mediaController + set variable.
+          */
+          const mediaStreamController = await mediaController.requestController();
+        })();
+      }
+    }, []);
+  ```
+
+### Step 6: Create an EncoderUiState
+
+The `EncoderUiState` is how we manage our React Encoder UI. It has one required parameter -- the `mediaController` we created in Step 5.
+
+- 6.1. Use the React `useState` hook to manage the `EncoderUiState` state.
+
+  ```ts
+  // in MyEncoderApp.tsx
+
+  /*
+   * 6.1a Set local state.
+   */
+  const [encoderUi, setEncoderUi] = useState<EncoderUiState | null>(null);
+  /*
+   * 6.1b For development purposes only, let's console our our state to make sure we
+   * have the right data.
+   */
+  console.log("EncoderUi State", encoderUi);
+  ```
+
+- 6.2. Continuing to use the `useEffect` hook we started in Step 5, create an `EncoderUiState` instance and set the local React state.
+
+  ```ts
+  // in MyEncoderApp.tsx
+
+  useEffect(() => {
+    /*
+     * 6.2a. Check is current state is null to avoid an infinite loop.
+     */
+    if (encoderUi == null) {
+      (async () => {
+        await mediaController.init();
+        const mediaStreamController = await mediaController.requestController();
+
+        /*
+         * 6.2b. Once your mediaStreamController variable has been set,
+         * create a new EncoderUiState instance and set it to local state.
+         */
+        setEncoderUi(new EncoderUiState(mediaStreamController));
+      })();
+    }
+    /*
+     * 6.2c. Add encoderUi to the dependency array.
+     */
+  }, [encoderUi]);
+  ```
+
+- 6.3. **Important: Clean up!** Be sure to dispose of the `EncoderUiState` (in this case, on unmount). Your implementation may have different functionality, so you may not want to dispose on unmount, but be sure to dispose of the Encoder instance when appropriate.
+
+  ```ts
+  // in MyEncoderApp.tsx
+
+  useEffect(() => {
+    if (encoderUi == null) {
+      (async () => {
+        await mediaController.init();
+        const mediaStreamController = await mediaController.requestController();
+        setEncoderUi(new EncoderUiState(mediaStreamController));
+      })();
+    }
+
+    /*
+     * 6.3a. In the same useEffect as above, utilize the useEffect cleanup.
+     */
+    return () => {
+      /*
+       * 6.3b. Check is current state is not null.
+       */
+      if (encoderUi != null) {
+        /*
+         * 6.3c. Dispose encoderUi and set state to null.
+         */
+        encoderUi.dispose();
+        setEncoderUi(null);
+      }
+    };
+  }, [encoderUi]);
+  ```
+
+- 6.4. Putting it all together, your code should look like this at this point:
+
+```tsx
+// in MyEncoderApp.tsx
+
+import {
+  EncoderUiState,
+  mediaController,
+  types,
+  VideoClient,
+  CallState,
+} from "@video/video-client-web";
+import React, { useEffect, useState } from "react";
+
+export const MyEncoderApp = (args) => {
+  const [vc, setVc] = useState<types.VideoClient | null>(null);
+  const [callState, setCallState] = useState<CallState | null>(null);
+  const [encoderUi, setEncoderUi] = useState<EncoderUiState | null>(null);
+
+  const yourDomain = "https://yourdomain.com";
+
+  /*
+   * For development purposes only.
+   */
+  console.log("Call State", callState);
+  console.log("VideoClient State", vc);
+  console.log("EncoderUi State", encoderUi);
+
+  /*
+   * Step 4: Create VideoClient instance and Call State.
+   */
+  useEffect(() => {
+    if (vc == null) {
+      const opts: types.VideoClientOptions = {
+        backendEndpoints: [yourDomain],
+        token: yourToken,
+      };
+      setVc(new VideoClient(opts));
+      setCallState(new CallState());
+    }
+    return () => {
+      if (vc != null) {
+        vc.dispose();
+        setVc(null);
+      }
+    };
+  }, [vc]);
+
+  /*
+   * Steps 5 + 6: Create mediaController and EncoderUiState.
+   */
+  useEffect(() => {
+    if (encoderUi == null) {
+      (async () => {
+        await mediaController.init();
+        const mediaStreamController = await mediaController.requestController();
+        setEncoderUi(new EncoderUiState(mediaStreamController));
+      })();
+    }
+    return () => {
+      if (encoderUi != null) {
+        encoderUi.dispose();
+        setEncoderUi(null);
+      }
+    };
+  }, [encoderUi]);
+
+  return <h1>Placeholder for Encoder</h1>;
+};
+```
+
+### Step 7: Create Context Providers
+
+Now that you have a working `VideoClient` and `EncoderUiState` it's time to start building the UI of your application.  {% company-name /%} UI components access _global state_ via React `Context`. For more background information, check out the
+[React Context docs](https://reactjs.org/docs/context.html).
+
+- 7.1. Create a new file for our UI Component, and set it aside.
+
+  ```ts
+  // in Encoder.tsx
+
+  import React from "react";
+  const Encoder = () => {
+    return <>Placeholder for Encoder UI!</>;
+  };
+  export default Encoder;
+  ```
+
+- 7.2. Back in `MyEncoderApp.tsx`, import `EncoderUiContext`, `VideoClientContext`, and our new component.
+
+  ```js
+  // in MyEncoderApp.tsx
+
+  import {
+    VideoClientContext,
+    EncoderUiContext,
+    CallContext,
+  } from "@video/video-client-web";
+  import Encoder from "./Encoder";
+  ```
+
+  - 7.3. Create a React Context `Provider` for your Encoder store using the `EncoderUiContext` Context instance. Grab the `encoderUi` value
+    from local React state.
+
+    ```ts
+    // in MyEncoderApp.tsx
+
+    return (
+      <EncoderUiContext.Provider value={encoderUi}></EncoderUiContext.Provider>
+    );
+    ```
+
+  - 7.4. Implement Encoder Provider.
+
+    **Important: The Provider needs to _wrap_ our `Encoder` component.**
+
+    ```ts
+    // in MyEncoderApp.tsx
+
+    /*
+     * 7.4a If our store is null, let's just return a fragment.
+     * Loading our Encoder component with an invalid store will throw errors.
+     */
+    if (encoderUi == null) {
+      return <></>;
+    }
+    /*
+     * 7.4b If our store is available, let's return our
+     * Provider and Encoder component.
+     */
+    return (
+      <EncoderUiContext.Provider value={encoderUi}>
+        <Encoder />
+      </EncoderUiContext.Provider>
+    );
+    ```
+
+  -7.5. Next, create a React Context `Provider` for your Call store using the `CallContext` Context instance. Grab the `callState` value
+  from local React state.
+
+  **Important: The Provider needs to _wrap_ our `Encoder` component.**
+
+  ```js
+  // in MyEncoderApp.tsx
+  return (
+    <CallContext.Provider value={callState}>
+      <EncoderUiContext.Provider value={encoderUi}>
+        <Encoder />
+      </EncoderUiContext.Provider>
+    </CallContext.Provider>
+  );
+  ```
+
+  -7.6. Lastly, create a React Context `Provider` for your VideoClient store using the `VideoClientContext` Context instance. Grab the `vc` value
+  from local React state.
+
+  **Important: The Provider needs to _wrap_ our `Encoder` component.**
+
+  ```js
+  // in MyEncoderApp.tsx
+  return (
+    <VideoClientContext.Provider value={vc}>
+      <CallContext.Provider value={callState}>
+        <EncoderUiContext.Provider value={encoderUi}>
+          <Encoder />
+        </EncoderUiContext.Provider>
+      </CallContext.Provider>
+    </VideoClientContext.Provider>
+  );
+  ```
+
+- 7.7. Putting it all together.
+
+  After implementing our Providers, this is how our application should be looking:
+
+  ```tsx
+  // in MyEncoderApp.tsx
+  /*
+  * Import Contexts.
+  */
+  import { EncoderUiState, mediaController, types, VideoClient, VideoClientContext, EncoderUiContext,  CallContext, CallState } from "@video/video-client-web";
+  import React, { useEffect, useState } from "react";
+  /*
+   * Import Encoder Component.
+   */
+  import Encoder from "./Encoder";
+
+  export const MyEncoderApp = (args) => {
+    const [vc, setVc] = useState<types.VideoClient | null>(null);
+    const [encoderUi, setEncoderUi] = useState<EncoderUiState | null>(null);
+
+    /*
+    * For development purposes only.
+    */
+    console.log("Call State", callState)
+    console.log("VideoClient State", vc);
+    console.log("EncoderUi State", encoderUi);
+
+    /*
+    * Step 4: Create VideoClient instance.
+    */
+    useEffect(() => {
+      if (vc == null) {
+        const opts: types.VideoClientOptions = {
+          backendEndpoints: [yourDomain],
+          token: yourToken,
+        };
+        setVc(new VideoClient(opts));
+      }
+      return () => {
+        if (vc != null) {
+          vc.dispose();
+          setVc(null);
+        }
+      };
+    }, [vc]);
+
+    /*
+    * Steps 5 + 6: Create mediaController and EncoderUiState.
+    */
+    useEffect(() => {
+      if (encoderUi == null) {
+        (async () => {
+          await mediaController.init();
+          const mediaStreamController =
+            await mediaController.requestController();
+          setEncoderUi(new EncoderUiState(mediaStreamController));
+        })();
+      }
+      return () => {
+        if (encoderUi != null) {
+          encoderUi.dispose();
+          setEncoderUi(null);
+        }
+      };
+    }, [encoderUi]);
+
+    /*
+    * Return a fragment if encoderUi is null.
+    */
+    if (encoderUi == null) {
+      return <></>;
+    }
+
+  /*
+    * Otherwise, return our Encoder component WRAPPED in our two Providers.
+    */
+    return (
+    <VideoClientContext.Provider value={vc}>
+      <CallClientContext.Provider value={callState}>
+        <EncoderUiContext.Provider value={encoderUi}>
+          <Encoder />
+        </EncoderUiContext.Provider>
+      </CallContext.Provider>
+    </VideoClientContext.Provider>
+    );
+  };
+  ```
+
+## Part II: Build Some UI and Consume React Context
+
+### Step 8: Build the Encoder UI using React Components
+
+- 8.1. Import Encoder Components.
+
+  ```ts
+  // in Encoder.tsx
+  import {
+    JoinBroadcastButton,
+    CameraButton,
+    ControlBar,
+    EncoderAudioDeviceSelect,
+    EncoderEchoCancellationCheckbox,
+    EncoderNoiseSuppressionCheckbox,
+    EncoderResolutionSelect,
+    EncoderVideo,
+    EncoderVideoDeviceSelect,
+    FullscreenButton,
+    MediaContainer,
+    MicrophoneButton,
+    ScreenCaptureButton,
+    SettingsButton,
+    SettingsSidebar,
+    TestMicButton,
+  } from "@video/video-client-web";
+  ```
+
+- 8.2. Assemble an Encoder.
+
+  These modular components are independent of one another and can be arranged however you like. The `MediaContainer`, `ControlBar`, and `SettingsSidebar` are merely wrappers for styling purposes.
+
+  ```ts
+  // in Encoder.tsx
+  return (
+      {/* 8.2c 8.2a MediaContainer should wrap all components for styling. */}
+      <MediaContainer>
+        <EncoderVideo  />
+        {/* 8.2c ControlBar wraps controls (for styling). Include required variant prop */}
+        <ControlBar variant="encoder" >
+          <CameraButton/>
+          <MicrophoneButton />
+          {/* 8.2d setCallId will return the ID of the owner call to the encoder */}
+          <JoinBroadcastButton setCallId={setCallId}broadcastOptions={{  streamName: "your-streamname" }} />
+          <ScreenCaptureButton />
+          <FullscreenButton />
+          <SettingsButton />
+        </ControlBar>
+        {/* 8.2e SettingsSidebar wraps items to be displayed in sidebar (for styling). */}
+        <SettingsSidebar>
+          <EncoderVideoDeviceSelect />
+          <EncoderAudioDeviceSelect />
+          <EncoderResolutionSelect />
+          <EncoderNoiseSuppressionCheckbox />
+          <EncoderEchoCancellationCheckbox />
+          <TestMicButton />
+        </SettingsSidebar>
+      </MediaContainer>
+  );
+  ```
+
+- 8.3. Putting it all together, our `Encoder.tsx` should now look like this:
+
+  ```ts
+  // in Encoder.tsx
+  import React from "react";
+  import {
+    JoinBroadcastButton,
+    CameraButton,
+    ControlBar,
+    EncoderAudioDeviceSelect,
+    EncoderEchoCancellationCheckbox,
+    EncoderNoiseSuppressionCheckbox,
+    EncoderResolutionSelect,
+    EncoderVideo,
+    EncoderVideoDeviceSelect,
+    FullscreenButton,
+    EncoderUiContext,
+    MediaContainer,
+    MicrophoneButton,
+    ScreenCaptureButton,
+    SettingsButton,
+    SettingsSidebar,
+    TestMicButton,
+  } from "@video/video-client-web";
+
+  const Encoder = () => {
+    return (
+      <MediaContainer>
+        <EncoderVideo />
+        <ControlBar variant="encoder">
+          <CameraButton />
+          <MicrophoneButton />
+          <JoinBroadcastButton
+            setCallId={setCallId}
+            broadcastOptions={{ streamName: "your-streamname" }}
+          />
+          <ScreenCaptureButton />
+          <FullscreenButton />
+          <SettingsButton />
+        </ControlBar>
+        <SettingsSidebar>
+          <EncoderVideoDeviceSelect />
+          <EncoderAudioDeviceSelect />
+          <EncoderResolutionSelect />
+          <EncoderNoiseSuppressionCheckbox />
+          <EncoderEchoCancellationCheckbox />
+          <TestMicButton />
+        </SettingsSidebar>
+      </MediaContainer>
+    );
+  };
+  export default Encoder;
+  ```
+
+  And our UI should now look something like this:
+  ![Expected output at the end of Step 8. Woohoo! You dit it!](https://video-client-main.ci.devspace.lsea4.livelyvideo.tv/images/encoder-4.png)
+
+### Step 9. Access Context
+
+Next, you'll access the context from the Context Provider.
+**Important to note:** In order to update the context and make these updates available via `Context` (i.e. available to all components nested within the Provider tree), updates need to occur _within_ a nested component NOT in the component which declares the `Provider`.
+
+- 9.1. Import `useContext` from React and `EncoderUiContext` and `VideoClientContext` from `@video/video-client-web`.
+
+  ```ts
+  // in `Encoder.tsx`
+
+  import React, { useContext } from "react";
+  import {
+    VideoClientContext,
+    EncoderUiContext,
+  } from "@video/video-client-web";
+  ```
+
+- 9.2. Access `Context` via React's `useContext` hook.
+
+  ```ts
+  // in `Encoder.tsx`
+
+  const encoderCtx = useContext(EncoderUiContext);
+  const videoClientCtx = useContext(VideoClientContext);
+  ```
+
+- 9.3. Putting it all together.
+
+  Not much has changed in this step (our UI and console output should remain the same as in Step 6), but our `Encoder` component should now look like this:
+
+  ```ts
+  // in Encoder.tsx
+
+  import React, { useContext } from "react";
+  import {
+    JoinBroadcastButton,
+    CameraButton,
+    ControlBar,
+    EncoderAudioDeviceSelect,
+    EncoderEchoCancellationCheckbox,
+    EncoderNoiseSuppressionCheckbox,
+    EncoderResolutionSelect,
+    EncoderVideo,
+    EncoderVideoDeviceSelect,
+    FullscreenButton,
+    EncoderUiContext,
+    MediaContainer,
+    MicrophoneButton,
+    ScreenCaptureButton,
+    SettingsButton,
+    SettingsSidebar,
+    TestMicButton,
+  } from "@video/video-client-web";
+
+  const Encoder = () => {
+    const encoderCtx = useContext(EncoderUiContext);
+    const videoClientCtx = useContext(VideoClientContext);
+    return (
+      <MediaContainer>
+        <EncoderVideo />
+        <ControlBar variant="encoder">
+          <CameraButton />
+          <MicrophoneButton />
+          <JoinBroadcastButton
+            setCallId={setCallId}
+            broadcastOptions={{ streamName: "your-streamname" }}
+          />
+          <ScreenCaptureButton />
+          <FullscreenButton />
+          <SettingsButton />
+        </ControlBar>
+        <SettingsSidebar>
+          <EncoderVideoDeviceSelect />
+          <EncoderAudioDeviceSelect />
+          <EncoderResolutionSelect />
+          <EncoderNoiseSuppressionCheckbox />
+          <EncoderEchoCancellationCheckbox />
+          <TestMicButton />
+        </SettingsSidebar>
+      </MediaContainer>
+    );
+  };
+  export default Encoder;
+  ```
+
+### Step 10. Working with Context
+
+Now that you have an Encoder up and running, you may have some functionality in your application that requires interacting with the API. In almost all cases, you will want to call any methods and make any changes to your state _within_ the `EncoderUiContext.Provider` and/or `VideoClientContext.Provider`, that way your Context is updated. If you make any updates to your Context _outside_ of the `EncoderUiContext.Provider` or `VideoClientContext.Provider`, those changes will not be reflected in your application.
+
+- 10.1. **Do This:** Call methods and update Context WITHIN the `EncoderUiContext.Provider`/ `VideoClientContext.Provider`.
+
+  ```ts
+  // in Encoder.tsx
+
+  import React, { useContext } from "react";
+  import {
+    JoinBroadcastButton,
+    CameraButton,
+    ControlBar,
+    EncoderAudioDeviceSelect,
+    EncoderEchoCancellationCheckbox,
+    EncoderNoiseSuppressionCheckbox,
+    EncoderResolutionSelect,
+    EncoderVideo,
+    EncoderVideoDeviceSelect,
+    FullscreenButton,
+    EncoderUiContext,
+    MediaContainer,
+    MicrophoneButton,
+    ScreenCaptureButton,
+    SettingsButton,
+    SettingsSidebar,
+    TestMicButton,
+  } from "@video/video-client-web";
+
+  const Encoder = () => {
+    /*
+     * 10.1a Access the encoderCtx via the useContext hook.
+     */
+    const encoderCtx = useContext(EncoderUiContext);
+    /*
+     * 10.1b Make updates to your EncoderUiState store, call EncoderUiState methods, etc.
+     * here or within nested components that access Context from the same
+     * Provider.
+     */
+    useEffect(() => {
+      encoderCtx.mediaStreamController.videoDeviceId = "myVideoDeviceId";
+      // Will set the videoDevice to "myVideoDeviceId".
+    }, []);
+
+    return (
+      <MediaContainer>
+        <EncoderVideo />
+        <ControlBar variant="encoder">
+          <CameraButton />
+          <MicrophoneButton />
+          <JoinBroadcastButton
+            setCallId={setCallId}
+            broadcastOptions={{ streamName: "your-streamname" }}
+          />
+          <ScreenCaptureButton />
+          <FullscreenButton />
+          <SettingsButton />
+        </ControlBar>
+        <SettingsSidebar>
+          <EncoderVideoDeviceSelect />
+          <EncoderAudioDeviceSelect />
+          <EncoderResolutionSelect />
+          <EncoderNoiseSuppressionCheckbox />
+          <EncoderEchoCancellationCheckbox />
+          <TestMicButton />
+        </SettingsSidebar>
+      </MediaContainer>
+    );
+  };
+  export default Encoder;
+  ```
+
+- 10.2. **Not This:** Don't call methods or update Context from OUTSIDE the `EncoderUiContext.Provider`/`VideoClientContext.Provider`/`CallContextProvider`.
+
+  ```tsx
+  // in MyEncoderApp.tsx
+  import {
+    EncoderUiState,
+    mediaController,
+    types,
+    VideoClient,
+    VideoClientContext,
+    EncoderUiContext,
+    CallContext,
+    CallState,
+  } from "@video/video-client-web";
+  import React, { useEffect, useState } from "react";
+  import Encoder from "./Encoder";
+
+  export const MyEncoderApp = (args) => {
+    const [vc, setVc] = useState<types.VideoClient | null>(null);
+    const [callState, setCallState] = useState<CallState | null>(null);
+    const [encoderUi, setEncoderUi] = useState<EncoderUiState | null>(null);
+
+    /*
+     * 10.2/ With few exceptions (dispose being one of them), DO NOT make updates to
+     * your Encoder store, call Encoder methods, etc. here. Any changes you make will not
+     * be reflected in your Context, and therefore, your application.
+     */
+    useEffect(() => {
+      encoderCtx.mediaStreamController.videoDeviceId = "myVideoDeviceId";
+      // Will NOT set the videoDevice to "myVideoDeviceId".
+    }, []);
+
+    useEffect(() => {
+      if (vc == null) {
+        const opts: types.VideoClientOptions = {
+          backendEndpoints: [yourDomain],
+          token: yourToken,
+        };
+        setVc(new VideoClient(opts));
+        setCallState(new CallState());
+      }
+      return () => {
+        if (vc != null) {
+          vc.dispose();
+          setVc(null);
+        }
+      };
+    }, [vc]);
+
+    useEffect(() => {
+      if (encoderUi == null) {
+        (async () => {
+          await mediaController.init();
+          const mediaStreamController =
+            await mediaController.requestController();
+          setEncoderUi(new EncoderUiState(mediaStreamController));
+        })();
+      }
+      return () => {
+        if (encoderUi != null) {
+          encoderUi.dispose();
+          setEncoderUi(null);
+        }
+      };
+    }, [encoderUi]);
+
+    if (encoderUi == null) {
+      return <></>;
+    }
+
+    return (
+      <VideoClientContext.Provider value={vc}>
+        <CallContext.Provider value={callState}>
+          <EncoderUiContext.Provider value={encoderUi}>
+            <Encoder />
+          </EncoderUiContext.Provider>
+        </CallContext.Provider>
+      </VideoClientContext.Provider>
+    );
+  };
+  ```
+
+## Full Code
+
+```tsx
+// in Encoder.tsx
+
+import React, { useContext } from "react";
+import {
+  JoinBroadcastButton,
+  CameraButton,
+  ControlBar,
+  EncoderAudioDeviceSelect,
+  EncoderEchoCancellationCheckbox,
+  EncoderNoiseSuppressionCheckbox,
+  EncoderResolutionSelect,
+  EncoderVideo,
+  EncoderVideoDeviceSelect,
+  FullscreenButton,
+  VideoClientContext,
+  EncoderUiContext,
+  MediaContainer,
+  MicrophoneButton,
+  ScreenCaptureButton,
+  SettingsButton,
+  SettingsSidebar,
+  TestMicButton,
+} from "@video/video-client-web";
+
+const Encoder = () => {
+  const encoderCtx = useContext(EncoderUiContext);
+  const videoClientCtx = useContext(VideoClientContext);
+
+  return (
+    <MediaContainer>
+      <EncoderVideo />
+      <ControlBar variant="encoder">
+        <CameraButton />
+        <MicrophoneButton />
+        <JoinBroadcastButton
+          setCallId={setCallId}
+          broadcastOptions={{ streamName: "your-streamname" }}
+        />
+        <ScreenCaptureButton />
+        <FullscreenButton />
+        <SettingsButton />
+      </ControlBar>
+      <SettingsSidebar>
+        <EncoderVideoDeviceSelect />
+        <EncoderAudioDeviceSelect />
+        <EncoderResolutionSelect />
+        <EncoderNoiseSuppressionCheckbox />
+        <EncoderEchoCancellationCheckbox />
+        <TestMicButton />
+      </SettingsSidebar>
+    </MediaContainer>
+  );
+};
+export default Encoder;
+```
+
+```tsx
+// in MyEncoderApp.tsx
+
+import {
+  EncoderUiState,
+  mediaController,
+  types,
+  VideoClient,
+  VideoClientContext,
+  EncoderUiContext,
+} from "@video/video-client-web";
+import React, { useEffect, useState } from "react";
+import Encoder from "./Encoder";
+
+export const MyEncoderApp = (args) => {
+  const [vc, setVc] = useState<types.VideoClient | null>(null);
+  const [callState, setCallState] = useState<CallState | null>(null);
+  const [encoderUi, setEncoderUi] = useState<EncoderUiState | null>(null);
+
+  useEffect(() => {
+    if (vc == null) {
+      const opts: types.VideoClientOptions = {
+        backendEndpoints: [yourDomain],
+        token: yourToken,
+      };
+      setVc(new VideoClient(opts));
+      setCallState(new CallState());
+    }
+    return () => {
+      if (vc != null) {
+        vc.dispose();
+        setVc(null);
+      }
+    };
+  }, [vc]);
+
+  useEffect(() => {
+    if (encoderUi == null) {
+      (async () => {
+        await mediaController.init();
+        const mediaStreamController = await mediaController.requestController();
+        setEncoderUi(new EncoderUiState(mediaStreamController));
+      })();
+    }
+    return () => {
+      if (encoderUi != null) {
+        encoderUi.dispose();
+        setEncoderUi(null);
+      }
+    };
+  }, [encoderUi]);
+
+  if (encoderUi == null) {
+    return <></>;
+  }
+
+  return (
+    <VideoClientContext.Provider value={vc}>
+      <CallContext.Provider value={callState}>
+        <EncoderUiContext.Provider value={encoderUi}>
+          <Encoder />
+        </EncoderUiContext.Provider>
+      </CallContext.Provider>
+    </VideoClientContext.Provider>
+  );
+};
+```
+
+## Appendix
+
+### VideoClientOptions.token
+
+Either a token `string` or a `TokenRefresher` can be passed in.
+
+```ts
+type TokenRefresher = () => Promise<string>;
+type TokenGetter = string | TokenRefresher;
+```
+
+### VideoClientOptions.backendEndpoints
+
+This is an array of load balancer URLs. One URL is required and additional fallback URLs are optional, and the URLs will be tried in order.
+
+### VideoClientOptions.mediaController
+
+A `MediaStreamController` instance. A `MediaStreamController` takes one _optional_ `options` parameter.
+
+```ts
+interface MediaStreamControllerOptions {
+  defaultConstraints: {
+    audio: DeepReadonly<MediaTrackConstraints>;
+    video: DeepReadonly<MediaTrackConstraints>;
+    screencapture: DeepReadonly<MediaTrackConstraints>;
+  };
+  fallbackConstraints: {
+    audio: DeepReadonly<MediaTrackConstraints>;
+    video: DeepReadonly<MediaTrackConstraints>;
+    screencapture: DeepReadonly<MediaTrackConstraints>;
+  } | null;
+  replaceTracks: boolean;
+  waitingDelay: number;
+  defaultLockPolicy: ExistsStreamPolicy;
+}
+
+/*
+ * Example
+ */
+const myMediaStreamController = new MediaStreamController(
+  MediaStreamControllerOptions
+);
+```
+
+### VideoClientOptions.logger
+
+A `LoggerCore` instance.
+
+```ts
+import LoggerCore from "@video/log-client";
+
+const myLogger = new LoggerCore("myLogger");
+```
+
+### VideoClientOptions.stats
+
+A `VideoClientStats` options object.
+
+```ts
+interface VideoClientStats {
+  app: string;
+  userId: string;
+  statsInterval?: number;
+  streamId?: string;
+  studioId?: string;
+  rsrc?: string;
+  xkey?: string;
+  bpeerId?: string;
+  debugLogs?: boolean;
+}
+```
+
+{% /tab-panel-item %}
+{% tab-panel-item %}
+
+## Encoder
+
+The encoder is {% company-name /%}'s video encoding API. It allows a user to configure and send video and audio data via a web call. The Encoder API is intended for single- or multi-broadcaster video streaming applications such as education, presentation, performance, and more.
+
+## Before Getting Started
+
+'s Encoder API can either be used as a standalone JavaScript API or as a React Component Library. The instructions below outline how to create a simple Encoder application using Vanilla JavaScript.
+
+**IMPORTANT**: You will need _your domain_ which will be provided by .
+
+Below are step-by-step instructions on how to set up a basic Encoder using Vanilla JavaScript. If you want to just skip to the end and see it all put together, head [here](#full-code-1).
+
+## Part I: Creating your bundle
+
+In order to use the `video-client-core` dependency inside of a Vanilla JavaScript application you must use a static module bundler. For this example, we will be using [webpack](https://webpack.js.org/).
+
+### Step 1: Create your webpack.config.js file
+
+```js
+var webpack = require('webpack');
+
+module.exports => {
+    return {
+        // Make sure to point this at the index.js file of @video-client-core
+        entry: "./index.js",
+        output: {
+            path: __dirname + "/bundle",
+            filename: 'videoClientLib.js',
+            libraryTarget: 'var',
+            library: 'VideoClient'
+        },
+    }
+};
+```
+
+### Step 2: Now create your HTML page for your Encoder and add the created bundle
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src="/videoClientLib.js"></script>
+  </body>
+</html>
+```
+
+### Step 3: Configure `VideoClient` Options
+
+Begin configuring your `VideoClient` options. A new `VideoClient` instance takes as a parameter an _optional_ `VideoClientOptions` object comprised of
+five optional properties:
+
+1. `backendEndpoints` - _Optional_ - An array of load balancer URLs. This is NOT optional when broadcasting, so in this case, when constructing an Encoder, it will be required.
+1. `token` - _Optional_ - A token.
+1. `autoPlay` - _Optional_ - A boolean that determines if players should autoplay (`autoPlay: true`) or not (`autoPlay: false`).
+1. `stats` - _Optional_ - A `VideoClientStats` options object.
+1. `logger` - _Optional_ - A `LoggerCore` instance.
+1. `loggerClientName` - _Optional_ - Passing this option appends the preferred app name to Video Client logs, i.e. "videoclient:loggerClientName"
+
+### Step 4: Create a `VideoClient` instance
+
+The VideoClient class is the foundation of the Video web encoder and player. It provides access
+to a Call as well as manages peer state.
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src="/videoClientLib.js"></script>
+    <script>
+      window.onload = async function () {
+        let vc;
+        const yourDomain = "https://yourdomain.com";
+        const videoClientOptions = {
+          backendEndpoints: [yourDomain],
+          token: yourToken,
+        };
+
+        //Create your videoClient instance
+        vc = new VideoClient.VideoClient(videoClientOptions);
+      };
+    </script>
+  </body>
+</html>
+```
+
+### Step 5: Create your `MediaController`
+
+A `mediaController` is how we manage a broadcaster's `MediaStream`, which gives access to a user's video and audio devices.
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src="/videoClientLib.js"></script>
+    <script>
+      window.onload = async function () {
+        const yourDomain = "https://yourdomain.com";
+        const videoClientOptions = {
+          backendEndpoints: [yourDomain],
+          token: yourToken,
+        };
+
+        //Create your videoClient instance
+        let vc = new VideoClient.VideoClient(videoClientOptions);
+
+        //Initialize and create your mediaController (Note: The media controller should only be initialized once)
+        //For mobile browsers mediaController.init(); needs to be called on user action like on click
+        await VideoClient.mediaController.init();
+        let mediaStreamController =
+          await VideoClient.mediaController.requestController();
+      };
+    </script>
+  </body>
+</html>
+```
+
+### Step 6: Set the defaults for your `MediaController` and request a preview player from the `VideoClient`
+
+`previewPlayer` will render video and audio from your webcam only and control only a local `HTMLVideoElement`, changes to the `previewPlayer` will not affect the video stream.
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src="/videoClientLib.js"></script>
+    <script>
+      window.onload = async function () {
+        const yourDomain = "https://yourdomain.com";
+        const videoClientOptions = {
+          backendEndpoints: [yourDomain],
+          token: yourToken,
+        };
+
+        //Create your videoClient instance
+        let vc = new VideoClient.VideoClient(videoClientOptions);
+
+        //Initialize and create your mediaController (Note: The media controller should only be initialized once)
+        //For mobile browsers mediaController.init(); needs to be called on user action like on click
+        await VideoClient.mediaController.init();
+        let mediaStreamController =
+          await VideoClient.mediaController.requestController();
+
+        //Set the defaults for your mediaStreamController
+        //Note only call methods/set properties for your video using the mediaStreamController
+        //Calling methods/setting properties on the HTMLVideoElement itself will cause issues with the video.
+        mediaStreamController.audioMuted = false;
+        mediaStreamController.videoPaused = false;
+        mediaStreamController.audioDeviceId = null;
+        mediaStreamController.videoDeviceId =
+          VideoClient.mediaController.videoDevices()[0].deviceId;
+
+        //Request your preview player from the VideoClient
+        const previewPlayer = vc.requestPlayer(mediaStreamController);
+      };
+    </script>
+  </body>
+</html>
+```
+
+### Step 7: Attach your now-created preview player from the `VideoClient` to a video element and append it to the document body
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src="/videoClientLib.js"></script>
+    <script>
+      window.onload = async function () {
+        const yourDomain = "https://yourdomain.com";
+        const videoClientOptions = {
+          backendEndpoints: [yourDomain],
+          token: yourToken,
+        };
+
+        //Create your videoClient instance
+        let vc = new VideoClient.VideoClient(videoClientOptions);
+
+        //Initialize and create your mediaController (Note: The media controller should only be initialized once)
+        //For mobile browsers mediaController.init(); needs to be called on user action like on click
+        await VideoClient.mediaController.init();
+        let mediaStreamController =
+          await VideoClient.mediaController.requestController();
+
+        //Set the defaults for your mediaStreamController
+        //Note only call methods/set properties for your video using the mediaStreamController
+        //Calling methods/setting properties on the HTMLVideoElement itself will cause issues with the video.
+        mediaStreamController.audioMuted = false;
+        mediaStreamController.videoPaused = false;
+        mediaStreamController.audioDeviceId = null;
+        mediaStreamController.videoDeviceId =
+          VideoClient.mediaController.videoDevices()[0].deviceId;
+
+        //Request your preview player from the VideoClient
+        const previewPlayer = vc.requestPlayer(mediaStreamController);
+
+        let video;
+        // Use the isImplements method on the adapter device to ensure the CREATE_VIDEO_ELEMENT is enabled
+        if (
+          VideoClient.adapter.device.isImplements(
+            VideoClient.adapter.Feature.CREATE_VIDEO_ELEMENT
+          )
+        ) {
+          //Create the video element using videoClient
+          video = VideoClient.adapter.device.createVideoElement();
+          //Set a width for the video (this can be done separately if needed)
+          video.width = 400;
+          //Set the local previews audio to not be muted
+          preview.localAudioMuted = false;
+          //Attach the video to the videoElement
+          preview.attachTo(video);
+        }
+
+        //Append your newly created video-element with the preview player attached to your document body
+        document.getElementById("videoWrapper").appendChild(video);
+      };
+    </script>
+    <div id="videoWrapper"></div>
+  </body>
+</html>
+```
+
+### Step 8: Create your buttons to control the mediaController and their on-click event handlers
+
+Notice that in our click handlers we are using the `mediaStreamController`.
+There are two separate APIs that can affect the video preview, `mediaStreamController` and `videoPlayer`.
+`videoPlayer`: Will only affect the preview that we see in the videoElement. `videoPlayer` has the following properties: `localAudioVolume`, `localVideoPaused`, `localAudioMuted`.
+`mediaStreamController`: Will affect both the video stream and the video preview. `mediaStreamController` has the following properties: `gain`, `videoPaused`, `audioMuted`.
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src="/videoClientLib.js"></script>
+    <script>
+      window.onload = async function () {
+        const yourDomain = "https://yourdomain.com";
+        const videoClientOptions = {
+          backendEndpoints: [yourDomain],
+          token: yourToken,
+        };
+
+        //Create your videoClient instance
+        let vc = new VideoClient.VideoClient(videoClientOptions);
+
+        //Initialize and create your mediaController (Note: The media controller should only be initialized once)
+        //For mobile browsers mediaController.init(); needs to be called on user action like on click
+        await VideoClient.mediaController.init();
+        let mediaStreamController =
+          await VideoClient.mediaController.requestController();
+
+        //Set the defaults for your mediaStreamController
+        //Note only call methods/set properties for your video using the mediaStreamController
+        //Calling methods/setting properties on the HTMLVideoElement itself will cause issues with the video.
+        mediaStreamController.audioMuted = false;
+        mediaStreamController.videoPaused = false;
+        mediaStreamController.audioDeviceId = null;
+        mediaStreamController.videoDeviceId =
+          VideoClient.mediaController.videoDevices()[0].deviceId;
+
+        //Request your preview player from the VideoClient
+        const previewPlayer = vc.requestPlayer(mediaStreamController);
+
+        let video;
+        // Use the isImplements method on the adapater device to ensure the CREATE_VIDEO_ELEMENT is enabled
+        if (
+          VideoClient.adapter.device.isImplements(
+            VideoClient.adapter.Feature.CREATE_VIDEO_ELEMENT
+          )
+        ) {
+          //Create the video element using videoClient
+          video = VideoClient.adapter.device.createVideoElement();
+          //Set a width for the video (this can be done separately if needed)
+          video.width = 400;
+          //Set the encoder to not be muted.
+          preview.localAudioMuted = false;
+          //Attach the video to the videoElement
+          preview.attachTo(video);
+        }
+
+        //Append your newly created video-element with the preview player attached to your document body
+        document.getElementById("videoWrapper").appendChild(video);
+
+        // Click handler for hiding/showing the video
+        function handleVideo() {
+          mediaStreamController.videoPaused =
+            !mediaStreamController.videoPaused;
+        }
+        //Click handler for muting/unmuting the video
+        function handleMute() {
+          mediaStreamController.audioMuted = !mediaStreamController.audioMuted;
+        }
+        //Click handler for entering fullScreen mode.
+        function handleFullScreen() {
+          document.getElementById("videoWrapper").requestFullscreen();
+        }
+
+        document
+          .getElementById("videoButton")
+          .addEventListener("click", handlePlay, false);
+        document
+          .getElementById("muteButton")
+          .addEventListener("click", handleMute, false);
+        document
+          .getElementById("fullScreenButton")
+          .addEventListener("click", handleFullScreen, false);
+      };
+    </script>
+    <div id="videoWrapper"></div>
+    <button id="videoButton">Video</button>
+    <button id="muteButton">Mute</button>
+    <button id="fullScreenButton">FullScreen</button>
+  </body>
+</html>
+```
+
+### Step 9: Create your call and broadcast button
+
+A `Call` is what connects a broadcaster and viewers.
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src="/videoClientLib.js"></script>
+    <script>
+      window.onload = async function () {
+        const yourDomain = "https://yourdomain.com";
+        const videoClientOptions = {
+          backendEndpoints: [yourDomain],
+          token: yourToken,
+        };
+
+        //Create your videoClient instance
+        let vc = new VideoClient.VideoClient(videoClientOptions);
+
+        //Initialize and create your mediaController (Note: The media controller should only be initialized once)
+        //For mobile browsers mediaController.init(); needs to be called on user action like on click
+        await VideoClient.mediaController.init();
+        let mediaStreamController =
+          await VideoClient.mediaController.requestController();
+
+        //Set the defaults for your mediaStreamController
+        //Note only call methods/set properties for your video using the mediaStreamController
+        //Calling methods/setting properties on the HTMLVideoElement itself will cause issues with the video.
+        mediaStreamController.audioMuted = false;
+        mediaStreamController.videoPaused = false;
+        mediaStreamController.audioDeviceId = null;
+        mediaStreamController.videoDeviceId =
+          VideoClient.mediaController.videoDevices()[0].deviceId;
+
+        //Request your preview player from the VideoClient
+        const previewPlayer = vc.requestPlayer(mediaStreamController);
+
+        let video;
+        // Use the isImplements method on the adapater device to ensure the CREATE_VIDEO_ELEMENT is enabled
+        if (
+          VideoClient.adapter.device.isImplements(
+            VideoClient.adapter.Feature.CREATE_VIDEO_ELEMENT
+          )
+        ) {
+          //Create the video element using videoClient
+          video = VideoClient.adapter.device.createVideoElement();
+          //Set a width for the video (this can be done separately if needed)
+          video.width = 400;
+          //Set the local previews audio to mute so you don't hear yourself
+          preview.localAudioMuted = false;
+          //Attach the video to the videoElement
+          preview.attachTo(video);
+        }
+
+        //Append your newly created video-element with the preview player attached to your document body
+        document.getElementById("videoWrapper").appendChild(video);
+
+        // Click handler for hiding/showing the video
+        function handleVideo() {
+          mediaStreamController.videoPaused =
+            !mediaStreamController.videoPaused;
+        }
+        //Click handler for muting/unmuting the video
+        function handleMute() {
+          mediaStreamController.audioMuted = !mediaStreamController.audioMuted;
+        }
+        //Click handler for entering fullScreen mode.
+        function handleFullScreen() {
+          document.getElementById("videoWrapper").requestFullscreen();
+        }
+        //Keeps track of if your are broadcasting/not broadcasting
+        let broadcasting = false;
+        //Click handler for creating the call and broadcasting/ending the broadcast/closing the call
+        async function handleBroadcast() {
+          //Options to be passed to the broadcast
+          let broadcastOptions = { streamName: "yourStreamName" };
+          //Create the call
+          let call = await vc.createCall({ userId: "yourUserId" });
+          //If you are not broadcasting and the call exists
+          if (!broadcasting && call != null) {
+            //Create the broadcast and pass the mediaStreamController and broadcastOptions as arguments (It is recommended to always use a return value for this method)
+            const broadcast = call.broadcast(
+              mediaStreamController,
+              broadcastOptions
+            );
+            //Set broadcasting to true
+            broadcasting = true;
+          }
+          //If you are broadcasting and want to end the broadcast
+          else {
+            //Dispose of the call (Note: this will also dispose of the call broadcast)
+            call.dispose();
+            //Set broadcasting to false
+            broadcasting = false;
+          }
+        }
+
+        document
+          .getElementById("videoButton")
+          .addEventListener("click", handlePlay, false);
+        document
+          .getElementById("muteButton")
+          .addEventListener("click", handleMute, false);
+        document
+          .getElementById("fullScreenButton")
+          .addEventListener("click", handleFullScreen, false);
+        document
+          .getElementById("broadcastButton")
+          .addEventListener("click", handleBroadcast, false);
+      };
+    </script>
+    <div id="videoWrapper"></div>
+    <button id="videoButton">Video</button>
+    <button id="muteButton">Mute</button>
+    <button id="fullScreenButton">FullScreen</button>
+    <button id="broadcastButton">Broadcast</button>
+  </body>
+</html>
+```
+
+## Full Code
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src="/videoClientLib.js"></script>
+    <script>
+      window.onload = async function () {
+        const yourDomain = "https://yourdomain.com";
+        const videoClientOptions = {
+          backendEndpoints: [yourDomain],
+          token: yourToken,
+        };
+
+        //Create your videoClient instance
+        let vc = new VideoClient.VideoClient(videoClientOptions);
+
+        //Initialize and create your mediaController (Note: The media controller should only be initialized once)
+        //For mobile browsers mediaController.init(); needs to be called on user action like on click
+        await VideoClient.mediaController.init();
+        let mediaStreamController =
+          await VideoClient.mediaController.requestController();
+
+        //Set the defaults for your mediaStreamController
+        //Note only call methods/set properties for your video using the mediaStreamController
+        //Calling methods/setting properties on the HTMLVideoElement itself will cause issues with the video.
+        mediaStreamController.audioMuted = false;
+        mediaStreamController.videoPaused = false;
+        mediaStreamController.audioDeviceId = null;
+        mediaStreamController.videoDeviceId =
+          VideoClient.mediaController.videoDevices()[0].deviceId;
+
+        //Request your preview player from the VideoClient
+        const previewPlayer = vc.requestPlayer(mediaStreamController);
+
+        let video;
+        // Use the isImplements method on the adapater device to ensure the CREATE_VIDEO_ELEMENT is enabled
+        if (
+          VideoClient.adapter.device.isImplements(
+            VideoClient.adapter.Feature.CREATE_VIDEO_ELEMENT
+          )
+        ) {
+          //Create the video element using videoClient
+          video = VideoClient.adapter.device.createVideoElement();
+          //Set a width for the video (this can be done separately if needed)
+          video.width = 400;
+          //Set the local previews audio to mute so you don't hear yourself
+          preview.localAudioMuted = false;
+          //Attach the video to the videoElement
+          preview.attachTo(video);
+        }
+
+        //Append your newly created video-element with the preview player attached to your document body
+        document.getElementById("videoWrapper").appendChild(video);
+
+        // Click handler for hiding/showing the video
+        function handleVideo() {
+          mediaStreamController.videoPaused =
+            !mediaStreamController.videoPaused;
+        }
+        //Click handler for muting/unmuting the video
+        function handleMute() {
+          mediaStreamController.audioMuted = !mediaStreamController.audioMuted;
+        }
+        //Click handler for entering fullScreen mode.
+        function handleFullScreen() {
+          document.getElementById("videoWrapper").requestFullscreen();
+        }
+        //Keeps track of if your are broadcasting/not broadcasting
+        let broadcasting = false;
+        //Click handler for creating the call and broadcasting/ending the broadcast/closing the call
+        async function handleBroadcast() {
+          //Options to be passed to the broadcast
+          let broadcastOptions = { streamName: "yourStreamName" };
+          //Create the call
+          let call = await vc.createCall({ userId: "yourUserId" });
+          //If you are not broadcasting and the call exists
+          if (!broadcasting && call != null) {
+            //Create the broadcast and pass the mediaStreamController and broadcastOptions as arguments (It is recommended to always use a return value for this method)
+            const broadcast = call.broadcast(
+              mediaStreamController,
+              broadcastOptions
+            );
+            //Set broadcasting to true
+            broadcasting = true;
+          }
+          //If you are broadcasting and want to end the broadcast
+          else {
+            //Dispose of the call (Note: this will also dispose of the call broadcast)
+            call.dispose();
+            //Set broadcasting to false
+            broadcasting = false;
+          }
+        }
+
+        document
+          .getElementById("videoButton")
+          .addEventListener("click", handlePlay, false);
+        document
+          .getElementById("muteButton")
+          .addEventListener("click", handleMute, false);
+        document
+          .getElementById("fullScreenButton")
+          .addEventListener("click", handleFullScreen, false);
+        document
+          .getElementById("broadcastButton")
+          .addEventListener("click", handleBroadcast, false);
+      };
+    </script>
+    <div id="videoWrapper"></div>
+    <button id="videoButton">Video</button>
+    <button id="muteButton">Mute</button>
+    <button id="fullScreenButton">FullScreen</button>
+    <button id="broadcastButton">Broadcast</button>
+  </body>
+</html>
+```
+
+{% /tab-panel-item %}
+{% /tab-panel %}
+{% /tabs  %}
+
+## Overview of starting and viewing a broadcast on an SFU (WebRTC)
+
+1. Create a ${streamKey} from {{ LSI_SERVICE_NAME }}
+2. Create an authToken for the broadcaster using the auth service
+3. Join/Create the broadcast using the Loadbalancer service. This will be accomplished using the Video Client SDK
+
+### Create an authToken for the broadcaster
+
+Create authToken with optional mirror config. The `mirrors` config is a required step if want to have your broadcast transcoded or archived.
+
+    curl -X POST https://{your-platform-domain}/auth/v1/access-tokens -H 'Authorization: Bearer {$internalToken}' -d '
+    {
+      "scopes": [
+    	"broadcaster"
+      ],
+      "userId": "123",
+      "data": {
+    	"displayName": "Jack",
+    	"mirrors": [{
+    		"id": ${MirrorID},
+    		"streamName": "demo",
+    		"kind": "pipe",
+    		"clientEncoder": "demo",
+    		"streamKey": ${PrivateKey},
+    		"clientReferrer": ${Referrer}
+    	}]
+      }
+    }'
+
+    ${internalToken} - Integrator token used to access system APIs (TODO - link to docs)
+    ${MirrorID} - Mirror ID should be a unique ID, a UUID is a good option here
+    ${PrivateKey} - Private Key should be obtained from the {{ LSI_SERVICE_NAME }} service, see [here](/docs/apis/lsi#/key/getKey)
+    ${Referrer} - Should match the {{ LGBX_REFERRER_KEY }} referrer key used to setup your integration (TODO - link to docs)
+
+    `scopes` is an array that should contain either "broadcaster" or "private-broadcaster". The "broadcaster" scope can be viewed by users that have an
+    access token with the "viewer" scope or the "private-viewer" scope. The "private-broadcaster" can be viewed by users who have an access token with the "private-viewer" scope.
+
+The returned access token will be used by the Video Client to begin a broadcast
+
+
+### Create an access token for the viewer
+
+    curl -X POST https://{your-platform-domain}/auth/v1/access-tokens -H 'Authorization: Bearer {$internalToken}' -d '
+    {
+      "scopes": [
+    	"viewer"
+      ],
+      "userId": "234",
+      "data": {
+    	"displayName": "Jane"
+      }
+    }'
+
+The returned access token will be required by the Video Client to view a call on a Selective Forwarding Unit (SFU).
+
+### Migrate a broadcast from public to private by updating peer scopes
+
+The Event Service is used used to receive webhooks for call and peer events. (TODO - link to events service docs)
+
+A webhook needs to be configured for each event you would like to receive.
+
+### Peer Joined Event
+
+Using the 'peer-joined' webhook events we can track the state of what peers have joined a broadcast. Using the data from the webhook we can call the update peers API endpoint (TODO: link to spec) to update the scopes of multiple peers.
+
+#### peer-joined payload:
+
+    {
+    	callBaseUrl: 'https://${domain}/sfu/${sfuId}/call/${publicId}',
+    	callId: '${callId}',
+    	callToken: '${callToken}',
+    	mirrors: {},
+    	peerId: '${peerId}',
+    	scope: 'broadcaster',
+    	userId: '123'
+    }
+
+    `callId` AKA `publicId`
+
+Using the above data a call to the update peers API endpoint can be used to change the scope of multiple peers.
+
+Change peer scopes to "private-broadcaster" and "private-viewer"
+
+    curl -X POST https://${domain}/sfu/${sfuId}/call/${publicId}/update-peers?callToken=${callToken} -d `
+    {
+    	"peers": [{
+    		"id": "${broadcastPeerId}",
+    		"action": "updateScope",
+    		"scope": "private-broadcaster"
+    	},{
+    		"id": "${viewerPeerId}",
+    		"action": "updateScope",
+    		"scope": "private-viewer"
+    	}]
+    }`
+
+The request will update the two specified peers. Any other peers with only a "viewer" scope will be removed from the broadcast.
+
+{{ FEEDBACK_PLACEHOLDER }}

@@ -1,0 +1,262 @@
+# using-an-auth-token-in-the-browser
+
+---
+route: /basic-operator-integration/methods-of-authorization/authentication-tokens/using-an-auth-token-in-the-browser
+pageTitle: Using an authorization token in the browser
+kind: guide
+uuid: {{UUID}}
+---
+
+In previous documents, we've explained what options you have for authorization and how to set up the token-based system we use at {{COMPANY_NAME}}.  Now we need to help you understand how the **authToken** is used in the browser.  
+
+### Where is the authToken passed
+
+The **authToken** is passed in as one of our `videoClientOptions`. As you can see in the snippet below there are many other properties in these options. At this time we are only going to focus on the `token` property in this document.[See the API documentation](/docs/apis/video-foundation-auth) for descriptions of the other parameters.
+```ts
+export interface VideoClientOptions {
+  stats?: VideoClientStats;
+  token?: TokenRefresher;
+  backendEndpoints?: string[];
+  logger?: LoggerCore;
+  loggerConfig?: {
+    clientName: string;
+    printOnly?: boolean;
+    writeLevel?: Level;
+  };
+  playerOptions?: WebrtcPlayerOptions;
+  displayName?: string;
+}
+```
+
+These options are then passed to the **VideoClient** when it is initialized.
+
+```ts
+const videoClient = new VideoClient(videoClientOptions);
+```
+
+### Now we need to create our TokenRefresher to pass to our VideoClientOptions
+
+The first step in the process is to fetch a proper token. Take a look at the code snippet below along with the table for an explanation of each parameter.
+
+```ts
+export interface TokenRefresherOptions {
+  backendEndpoint: string;
+  authUrl: string;
+  streamKey: string;
+  scope: string;
+  displayName: string;
+  userId: string;
+  clientReferrer: string;
+  streamName: string;
+}
+```
+
+| **Property**     | **Type** | **Description**                                                                                                                                                                                                                                                                                                                                                  |
+| ---------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| backendEndpoint  | string   | Your organizations endpoint.                                                                                                                                                                                                                                                                                                                                     |
+| `authUrl`        | string   | The endpoint that will be used in order to create our token request to the authentication API.                                                                                                                                                                                                                                                                   |
+| `streamKey`      | string   | The stream key created for the call, the same as the call`ID.                                                                                                                                                                                                                                                                                                    |
+| `scope`          | string   | The scope for which the stream is set, can either be a private or public stream. There are different scopes for both viewers and owners. Owner scopes include **private-owner** for private streams and **conference-owner** for public streams. Viewer scopes include **private-viewer** for private streams and **conference-participant** for public streams. |
+| `displayName`    | string   | The display name for the end user who is trying to create/join a call.                                                                                                                                                                                                                                                                                           |
+| `userId`         | string   | The user ID for the end user who is trying to create/join a call.                                                                                                                                                                                                                                                                                                |
+| `clientReferrer` | string   | A reference to the client stream it belongs to.                                                                                                                                                                                                                                                                                                                  |
+| `streamName`     | string   | The name of the stream that you will be creating with the Encoder, **it is extremely important that this matches the  stream definition prop passed to the Encoder, otherwise, your broadcast will not work.**                                                                                                                                                           |
+
+### Fetch Method
+
+Now that we know about the different options we need to pass, let's create our token fetch method.
+
+```ts
+export const fetchToken = async (
+  authUrl: string,
+  fetchBody
+): Promise<types.TokenRefresher> => {
+  const response = await fetch(authUrl, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(fetchBody),
+  });
+  if (response.status !== 200) {
+    throw new Error("Unable to get token");
+  }
+
+  const body = await response.json();
+  return body.token;
+};
+```
+
+### Token Refresher for broadcasts needing transcoding
+
+Next, we need to create our token refresher for our broadcaster.
+
+```ts
+export const tokenRefresher = (
+  options: TokenRefresherOptions
+): types.TokenRefresher => {
+  //Create our mirrors using the options that have been passed
+  const mirrors = [
+    {
+      id: options.streamKey,
+      streamName: options.streamName,
+      kind: "rtmp",
+      rtmpPath: `/origin_proxy/${options.streamKey}`,
+      clientEncoder: "demo",
+      streamKey: options.streamKey,
+      clientReferrer: options.clientReferrer,
+    },
+  ];
+
+  //This needs to be asynchronous because the `fetchToken` method will need to do a **POST** request to the authentication API
+  return async (): types.TokenRefresher => {
+    const url = `${options.authUrl}`;
+    let token: types.TokenRefresher;
+    try {
+      const fetchOptions = {
+        scopes: [options.scope],
+        userId: options.userId,
+        data: {
+          displayName: options.displayName,
+          mirrors,
+        },
+      };
+      //Here we actually fetch our token.
+      token = await fetchToken(url, fetchOptions);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("unable to get access token", {
+        error,
+        url,
+      });
+      throw error;
+    }
+
+    return token;
+  };
+};
+```
+
+### Token Refresher for broadcasts that do not need to be transcoded
+
+Please note that you do not need mirrors for streams that do not need to be transcoded. Use the token refresher below this if mirrors are not needed.
+
+```ts
+export const tokenRefresher = (
+  options: TokenRefresherOptions
+): types.TokenRefresher => {
+  //This needs to be asynchronous because the fetchToken method will need to do a **POST** request to the authentication API
+  return async (): types.TokenRefresher => {
+    const url = `${options.authUrl}`;
+    let token: types.TokenRefresher;
+    try {
+      const fetchOptions = {
+        scopes: [options.scope],
+        userId: options.userId,
+        data: {
+          displayName: options.displayName,
+        },
+      };
+      //Here we actually fetch our token.
+      token = await fetchToken(url, fetchOptions);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("unable to get access token", {
+        error,
+        url,
+      });
+      throw error;
+    }
+
+    return token;
+  };
+};
+```
+
+### Putting it all together
+
+Now we just need to put it all together.
+
+```ts
+export const fetchToken = async (authUrl: string, fetchBody): Promise<types.TokenRefresher> => {
+  const response = await fetch(authUrl, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(fetchBody),
+  });
+  if (response.status !== 200) {
+    throw new Error("Unable to get token");
+  }
+
+  const body = await response.json();
+  return body.token;
+};
+
+export const tokenRefresher = (options: TokenRefresherOptions): types.TokenRefresher => {
+  //Create our mirrors using the options that have been passed
+  //Reminder: Mirrors are not needed for broadcasts that will not be transcoded.
+  const mirrors = [
+    {
+      id: options.streamKey,
+      streamName: options.streamName,
+      kind: "rtmp",
+      rtmpPath: `/origin_proxy/${options.streamKey}`,
+      clientEncoder: "demo",
+      streamKey: options.streamKey,
+      clientReferrer: options.clientReferrer,
+    },
+  ];
+
+  //This needs to be asynchronous because the fetchToken method will need to do a POST request to the authentication API
+  return async (): types.TokenRefresher => {
+    const url = `${options.authUrl}`;
+    let token: types.TokenRefresher;
+    try {
+      const fetchOptions = {
+        scopes: [options.scope],
+        userId: options.userId,
+        data: {
+          displayName: options.displayName,
+          //Remove if you do not need to transcode the broadcast
+          mirrors,
+        },
+      };
+      //This has not been created yet, please see below for this method.
+      //Here we actually fetch our options
+      token = await fetchToken(url, fetchOptions);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("unable to get access token", {
+        error,
+        url,
+      });
+      throw error;
+    }
+
+    return token;
+  };
+};
+
+// Set the token refresher to be part of our videoClient options
+const tokenOptions = {
+  backendEndpoint: "{{BACKEND_ENDPOINT}}";
+  authUrl: "{{AUTH_URL}}";
+  streamKey: "{{STREAM_KEY}}";
+  scope: "{{SCOPE}}"; //Change this accordingly
+  displayName: "{{DISPLAY_NAME}}";
+  userId: "{{USER_ID}}";
+  clientReferrer: "{{CLIENT_REFERRER}}";
+  streamName: "{{STREAM_NAME}}";
+}
+
+const vcViewerOptions: types.VideoClientOptions = {
+        backendEndpoints: [backendEndpoint],
+        token: tokenRefresher(tokenOptions),
+      };
+
+      const newVc = new VideoClient(vcViewerOptions);
+```
+
+{{FEEDBACK_PLACEHOLDER}}
