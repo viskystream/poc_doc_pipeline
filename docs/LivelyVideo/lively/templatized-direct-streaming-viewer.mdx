@@ -1,0 +1,574 @@
+# direct-streaming-viewer
+
+---
+route: /livestream-interactions/direct-streaming-viewer
+category: Direct Streaming Viewer
+pageTitle: Direct Streaming Viewer
+kind: guide
+uuid: f4bc7c47-5dc2-4105-bf11-9eebbe83e45a
+---
+
+## What is Direct Streaming?
+
+Direct Streaming as a viewer is when a viewer/viewers join a private broadcast while simultaneously broadcasting themselves. One of the main uses of Direct Streaming is an individual direct connection that can be established.
+
+## Getting started with Direct Streaming?
+
+The Direct Streaming connection is comprised of four different components that we offer. Two `Encoders`, a `Web Player` and a `Manifest Player`. The application for a Direct Streaming a broadcast is then split into two parts the broadcast owner and the broadcast viewer. The broadcast owner will have one `Encoder` and one `Web Player`, the broadcast viewer will have one `Encoder` and one `Manifest Player`. These documents will cover how to add these components and establish a Direct Streaming broadcast.
+
+## Broadcast Viewer
+
+This guide will cover how to build the Direct Streaming viewer side. Please note that in order for this to work you will also need to implement the Direct Streaming Broadcaster section of Direct Streaming.
+
+## Before Getting Started
+
+LivelyVideo's Player API can either be used as a standalone JavaScript API or as a React Component Library.
+
+Project dependencies include knowledge of and experience with:
+
+- [React](https://reactjs.org/docs/react-api.html)
+- [React Hooks](https://reactjs.org/docs/hooks-intro.html)
+- [React Context](https://reactjs.org/docs/context.html), including [Providers](https://reactjs.org/docs/context.html#contextprovider)
+
+If you are new to any of the above, we recommend spending some time familiarizing yourself with these before moving on.
+
+**IMPORTANT**: You will also need _your domain_ which will be provided by LivelyVideo.
+
+## Part I: Set up your Manifest Player
+
+To start we will add the completed code for the `Manifest Player`. Please refer to our docs for the [Manifest Player](/docs/consuming-a-livestream/play-a-stream-using-a-manifest) if you are confused about any of the code below! If you would like to skip all of the guide and just view the final code please click [here](#full-code)!
+
+Note: This is a much simpler version of our `Manifest Player` than in our `Manifest player` docs, this is done on purpose because both the `Manifest Player` and `Encoder` will share a `VideoClient` instance.
+
+```ts
+import {
+  ControlBar,
+  PlayerUiContext,
+  MediaContainer,
+  PlayerAudioButton,
+  PlayerGetSoundButton,
+  PlayerPlayButton,
+  PlayerUiState,
+  PlayerVideo,
+  PlayerVolumeRange,
+  types,
+} from "@video/video-client-web";
+import React, { useEffect, useState } from "react";
+const CustomManifest = ({ vc, manifestUrl, styles }): React.ReactElement => {
+  /**
+   * Set local state.
+   */
+  const [playerUi, setPlayerUi] = useState<PlayerUiState | null>(null);
+  /**
+   * 1. Request manifest player.
+   */
+  useEffect(() => {
+    if (manifestUrl && playerUi == null && vc) {
+      let player: types.BasePlayer | null = null;
+      try {
+        player = vc.requestPlayer(manifestUrl);
+      setPlayerUi(new PlayerUiState(player));
+    }
+    //Remember to cleanup your playerUi on unmount/re-render
+    return () => {
+      if (playerUi != null) {
+        playerUi.dispose("CustomManifestPlayer demo unmounting/re-render");
+        setPlayerUi(null);
+      }
+    };
+  }, [manifestUrl, playerUi, vc]);
+  /**
+   * 4. Dispose VideoClient instance on unmount.
+   */
+  useEffect((): (() => void) | void => {
+    return () => {
+      if (vc != null) {
+        vc.dispose("CustomManifestPlayer demo unmounting/re-render");
+      }
+    };
+  }, [vc]);
+  return (
+    <PlayerUiContext.Provider value={playerUi}>
+      {playerUi != null && (
+        <>
+          <MediaContainer>
+            <PlayerGetSoundButton/>
+            <PlayerVideo/>
+            <ControlBar variant="player">
+              <PlayerVolumeRange/>
+              <PlayerAudioButton/>
+              <PlayerPlayButton/>
+            </ControlBar>
+          </MediaContainer>
+        </>
+      )}
+    </PlayerUiContext.Provider>
+  );
+};
+export { CustomManifest };
+```
+
+## Part II: Now that we have a manifest player we need to create our Encoder
+
+Now we will add the completed code for the `Encoder`. Please refer to our docs for the [Encoder](/docs/broadcasting-a-livestream/streaming-with-a-web-browser/set-up-a-livestream-video) if you are confused about any of the code below!
+Note: This is a much simpler version of our `Encoder` than in our `Encoder` docs, this is done on purpose as we will only need one `VideoClient` for the `Encoder` and `Manifest Player`.
+
+```tsx
+import {
+  CameraButton,
+  ControlBar,
+  EncoderUiState,
+  EncoderVideo,
+  JoinBroadcastButton,
+  EncoderUiContext,
+  VideoClientContext,
+  CallContext,
+  CallState,
+  MediaContainer,
+  MicrophoneButton,
+  types,
+} from "@video/video-client-web";
+import React from "react";
+
+const Encoder = ({
+  encoderUi = null,
+  videoclient,
+  setCallId,
+  setOwnerCall,
+  callId,
+  callState,
+}: {
+  encoderUi: EncoderUiState | null;
+  videoclient: types.VideoClient | null;
+  setCallId?: (id: string | null) => void;
+  setOwnerCall?: (call: types.BaseCall | null) => void;
+  callId?: string | null;
+  callState: CallState | null;
+}): React.ReactElement => {
+  return (
+    <VideoClientContext.Provider value={videoclient}>
+      <CallContext.Provider value={callState}>
+        <EncoderUiContext.Provider value={encoderUi}>
+          <MediaContainer>
+            <EncoderVideo />
+            <ControlBar variant="encoder">
+              {callId !== "" && (
+                <JoinBroadcastButton
+                  callId={callId}
+                  setCallId={setCallId}
+                  setOwnerCall={setOwnerCall}
+                  broadcastOptions={{
+                    streamName: "demo",
+                  }}
+                />
+              )}
+              <CameraButton />
+              <MicrophoneButton />
+            </ControlBar>
+          </MediaContainer>
+        </EncoderUiContext.Provider>
+      </CallContext.Provider>
+    </VideoClientContext.Provider>
+  );
+};
+
+export { Encoder };
+```
+
+## Part III: Set up your parent component for your Player and Encoder
+
+Now that we have our components for both the `Encoder` and `Manifest Player` we need a parent component that can handle all of the logic necessary for our Direct Streaming connection.
+
+### Step 1: Set up our parent component and VideoClient
+
+First we need a `VideoClient` and a parent component to render our `Encoder` and `Manifest Player`. Only one `VideoClient` is necessary for both the `Manifest Player` and the `Encoder`.
+
+**Note:** If you can't find out how to get the callId for the owner please refer to our docs on the Direct Streaming Broadcaster.
+
+```ts
+import {
+  EncoderUiState,
+  mediaController,
+  types,
+  VideoClient,
+  CallState,
+} from "@video/video-client-web";
+import React, { ReactElement, useEffect, useState } from "react";
+
+const BroadcastViewer = (): ReactElement => {
+  // Here is our Local state that we will use to store different instances that we create.
+  const [vc, setVc] = useState<types.VideoClient | null>(null);
+  const [callState, setCallState] = useState<CallState | null>(null);
+
+  // useEffect that handles the instantiation of our VideoClient instance
+  useEffect(() => {
+    // Let's check to ensure our VideoClient is not already created and our endpoint exists before we create our VideoClient
+    if (backendEndpoint && streamKey != null && vc == null) {
+      const vcViewerOptions: types.VideoClientOptions = {
+        backendEndpoints: [backendEndpoint],
+        //Ensure we are using the scope private viewer for our token
+        token: tokenRefresher({
+          backendEndpoint,
+          authUrl: `${backendEndpoint}/api/demo/v1/access-token`,
+          streamKey,
+          scope: "private-viewer",
+          clientReferrer,
+        }),
+      };
+
+      const newVc = new VideoClient(vcViewerOptions);
+      // This is used to keep track of the current state of our call for the encoder.
+      setCallState(new CallState());
+
+      setVc(newVc);
+    }
+    return () => {
+      // Ensure we clean up our VideoClient on unmount
+      if (vc != null) {
+        vc.dispose("Private Broadcast Viewer component unmounting/re-render");
+        setVc(null);
+      }
+    };
+  }, [backendEndpoint, streamKey, clientReferrer, vc]);
+
+  return <></>;
+};
+
+export default BroadcastViewer;
+```
+
+### Step 2: Add our Manifest Player and Encoder
+
+Now that we have our `VideoClient` lets add our `Manifest Player` and `Encoder` that we created earlier.
+
+```ts
+import {
+  EncoderUiState,
+  mediaController,
+  types,
+  VideoClient,
+  CallState,
+} from "@video/video-client-web";
+import React, { ReactElement, useEffect, useState } from "react";
+
+const BroadcastViewer = (): ReactElement => {
+  // Here is our Local state that we will use to store different instances that we create.
+  const [vc, setVc] = useState<types.VideoClient | null>(null);
+  const [callState, setCallState] = useState<CallState | null>(null);
+
+  // useEffect that handles the instantiation of our VideoClient instance
+  useEffect(() => {
+    // Let's check to ensure our VideoClient is not already created and our endpoint exists before we create our VideoClient
+    if (backendEndpoint && streamKey != null && vc == null) {
+      const vcViewerOptions: types.VideoClientOptions = {
+        backendEndpoints: [backendEndpoint],
+        //Ensure we are using the scope private viewer for our token
+        token: tokenRefresher({
+          backendEndpoint,
+          authUrl: `${backendEndpoint}/api/demo/v1/access-token`,
+          streamKey,
+          scope: "private-viewer",
+          clientReferrer,
+        }),
+      };
+
+      const newVc = new VideoClient(vcViewerOptions);
+      // This is used to keep track of the current state of our call for the encoder.
+      setCallState(new CallState());
+
+      setVc(newVc);
+    }
+    return () => {
+      // Ensure we clean up our VideoClient on unmount
+      if (vc != null) {
+        vc.dispose("Private Broadcast Viewer component unmounting/re-render");
+        setVc(null);
+      }
+    };
+  }, [backendEndpoint, streamKey, clientReferrer, vc]);
+
+  // useEffect that handles the instantiation of our encoderUi State.
+  useEffect(() => {
+    if (encoderUi == null) {
+      (async () => {
+        // Init our mediaController and then pass that as an option to our new EncoderUiState
+        await mediaController.init();
+        const mediaStreamController = await mediaController.requestController();
+        setEncoderUi(new EncoderUiState(mediaStreamController));
+      })();
+    }
+    return () => {
+      // Ensure we are cleaning up the encoder on unmount.
+      if (encoderUi != null) {
+        encoderUi.dispose(
+          "Private Broadcast Viewer component unmounting/re-render"
+        );
+        setEncoderUi(null);
+      }
+    };
+  }, [encoderUi]);
+
+  return (
+    <>
+      {encoderUi != null && (
+        <Broadcaster
+          viewer
+          callId={callId}
+          encoderUi={encoderUi}
+          videoclient={vc}
+          callState={callState}
+        />
+      )}
+      <CustomManifest vc={vc} manifestUrl={manifestUrl} styles={styles} />
+    </>
+  );
+};
+
+export default BroadcastViewer;
+```
+
+### Step 3: Ensure you properly adjust the scope of the token for the VideoClient
+
+This has already been discussed in the code above but it is required to change the scope of your token to `private-viewer`. If the scope is not changed you will not be able to join the `private-broadcast`.
+
+Here is an example of the scope change in your token refresher:
+
+```ts
+tokenRefresher({
+          backendEndpoint,
+          authUrl: `${backendEndpoint}/api/demo/v1/access-token`,
+          streamKey,
+          scope: "private-viewer",
+          clientReferrer,
+        }),
+```
+
+### Step 4: Joining the Broadcast
+
+Finally a viewer will need to click the `JoinBroadcastButton` after a **VALID** `callId` from a Direct Streaming broadcaster has been passed to the `JoinBroadcastButton`. If a valid `callId` is not passed the button will not function, this can be observed by the color never changing to red which indicates you are currently broadcasting.
+
+# Full Code
+
+## Full Code Parent
+
+```ts
+import {
+  EncoderUiState,
+  mediaController,
+  types,
+  VideoClient,
+  CallState,
+} from "@video/video-client-web";
+import React, { ReactElement, useEffect, useState } from "react";
+
+const BroadcastViewer = (): ReactElement => {
+  // Here is our Local state that we will use to store different instances that we create.
+  const [vc, setVc] = useState<types.VideoClient | null>(null);
+  const [callState, setCallState] = useState<CallState | null>(null);
+
+  // useEffect that handles the instantiation of our VideoClient instance
+  useEffect(() => {
+    // Let's check to ensure our VideoClient is not already created and our endpoint exists before we create our VideoClient
+    if (backendEndpoint && streamKey != null && vc == null) {
+      const vcViewerOptions: types.VideoClientOptions = {
+        backendEndpoints: [backendEndpoint],
+        //Ensure we are using the scope private viewer for our token
+        token: tokenRefresher({
+          backendEndpoint,
+          authUrl: `${backendEndpoint}/api/demo/v1/access-token`,
+          streamKey,
+          scope: "private-viewer",
+          clientReferrer,
+        }),
+      };
+
+      const newVc = new VideoClient(vcViewerOptions);
+      // This is used to keep track of the current state of our call for the encoder.
+      setCallState(new CallState());
+
+      setVc(newVc);
+    }
+    return () => {
+      // Ensure we clean up our VideoClient on unmount
+      if (vc != null) {
+        vc.dispose("Private Broadcast Viewer component unmounting/re-render");
+        setVc(null);
+      }
+    };
+  }, [backendEndpoint, streamKey, clientReferrer, vc]);
+
+  // useEffect that handles the instantiation of our encoderUi State.
+  useEffect(() => {
+    if (encoderUi == null) {
+      (async () => {
+        // Init our mediaController and then pass that as an option to our new EncoderUiState
+        await mediaController.init();
+        const mediaStreamController = await mediaController.requestController();
+        setEncoderUi(new EncoderUiState(mediaStreamController));
+      })();
+    }
+    return () => {
+      // Ensure we are cleaning up the encoder on unmount.
+      if (encoderUi != null) {
+        encoderUi.dispose(
+          "Private Broadcast Viewer component unmounting/re-render"
+        );
+        setEncoderUi(null);
+      }
+    };
+  }, [encoderUi]);
+
+  return (
+    <>
+      {encoderUi != null && (
+        <Broadcaster
+          viewer
+          callId={callId}
+          encoderUi={encoderUi}
+          videoclient={vc}
+          callState={callState}
+        />
+      )}
+      <CustomManifest vc={vc} manifestUrl={manifestUrl} styles={styles} />
+    </>
+  );
+};
+
+export default BroadcastViewer;
+```
+
+## Full Code Encoder
+
+```tsx
+import {
+  CameraButton,
+  ControlBar,
+  EncoderUiState,
+  EncoderVideo,
+  JoinBroadcastButton,
+  EncoderUiContext,
+  VideoClientContext,
+  CallContext,
+  CallState,
+  MediaContainer,
+  MicrophoneButton,
+  types,
+} from "@video/video-client-web";
+import React from "react";
+
+const Encoder = ({
+  encoderUi = null,
+  videoclient,
+  setCallId,
+  setOwnerCall,
+  callId,
+  calState,
+}: {
+  encoderUi: EncoderUiState | null;
+  videoclient: types.VideoClient | null;
+  setCallId?: (id: string | null) => void;
+  setOwnerCall?: (call: types.BaseCall | null) => void;
+  callId?: string | null;
+  callState: CallState | null;
+}): React.ReactElement => {
+  return (
+    <VideoClientContext.Provider value={videoclient}>
+      <CallContext.Provider value={callState}>
+        <EncoderUiContext.Provider value={encoderUi}>
+          <MediaContainer>
+            <EncoderVideo />
+            <ControlBar variant="encoder">
+              {callId !== "" && (
+                <JoinBroadcastButton
+                  callId={callId}
+                  setCallId={setCallId}
+                  setOwnerCall={setOwnerCall}
+                  broadcastOptions={{
+                    streamName: "demo",
+                  }}
+                />
+              )}
+              <CameraButton />
+              <MicrophoneButton />
+            </ControlBar>
+          </MediaContainer>
+        </EncoderUiContext.Provider>
+      </CallContext.Provider>
+    </VideoClientContext.Provider>
+  );
+};
+
+export { Encoder };
+```
+
+## Full Code Player
+
+```ts
+import {
+  ControlBar,
+  PlayerUiContext,
+  MediaContainer,
+  PlayerAudioButton,
+  PlayerGetSoundButton,
+  PlayerPlayButton,
+  PlayerUiState,
+  PlayerVideo,
+  PlayerVolumeRange,
+  types,
+} from "@video/video-client-web";
+import React, { useEffect, useState } from "react";
+const CustomManifest = ({ vc, manifestUrl, styles }): React.ReactElement => {
+  /**
+   * Set local state.
+   */
+  const [playerUi, setPlayerUi] = useState<PlayerUiState | null>(null);
+  /**
+   * 1. Request manifest player.
+   */
+  useEffect(() => {
+    if (manifestUrl && playerUi == null && vc) {
+      let player: types.BasePlayer | null = null;
+      try {
+        player = vc.requestPlayer(manifestUrl);
+      setPlayerUi(new PlayerUiState(player));
+    }
+    return () => {
+      if (playerUi != null) {
+        playerUi.dispose("CustomManifestPlayer demo unmounting/re-render");
+        setPlayerUi(null);
+      }
+    };
+  }, [manifestUrl, playerUi, vc]);
+  /**
+   * 4. Dispose VideoClient instance on unmount.
+   */
+  useEffect((): (() => void) | void => {
+    return () => {
+      if (vc != null) {
+        vc.dispose("CustomManifestPlayer demo unmounting/re-render");
+      }
+    };
+  }, [vc]);
+  return (
+    <PlayerUiContext.Provider value={playerUi}>
+      {playerUi != null && (
+        <>
+          <MediaContainer>
+            <PlayerGetSoundButton/>
+            <PlayerVideo/>
+            <ControlBar variant="player">
+              <PlayerVolumeRange/>
+              <PlayerAudioButton/>
+              <PlayerPlayButton/>
+            </ControlBar>
+          </MediaContainer>
+        </>
+      )}
+    </PlayerUiContext.Provider>
+  );
+};
+export { CustomManifest };
+```
+
+
+feedback

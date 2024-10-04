@@ -16,6 +16,7 @@
     "start:vendor1:company_a": "cross-env VENDOR=vendor1 COMPANY=company_a npm run generate-docs && cross-env VENDOR=vendor1 COMPANY=company_a npm start",
     "start:vendor2:company_b": "cross-env VENDOR=vendor2 COMPANY=company_b npm run generate-docs && cross-env VENDOR=vendor2 COMPANY=company_b npm start",
     "start:lv": "cross-env VENDOR=LivelyVideo COMPANY=lively npm run generate-docs && cross-env VENDOR=LivelyVideo COMPANY=lively npm start",
+    "generate-docs-internal": "cross-env VENDOR=LivelyVideo COMPANY=lively GENERATE_INTERNAL=true npm run generate-docs && npm run start",
     "typecheck": "tsc"
   },
   "dependencies": {

@@ -25,12 +25,18 @@ interface Placeholder {
     };
   }
 
+  interface ProcessContext {
+    companyConfig: Company;
+    product: Product;
+    isInternal: boolean;
+  }
+
   abstract class TransformationStep {
-    abstract transform(content: string, context: any): Promise<string>;
+    abstract transform(content: string, context: ProcessContext): Promise<string>;
 }
 
 class PlaceholderReplacement extends TransformationStep {
-    async transform(content: string, context: { companyConfig: Company, product: Product }): Promise<string> {
+    async transform(content: string, context: ProcessContext): Promise<string> {
         const placeholders: { [key: string]: string } = {
             COMPANY_NAME: context.companyConfig.name,
             COMPANY_WEBSITE: context.companyConfig.website,
@@ -44,6 +50,15 @@ class PlaceholderReplacement extends TransformationStep {
     }
 }
 
+class InternalContentFilter extends TransformationStep {
+    async transform(content: string, context: ProcessContext): Promise<string> {
+        if (context.isInternal) {
+            return content.replace(/<!-- INTERNAL_START -->|<!-- INTERNAL_END -->/g, '');
+        }
+        return content.replace(/<!-- INTERNAL_START -->[\s\S]*?<!-- INTERNAL_END -->/g, '');
+    }
+}
+
 class DocumentProcessor {
     private steps: TransformationStep[] = [];
 
@@ -51,7 +66,7 @@ class DocumentProcessor {
         this.steps.push(step);
     }
 
-    async process(content: string, context: any): Promise<string> {
+    async process(content: string, context: ProcessContext): Promise<string> {
         for (const step of this.steps) {
             content = await step.transform(content, context);
         }
@@ -63,6 +78,7 @@ async function generateDocs() {
     const config = yaml.load(await fs.readFile('config/companies.yaml', 'utf8')) as Config;
     const vendor = process.env.VENDOR;
     const company = process.env.COMPANY;
+    const isInternal = process.env.GENERATE_INTERNAL === 'true';
 
     if (!vendor || !company) {
         console.error('VENDOR and COMPANY environment variables must be set');
@@ -83,10 +99,15 @@ async function generateDocs() {
     // Create and configure the document processor
     const processor = new DocumentProcessor();
     processor.addStep(new PlaceholderReplacement());
+    processor.addStep(new InternalContentFilter());
 
     for (const product of companyConfig.products) {
         const templateContent = await fs.readFile(`templates/${product.template}`, 'utf8');
-        const filledContent = await processor.process(templateContent, { companyConfig, product });
+        const filledContent = await processor.process(templateContent, {
+            companyConfig,
+            product,
+            isInternal
+        });
 
         const fileName = `${path.parse(product.template).name.toLowerCase().replace(/ /g, '-')}.mdx`;
         const outputPath = path.join(docsDir, fileName);

@@ -1,0 +1,1168 @@
+# create-a-group-call
+
+---
+route: /livestream-interactions/create-a-group-call
+pageTitle: Create a group call
+kind: guide
+uuid: f4bc7c47-5dc2-4105-bf11-9eebbe83e44e
+---
+
+# VideoSource
+
+VideoSource is LivelyVideo's web conferencing API. It allows multiple users to join a single call and both send and receive video and audio data. The VideoSource API is intended for interactive, bidirectional video streaming applications with features such as online learning, video conferencing, online meetings, digital community building, and more.
+
+## Before Getting Started
+
+LivelyVideo's VideoSource API can either be used as a standalone JavaScript API or as a React Component Library. The instructions below outline how to create a simple VideoSource application using React.
+
+Project dependencies include knowledge of and experience with:
+
+- [React](https://reactjs.org/docs/react-api.html)
+- [React Hooks](https://reactjs.org/docs/hooks-intro.html)
+- [React Context](https://reactjs.org/docs/context.html), including [Providers](https://reactjs.org/docs/context.html#contextprovider)
+
+If you are new to any of the above, we recommend spending some time familiarizing yourself with these before moving on.
+
+## Part I: Setting up a Basic VideoSource
+
+Below are step-by-step instructions on how to set up a basic `VideoSourceUI` instance.
+If you want to just skip to the end and see it all put together, head [here](#full-code).
+
+### Step 1: Imports
+
+To start, import the following:
+
+1. React, `useEffect`, `useState` from `react`
+2. `VideoSourceUI` from `@video/video-client-core`
+3. `MediaStreamState` and `EncoderUiContext` from `@video/video-client-web`
+
+```
+// in MyWebConference.tsx
+import React, { useEffect, useState } from "react";
+import { VideoSourceUI, EncoderUiContext } from "@video/video-client-web";
+import { MediaStreamState } from "@video/video-client-core";
+```
+
+### Step 2: Configure Options
+
+Next, begin configuring your `VideoSourceUI` options.
+A new `VideoSourceUI` instance takes as a parameter a `VideoSourceUIOptions` object comprised of four
+required properties:
+
+- `videoSourceOptions` - Options for the VideoSource. For more info, see [Appendix](#videoSourceOptions).
+- `encoderOptions` - Options for the VideoSource Encoder. For more info, see [Appendix](#encoderOptions).
+- `mediaStreamState` - A MediaStreamState instance.
+- `websocketUri`
+
+  ```ts
+  interface VideoSourceUIOptions {
+    videoSourceOptions: VideoSourceOptions;
+    encoderOptions: EncoderOptions;
+    mediaStreamState: MediaStreamState;
+    websocketUri: string;
+  }
+  ```
+
+1. `VideoSourceOptions`
+   For more information on `VideoSourceOptions`, please see the [Appendix](#videoSourceOptions) at the bottom of this doc.
+
+```ts
+/*
+ * Example VideoSourceOptions
+ */
+const videoSourceOptions = {
+  token: () => {
+    // The requestBroadcastToken function below is for demo purposes only,
+    // you will have your own token.
+    return requestBroadcastToken(demoOptions);
+  },
+  statsTags: {
+    userId: "testUserId",
+    app: "video-client-demo",
+    streamId: "1234abcd",
+  },
+  websocketUri: "wss://yourWebsocket",
+  loadbalancer: "https://yourLoadbalancer",
+  userId: "",
+  peerId: "",
+  callId: "",
+  producerId: "",
+  displayName: "",
+  streamId: "",
+  studioId: "",
+  kind: "",
+  app: "",
+};
+```
+
+2. `EncoderOptions`
+   For more information on `EncoderOptions`, please see the [Appendix](#encoderOptions) at the bottom of this doc.
+
+```ts
+/*
+ * Example EncoderOptions.
+ */
+const encoderOptions = {
+  streamName: "demo",
+  streamKey: "123456789",
+  callId: "7809j980989",
+  loadbalancer: "https://yourLoadbalancer",
+};
+```
+
+3. `MediaStreamState`
+   For more information on `MediaStreamState`, please see the [Appendix](#mediaStreamState) at the bottom of this doc.
+
+```ts
+/*
+ * Example MediaStreamState.
+ */
+const mediaStreamState = new MediaStreamState();
+```
+
+### Step 3: Create a basic `VideoSourceUI` instance:
+
+Using the options configured in Step 2, we will create a basic `VideoSourceUI` instance
+using React hooks. Follow the steps below:
+
+1. Set up your main React component.
+2. Use React `useState` to manage the store. This will be necessary to trigger a re-render when the store populates asynchronously.
+3. Use React `useEffect` hook to create a new VideoSource instance.
+4. Set `VideoSourceOptions`. For more information on VideoSourceOptions, please see the [Appendix](#videoSourceOptions) at the bottom of this doc.
+5. Access callId.
+6. Set `EncoderOptions`. For more information on EncoderOptions, please see the [Appendix](#encoderOptions) at the bottom of this doc.
+7. Create a new `MediaStreamState`. For more information on MediaStreamStates, please see the [Appendix](#mediaStreamState) at the bottom of this doc.
+8. Create a new `VideoSourceUI` instance.
+9. Set local React state with VideoSource store.
+10. *For dev purposes only*: Console out store to make sure what we have looks good so far.
+11. *Important*: Dispose of VideoSource (in this case, on unmount). Your implementation may have different functionality, so you may not want to dispose on unmount, but be sure to dispose of the VideoSource instance (and sever the call connection as well as access to the user's video and audio devices) when appropriate.
+
+```tsx
+// in MyWebConference.tsx
+import React, { useEffect, useState } from "react";
+import {
+  VideoSourceUI,
+  EncoderUiContext,
+} from "@video/video-client-web";
+import { MediaStreamState } from "@video/video-client-core";
+/*
+*3.1. Set up your main React component
+*/
+export const MyWebConference = () => {
+  /*
+  * 3.2. Use local React state to manage the `store`. This will be necessary to trigger
+  * a re-render when the store populates.
+  */
+ const [store, setStore] = useState({
+    videoSource: null,
+    callId: null,
+  });
+  /*
+  * 3.3. Use React `useEffect` hook to create a new VideoSource instance.
+  */
+  useEffect(() => {
+    /*
+    * 3.3.a. Async IIFE
+    */
+    (async () => {
+      // NOTE: The demoOptions below are for demo purposes only,
+      // you will have your own token and callId.
+      const demoOptions = {
+          scope: "conference-owner",
+          loadbalancer: "https://yourLoadbalancer",
+          hub: "https://yourHubEndpoint",
+          streamKey: "123456789",
+          displayName: "Conference Owner",
+        };
+    /*
+    * 3.4. Set VideoSourceOptions. For more information on VideoSourceOptions,
+    * please see the Appendix at the bottom of this doc.
+    */
+    const videoSourceOptions = {
+      token: () => {
+        // The requestBroadcastToken function below is for demo purposes only,
+        // you will have your own token.
+        return requestBroadcastToken(demoOptions);
+      },
+      statsTags: {
+        userId: "testUserId",
+        app: "video-client-demo",
+        streamId: "1234abcd",
+      },
+      websocketUri: "wss://yourWebsocket",
+      loadbalancer: "https://yourLoadbalancer",
+      userId: "",
+      peerId: "",
+      callId: "",
+      producerId: "",
+      displayName: "",
+      streamId: "",
+      studioId: "",
+      kind: "",
+      app: "",
+    };
+    /*
+    *3.5. Access callId.
+    * NOTE: Async createMockCallId function below is for demo
+    * purposes only. You will have your own callId.
+    */
+    const callId = await createMockCallId(
+      videoSourceOptions.token,
+      demoOptions
+    );
+    /*
+    * 3.6. Set EncoderOptions. For more information on EncoderOptions,
+    * please see the Appendix at the bottom of this doc.
+    */
+    const encoderOptions = {
+      streamName: "demo",
+      streamKey: "123456789",
+      callId,
+      loadbalancer: "https://yourLoadbalancer",
+    };
+    /*
+    * 3.7. Create a new MediaStreamState. For more information on MediaStreamStates,
+    * please see the Appendix at the bottom of this doc.
+    */
+    const mediaStreamState = new MediaStreamState();
+    /*
+    * 3.8. Create a new VideoSource Instance.
+    */
+    const videoSourceStore = new VideoSourceUI({
+      videoSourceOptions,
+      encoderOptions,
+      mediaStreamState,
+      websocketUri: "wss://yourWebsocket"
+    });
+    /*
+    * 3.9. Set local React state with VideoSource store.
+    */
+    setStore({
+      videoSource: videoSourceStore,
+      callId,
+    });
+    /*
+    * 3.10. For dev purposes only: Console out store to make sure what we have looks good so far.
+    */
+    console.log("videoSourceStore", videoSourceStore);
+    })();
+    /*
+    * 3.11. Important: Dispose of VideoSource (in this case, on unmount).
+    * Your implementation may have different functionality,
+    * so you may not want to dispose on unmount, but be sure to dispose of the VideoSource instance (and sever
+    * the call connection as well as access to the user's video and audio devices) when appropriate.
+    */
+    return () => {
+      videoSourceStore.dispose();
+      if (store.videoSource) {
+        store.videoSource.dispose();
+      }
+    };
+  }, []);
+    /*
+    * NOTE: At this point, nothing will be visible in the UI. Refer to the console below above to confirm
+    * that you are on the right track before moving on to the next step.
+    */
+  return {*TBD*}
+};
+```
+
+### Step 4: Create a VideoSource Provider
+
+Now that you have a working `VideoSourceUI` instance, it's time to start building the UI of your application. s UI components access the global state via React Context. For more background information, check out the
+[React Context docs](https://reactjs.org/docs/context.html).
+
+1. Create a new file for our UI Components, and set aside.
+
+```tsx
+import React from "react";
+const VideoSourceConsumer = () => {
+  return <>Placeholder for VideoSourceConsumer UI!</>;
+};
+export default VideoSourceConsumer;
+```
+
+2. Back in `MyWebConference.tsx`, import `EncoderUiContext` and our new component.
+
+```ts
+// in MyWebConference.tsx
+import { EncoderUiContext } from "@video/video-client-web";
+import VideoSourceConsumer from "./VideoSourceConsumer";
+```
+
+3. Create a React Context Provider for your VideoSource store using the `EncoderUiContext` Context instance. Grab the `store` value from local React state.
+
+```tsx
+// in MyWebConference.tsx
+return <EncoderUiContext.Provider value={store}></EncoderUiContext.Provider>;
+```
+
+4. Implement VideoSource Provider.
+
+**Important: The Provider needs to _wrap_ our `VideoSourceConsumer` component.**
+
+```tsx
+// in MyWebConference.tsx
+return (
+  <EncoderUiContext.Provider value={store}>
+    <VideoSourceConsumer />
+  </EncoderUiContext.Provider>
+);
+```
+
+5. Putting it all together.
+
+Building on our work in Step 3, this is how our application should be looking:
+
+```tsx
+// in MyWebConference.tsx
+import React, { useEffect, useState } from "react";
+/**
+ *  4.1 Import EncoderUiContext and our new VideoSourceConsumer component.
+ */
+import { VideoSourceUI, EncoderUiContext } from "@video/video-client-web";
+import { MediaStreamState } from "@video/video-client-core";
+import VideoSourceConsumer from "./VideoSourceConsumer";
+export const MyWebConference = () => {
+  const [store, setStore] = useState({
+    videoSource: null,
+    callId: null,
+  });
+  useEffect(() => {
+    (async () => {
+      // NOTE: The demoOptions below are for demo purposes only,
+      // you will have your own token and callId.
+      const demoOptions = {
+        scope: "conference-owner",
+        loadbalancer: "https://yourLoadbalancer",
+        hub: "https://yourHubEndpoint",
+        streamKey: "123456789",
+        displayName: "Conference Owner",
+      };
+      const videoSourceOptions = {
+        token: () => {
+          // The requestBroadcastToken function below is for demo purposes only,
+          // you will have your own token.
+          return requestBroadcastToken(demoOptions);
+        },
+        statsTags: {
+          userId: "testUserId",
+          app: "video-client-demo",
+          streamId: "1234abcd",
+        },
+        websocketUri: "wss://yourWebsocket",
+        loadbalancer: "https://yourLoadbalancer",
+        userId: "",
+        peerId: "",
+        callId: "",
+        producerId: "",
+        displayName: "",
+        streamId: "",
+        studioId: "",
+        kind: "",
+        app: "",
+      };
+      const callId = await createMockCallId(
+        videoSourceOptions.token,
+        demoOptions
+      );
+      const encoderOptions = {
+        streamName: "demo",
+        streamKey: "123456789",
+        callId,
+        loadbalancer: "https://yourLoadbalancer",
+      };
+      const mediaStreamState = new MediaStreamState();
+      const videoSourceStore = new VideoSourceUI({
+        videoSourceOptions,
+        encoderOptions,
+        mediaStreamState,
+        websocketUri: "wss://yourWebsocket",
+      });
+      setStore({
+        videoSource: videoSourceStore,
+        callId,
+      });
+      // For dev purposes only: Console out store to make sure what we have looks good so far.
+      console.log("videoSourceStore", videoSourceStore);
+    })();
+    return () => {
+      videoSourceStore.dispose();
+      if (store.videoSource) {
+        store.videoSource.dispose();
+      }
+    };
+  }, []);
+  /*
+   * 4.2 Create a React Context Provider for your VideoSource store using EncoderUiContext.
+   * Grab the store value from local React state.
+   *
+   * 4.3 Implement VideoSource Provider.
+   */
+  return (
+    <EncoderUiContext.Provider value={store}>
+      <VideoSourceConsumer />
+    </EncoderUiContext.Provider>
+  );
+};
+```
+
+## Part II: Consume the Context and Build Some UI
+
+Next, you'll need to acess the `videoSourceStore` from the Context Provider.
+**Important to note:** In order to update the `videoSourceStore` and make these updates available via `Context` (i.e. available to all components nested within the Provider tree), updates need to occur _within_ a nested component NOT in the component which declares the `Provider`.
+
+### Step 5. Access Context
+
+Import `useContext` from React and `EncoderUiContext` from `@video/video-client-web`.
+
+```ts
+// in `VideoSourceConsumer.tsx`
+import React, { useContext } from "react";
+import { EncoderUiContext } from "@video/video-client-web";
+```
+
+Access `Context` via React's `useContext` hook.
+
+```ts
+// in `VideoSourceConsumer.tsx`
+const { videoSourceStore } = useContext(EncoderUiContext);
+```
+
+Putting it all together.
+
+Not much has changed in this step, but our `VideoSourceConusmer` component should now look like this:
+
+```tsx
+// in VideoSourceConsumer.tsx
+import React, { useContext } from "react";
+import { EncoderUiContext } from "@video/video-client-web";
+const VideoSourceConsumer = () => {
+  const { videoSourceStore } = useContext(EncoderUiContext);
+  return <>Placeholder for VideoSourceConsumer UI!</>;
+};
+export default VideoSourceConsumer;
+```
+
+### Step 6. Create an Encoder store via VideoSource Context
+
+Using the `useEffect` hook, call the VideoSource `createEncoder()` method to create a new Encoder (this will create the broadcaster's video).
+
+```ts
+  // in `VideoSourceConsumer.tsx`
+  import { useEffect } from "react";
+    useEffect(() => {
+      /*
+      * 6.1a Async IIFE to await the `createEncoder` method.
+      */
+      (async () => {
+        if (videoSourceStore) {
+          await videoSourceStore.createEncoder();
+        }
+      })();
+    }, []);
+  };
+```
+
+Using the React `useState` hook, update state once the encoder has been created -- so that it triggers a re-render.
+
+```tsx
+// in `VideoSourceConsumer.tsx`
+/*
+ * 6.2a import `useState` from React.
+ */
+import React, { useContext, useEffect, useState } from "react";
+import { EncoderUiContext } from "@video/video-client-web";
+const VideoSourceConsumer = () => {
+  /*
+   * 6.2b Create local encoder state.
+   */
+  const [encoder, setEncoder] = useState(null);
+  const { videoSourceStore } = useContext(EncoderUiContext);
+  useEffect(() => {
+    (async () => {
+      if (videoSourceStore) {
+        await videoSourceStore.createEncoder();
+        /*
+         * 6.2c Set local encoder state with the now available encoder store.
+         */
+        setEncoder(videoSource.videoSource.encoder);
+      }
+    })();
+  }, []);
+  return <>Placeholder for VideoSourceConsumer UI!</>;
+};
+```
+
+Create a new file for our Encoder component, and set aside.
+
+```ts
+// in Encoder.tsx
+import React from "react";
+const Encoder = ({ encoderStore }) => {
+  return <>Placeholder for Encoder!</>;
+};
+export default Encoder;
+```
+
+Back in `VideoSourceConsumer` import the `Encoder` component.
+
+```ts
+// in `VideoSourceConsumer.tsx`
+import React, { useContext, useEffect } from "react";
+import { EncoderUiContext } from "@video/video-client-web";
+/*
+ * Import Encoder component.
+ */
+import Encoder from "./Encoder";
+```
+
+Pass the new Encoder store (created via `createEncoder()`) to an `Encoder` component via the `encoderStore` prop.
+
+```ts
+// in VideoSourceConsumer.tsx
+return (
+  <>
+    // Check if encoder store exists (so you don't render a `null` store)
+    {encoder != null && (
+      // Pass encoder store to `encoderStore` prop
+      <Encoder encoderStore={encoder} />
+    )}
+  </>
+);
+```
+
+Putting it all together, our `VideoSourceConsumer` component should now look like this:
+
+```ts
+// in `VideoSourceConsumer.tsx`
+import React, { useContext, useEffect, useState } from "react";
+import { EncoderUiContext } from "@video/video-client-web";
+import Encoder from "./Encoder";
+const VideoSourceConsumer = (): React.ReactElement => {
+  const [encoder, setEncoder] = useState(null);
+  const { videoSource } = useContext(EncoderUiContext);
+  useEffect(() => {
+    (async () => {
+      if (videoSource) {
+        await videoSource.createEncoder();
+        setEncoder(videoSource.videoSource.encoder);
+      }
+    })();
+  }, []);
+  return <>{encoder != null && <Encoder encoderStore={encoder} />}</>;
+};
+```
+
+### Step 7: Build the Encoder UI
+
+Create a React Context Provider for your Encoder store using the `EncoderUiContext` Context instance.
+
+```tsx
+// in Encoder.tsx
+import React from "react";
+/*
+ * 7.1a Import `EncoderUiContext`
+ */
+import { EncoderUiContext } from "@video/video-client-web";
+const Encoder = ({ encoderStore }) => {
+  /*
+   * 7.1b Create a `Provider` using the `encoderStore` prop.
+   */
+  return (
+    <EncoderUiContext.Provider value={encoderStore}>
+      Placeholder for Encoder!
+    </EncoderUiContext.Provider>
+  );
+};
+```
+
+Import  Components.
+
+```ts
+// in Encoder.tsx
+import {
+  BroadcastButton,
+  CameraButton,
+  ControlBar,
+  EncoderVideo,
+  MediaContainer,
+  MicrophoneButton,
+} from "@video/video-client-web";
+```
+
+Assemble an Encoder.
+
+```tsx
+  // in Encoder.tsx
+  return (
+  {* 7.2a Encoder Provider MUST wrap all components in order to use Context. *}
+    <EncoderUiContext.Provider value={encoderStore}>
+    {* 7.2b MediaContainer should wrap all components for styling. *}
+      <MediaContainer>
+      {* 7.2c Pass in autoEncoderSetup as `true` to EncoderVideo. *}
+        <EncoderVideo autoEncoderSetup />
+        {* 7.2c ControlBar wraps controls (for styling). *}
+        <ControlBar>
+          <CameraButton/>
+          <MicrophoneButton />
+          <BroadcastButton broadcastOptions={{ streamName: "name" }} />
+        </ControlBar>
+      </MediaContainer>
+    </EncoderUiContext.Provider>
+  );
+```
+
+Putting it all together, our `Encoder.tsx` should now look like this:
+
+```tsx
+// in Encoder.tsx
+import {
+  BroadcastButton,
+  CameraButton,
+  ControlBar,
+  EncoderVideo,
+  MediaContainer,
+  MicrophoneButton,
+  EncoderUiContext,
+} from "@video/video-client-web";
+const Encoder = ({ encoderStore }) => {
+  return (
+    <EncoderUiContext.Provider value={encoderStore}>
+      <MediaContainer>
+        <EncoderVideo autoEncoderSetup />
+        <ControlBar>
+          <CameraButton />
+          <MicrophoneButton />
+          <BroadcastButton broadcastOptions={{ streamName: "name" }} />
+        </ControlBar>
+      </MediaContainer>
+    </EncoderUiContext.Provider>
+  );
+};
+```
+
+### Step 8: Setup Peer Store
+
+While the Encoder represents the User's video camera and mic output in a web conference, we still need to implement
+how peers on the call are handled.
+
+Create a `Peers` component that is set up to use `EncoderUiContext`.
+
+```tsx
+// in Peers.tsx
+/*
+ * 8.1a Import React, useContext from React
+ */
+import React, { useContext } from "react";
+/*
+ * 8.1b Import EncoderUiContext from @video/video-client-web
+ */
+import { EncoderUiContext } from "@video/video-client-web";
+const Peers = () => {
+  /*
+   * 8.1c Access `EncoderUiContext`.
+   */
+  const { videoSource } = useContext(EncoderUiContext);
+  /*
+   * 8.1d Dev only: console out store.
+   */
+  console.log("PeerContext", videoSource);
+  return <>Placeholder for Peers UI!</>;
+};
+export default Peers;
+```
+
+Back in `VideoSourceConsumer.tsx` import Peers.
+
+```tsx
+// in `VideoSourceConsumer.tsx`
+import React, { useContext, useEffect, useState } from "react";
+import { EncoderUiContext } from "@video/video-client-web";
+import Encoder from "./Encoder";
+/*
+ * 8.2a Import Peers.
+ */
+import Peers from "./Peers";
+const VideoSourceConsumer = (): React.ReactElement => {
+  const [encoder, setEncoder] = useState(null);
+  const { videoSource } = useContext(EncoderUiContext);
+  useEffect(() => {
+    (async () => {
+      if (videoSource) {
+        await videoSource.createEncoder();
+        setEncoder(videoSource.videoSource.encoder);
+      }
+    })();
+  }, []);
+  /*
+   * 8.2b If `videoSource` isn't available let's make sure not to render that requires it.
+   */
+  if (!videoSource) {
+    return <></>;
+  }
+  return (
+    <>
+      {encoder != null && <Encoder encoderStore={encoder} />}
+      /* * 8.2c Implement Peers. */
+      <Peers />
+    </>
+  );
+};
+```
+
+Before we go on, let's add some styling.
+
+```tsx
+// in VideoSourceConsumer.tsx
+return (
+  <>
+    <div style={{ display: "flex", marginBottom: "1rem" }}>
+      {encoder != null && <Encoder encoderStore={encoder} />}
+    </div>
+    <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <Peers />
+    </div>
+  </>
+);
+```
+
+```tsx
+// in Encoder.tsx
+return (
+  <div style={{ flex: 1, maxWidth: "50%" }}>
+    <EncoderUiContext.Provider value={encoderStore}>
+      <MediaContainer>
+        <EncoderVideo autoEncoderSetup />
+        <ControlBar>
+          <CameraButton />
+          <MicrophoneButton />
+          <BroadcastButton broadcastOptions={{ streamName: "name" }} />
+        </ControlBar>
+      </MediaContainer>
+    </EncoderUiContext.Provider>
+  </div>
+);
+```
+
+Create a `Player` Component.
+
+```tsx
+// in Player.tsx
+import React from "react";
+const Player = ({ playerStore }) => {
+  return <>Placeholder for Player UI!</>;
+};
+export default Player;
+```
+
+Back in `Peers.tsx`, create a reducer function to manage peer state."
+For more background: We will be creating an array of Peers that reflects the participants
+on the web conference call. The `reducer` function will be used to manage that state.
+
+```ts
+// in Peers.tsx
+const reducer = (state: { peers }, action: { payload; type }) => {
+  switch (action.type) {
+    case "add":
+      return { peers: [...state.peers, action.payload] };
+    case "remove":
+      return {
+        peers: state.peers.filter((item: any) => item !== action.payload),
+      };
+    default:
+      throw new Error(
+        "Must specify either `add` or `remove` for Peer reducer."
+      );
+  }
+};
+```
+
+Using React hooks, listen for `videoSource` peer events and update local state accordingly.
+
+```ts
+// in Peers.ts
+/*
+ * 8.7a Import `useEffect` and `useReducer` from React.
+ */
+import { useEffect, useReducer } from "react";
+/*
+ * 8.7b Set up local state using the `useReducer` hook (Note: `reducer` below is going to be referencing
+ * our new reducer function we created).
+ */
+const [peerState, dispatch] = useReducer(reducer, { peers: [] });
+useEffect(() => {
+  /*
+   * 8.7c Set Async IIFE.
+   */
+  (async () => {
+    /*
+     * 8.7d Listen for the "peer-added" event and dispatch the new peer to our state when
+     * a new user joins our web conference.
+     */
+    videoSource.videoSource.on("peer-added", (peer) => {
+      dispatch({ type: "add", payload: peer });
+    });
+    /*
+     * 8.7e Listen for the "peer-removed" event and dispatch the removed peer to our state when a
+     * user leaves our web conference.
+     */
+    videoSource.videoSource.on("peer-removed", (peer: PeerParameters) => {
+      dispatch({ type: "remove", payload: peer });
+    });
+  })();
+  /*
+   * 8.7f Add `videoSource.videoSource` to the dependency array.
+   */
+}, [videoSource.videoSource]);
+```
+
+Putting it all together our `Peers.tsx` file should now look like this:"
+
+```ts
+// in Peers.tsx
+import React, { useContext, useEffect, useReducer } from "react";
+import { EncoderUiContext } from "@video/video-client-web";
+const reducer = (state: { peers }, action: { payload; type }) => {
+  switch (action.type) {
+    case "add":
+      return { peers: [...state.peers, action.payload] };
+    case "remove":
+      return {
+        peers: state.peers.filter((item) => item !== action.payload),
+      };
+    default:
+      throw new Error(
+        "Must specify either `add` or `remove` for Peer reducer."
+      );
+  }
+};
+const Peers = () => {
+  const { videoSource } = useContext(EncoderUiContext);
+  const [peerState, dispatch] = useReducer(reducer, { peers: [] });
+  useEffect(() => {
+    (async () => {
+      videoSource.videoSource.on("peer-added", (peer: any) => {
+        dispatch({ type: "add", payload: peer });
+      });
+      videoSource.videoSource.on("peer-removed", (peer: any) => {
+        dispatch({ type: "remove", payload: peer });
+      });
+    })();
+  }, [videoSource.videoSource]);
+  console.log("PeersContext", videoSource);
+  return <>Placeholder for Peers UI!</>;
+};
+export default Peers;
+```
+
+Import Player and iterate over `peerState`.
+
+```ts
+// in Peers.tsx
+/*
+ * 8.9a Import Player
+ */
+import Player from "./Player";
+```
+
+```ts
+// in Peers.tsx
+return;
+/*
+ * If there are no peers in our array, return `null`, otherwise map over the array and return
+ * a Player, passing in that peer's `player` store.
+ */
+!peerState.peers
+  ? null
+  : peerState.peers.map((peer, index) => {
+      return <Player playerStore={peer.player} />;
+    });
+```
+
+Now, putting it all together, our `Peers.tsx` should look like this:
+
+```tsx
+  // in Peers.tsx
+  import React, { useContext, useEffect, useReducer } from "react";
+  import { EncoderUiContext } from "@video/video-client-web";
+  import Player from "./Player";
+  const reducer = (
+    state: { peers },
+    action: { payload, type }
+  ) => {
+    switch (action.type) {
+      case "add":
+        return { peers: [...state.peers, action.payload] };
+      case "remove":
+        return {
+          peers: state.peers.filter((item) => item !== action.payload),
+        };
+      default:
+        throw new Error("Must specify either `add` or `remove` for Peer reducer.");
+    }
+  };
+
+  const Peers = () => {
+    const { videoSource } = useContext(EncoderUiContext);
+    const [peerState, dispatch] = useReducer(reducer, { peers: [] });
+
+    useEffect(() => {
+      (async () => {
+        videoSource.videoSource.on("peer-added", (peer: any) => {
+          dispatch({ type: "add", payload: peer });
+        });
+        videoSource.videoSource.on("peer-removed", (peer: any) => {
+          dispatch({ type: "remove", payload: peer });
+        });
+      })();
+    }, [videoSource.videoSource]);
+
+    console.log("PeersContext", videoSource);
+
+    return
+      !peerState.peers
+        ? null
+        : peerState.peers.map((peer, index) => (
+          <Player playerStore={peer.player} />;
+        ));
+  }
+```
+
+## Full Code
+
+```tsx
+// in Encoder.tsx
+import React from "react";
+import {
+  BroadcastButton,
+  CameraButton,
+  ControlBar,
+  EncoderVideo,
+  MediaContainer,
+  MicrophoneButton,
+  EncoderUiContext,
+} from "@video/video-client-web";
+const Encoder = ({ encoderStore }) => {
+  return (
+    <div style={{ flex: 1, maxWidth: "50%" }}>
+      <EncoderUiContext.Provider value={encoderStore}>
+        <MediaContainer>
+          <EncoderVideo autoEncoderSetup />
+          <ControlBar>
+            <CameraButton />
+            <MicrophoneButton />
+            <BroadcastButton broadcastOptions={{ streamName: "name" }} />
+          </ControlBar>
+        </MediaContainer>
+      </EncoderUiContext.Provider>
+    </div>
+  );
+};
+export default Encoder;
+```
+
+```tsx
+// in Peers.tsx
+import React, { useContext, useEffect, useReducer } from "react";
+import { EncoderUiContext } from "@video/video-client-web";
+const reducer = (
+  // Using "any" here as no overload for the useReducer call will be matched otherwise
+  state: { peers: any },
+  action: { payload: any; type: string }
+) => {
+  switch (action.type) {
+    case "add":
+      return { peers: [...state.peers, action.payload] };
+    case "remove":
+      return {
+        peers: state.peers.filter((item: any) => item !== action.payload),
+      };
+    default:
+      throw new Error();
+  }
+};
+const Peers = (): React.ReactElement => {
+  const { videoSource } = useContext < any > EncoderUiContext;
+  const [peerState, dispatch] = useReducer(reducer, { peers: [] });
+  useEffect(() => {
+    (async () => {
+      videoSource.videoSource.on("peer-added", (peer: any) => {
+        dispatch({ type: "add", payload: peer });
+      });
+      videoSource.videoSource.on("peer-removed", (peer: any) => {
+        dispatch({ type: "remove", payload: peer });
+      });
+    })();
+  }, [videoSource.videoSource]);
+  return <>Placeholder for Peers UI!</>;
+};
+export default Peers;
+```
+
+```tsx
+// in `VideoSourceConsumer.tsx`
+import React, { useContext, useEffect, useState } from "react";
+import { EncoderUiContext } from "@video/video-client-web";
+import Encoder from "./Encoder";
+import Peers from "./Peers";
+const VideoSourceConsumer = (): React.ReactElement => {
+  const [encoder, setEncoder] = useState(null);
+  const { videoSource } = useContext < any > EncoderUiContext;
+  useEffect(() => {
+    (async () => {
+      if (videoSource) {
+        await videoSource.createEncoder();
+        setEncoder(videoSource.videoSource.encoder);
+      }
+    })();
+  }, []);
+  if (!videoSource) {
+    return <></>;
+  }
+  return (
+    <>
+      <div style={{ display: "flex", marginBottom: "1rem" }}>
+        {encoder != null && <Encoder encoderStore={encoder} />}
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
+        <Peers />
+      </div>
+    </>
+  );
+};
+export default VideoSourceConsumer;
+```
+
+```tsx
+// in MyWebConference.tsx
+import React, { useEffect, useState } from "react";
+/**
+ *  4.1 Import EncoderUiContext and our new VideoSourceConsumer component.
+ */
+import { VideoSourceUI, EncoderUiContext } from "@video/video-client-web";
+import { MediaStreamState } from "@video/video-client-core";
+import VideoSourceConsumer from "./VideoSourceConsumer";
+export const MyWebConference = () => {
+  const [store, setStore] = useState({
+    videoSource: null,
+    callId: null,
+  });
+  useEffect(() => {
+    (async () => {
+      // NOTE: The demoOptions below are for demo purposes only,
+      // you will have your own token and callId.
+      const demoOptions = {
+        scope: "conference-owner",
+        loadbalancer: "https://yourLoadbalancer",
+        hub: "https://yourHubEndpoint",
+        streamKey: "123456789",
+        displayName: "Conference Owner",
+      };
+      const videoSourceOptions = {
+        token: () => {
+          // The requestBroadcastToken function below is for demo purposes only,
+          // you will have your own token.
+          return requestBroadcastToken(demoOptions);
+        },
+        statsTags: {
+          userId: "testUserId",
+          app: "video-client-demo",
+          streamId: "1234abcd",
+        },
+        websocketUri: "wss://yourWebsocket",
+        loadbalancer: "https://yourLoadbalancer",
+        userId: "",
+        peerId: "",
+        callId: "",
+        producerId: "",
+        displayName: "",
+        streamId: "",
+        studioId: "",
+        kind: "",
+        app: "",
+      };
+      const callId = await createMockCallId(
+        videoSourceOptions.token,
+        demoOptions
+      );
+      const encoderOptions = {
+        streamName: "demo",
+        streamKey: "123456789",
+        callId,
+        loadbalancer: "https://yourLoadbalancer",
+      };
+      const mediaStreamState = new MediaStreamState();
+      const videoSourceStore = new VideoSourceUI({
+        videoSourceOptions,
+        encoderOptions,
+        mediaStreamState,
+        websocketUri: "wss://yourWebsocket",
+      });
+      setStore({
+        videoSource: videoSourceStore,
+        callId,
+      });
+    })();
+    return () => {
+      videoSourceStore.dispose();
+      if (store.videoSource) {
+        store.videoSource.dispose();
+      }
+    };
+  }, []);
+  /*
+   * 4.2 Create a React Context Provider for your VideoSource store using the EncoderUiContext.
+   * Grab the store value from local React state.
+   *
+   * 4.3 Implement VideoSource Provider.
+   */
+  return (
+    <EncoderUiContext.Provider value={store}>
+      <VideoSourceConsumer />
+    </EncoderUiContext.Provider>
+  );
+};
+```
+
+## Appendix
+
+#### VideoSourceUIOptions.videoSourceOptions 
+
+Details on the required and optional `videoSourceOptions`.
+
+```ts
+interface VideoSourceOptions {
+  loadbalancer: string; // Required. Host for 's PVC loadbalancer service
+  statsTags: Record<string, unknown>; // Required.
+  userId: string; // Required.
+  peerId: string; // Required.
+  callId: string; // Required.
+  producerId: string; // Required.
+  displayName: string; // Required.
+  streamId: string; // Required.
+  studioId: string; // Required.
+  kind: string; // Required.
+  app: string; // Required.
+  websocketUri: string; // Required.
+  token?: TokenGetter; // Optional.
+  playerOptions?: Partial<PlayerOptions>; // Optional.
+}
+```
+
+#### VideoSourceUIOptions.encoderOptions 
+
+Details on the required and optional `encoderOptions`.
+
+```ts
+interface EncoderOptions {
+  streamName: string; // Required.
+  loadbalancer: string; // Required. Host for 's PVC loadbalancer service. Matches loadbalancer passed into videoSourceOptions.
+  callId?: string; // Optional.
+  callUrl?: string; // Optional.
+}
+```
+
+#### EncoderUIOptions.mediaStreamState > Details on the required `mediaStreamState` option. API Documentation forthcoming. 
+
+feedback

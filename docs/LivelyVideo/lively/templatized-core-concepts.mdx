@@ -1,0 +1,134 @@
+# core-concepts
+
+---
+route: /basic-operator-integration/video-client/core-concepts
+pageTitle: Core Concepts
+kind: concept
+uuid: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+---
+
+## How do I listen for a specific stats value?
+
+You can easily listen for any specific stats value by attaching a listener to the call object and listening for `webrtc-stats`.
+
+Below is a list of available stats:
+
+```
+{
+  cpu: double,
+  eventTime: long
+  sourceType: string
+  mediaSource_frameHeight: long
+  mediaSource_frameWidth: long
+  mediaSource_framesPerSecond: float
+  remoteInboundRtp_roundTripTime: double
+  remoteInboundRtp_fractionLost: double
+  inboundRtp_bitrate: long
+  inboundRtp_framesPerSecond: float
+  inboundRtp_bytesReceived: double
+  calculation_fpsSourceToOutput: double
+  calculation_widthSourceToOutput: double
+  calculation_heightSourceToOutput: double
+  remoteOutboundRtp_fractionLost: double
+  outboundRtp_nackCount: double
+  outboundRtp_pliCount: double
+  outboundRtp_qualityLimitationReason: string
+  outboundRtp_qualityLimitationResolutionChanges: double
+  outboundRtp_retransmittedPacketsSent: double
+  outboundRtp_framesPerSecond: float
+  outboundRtp_packetSendDelay: double
+  outboundRtp_encodedBytesTarget: double
+  outboundRtp_bitrate: long
+  outboundRtp_encodeTime: double
+  localCandidate_networkType: string
+  transport_transportStatus: string
+}
+```
+
+Example of listening to `videoOutboundBitrate` and performing an action when the bitrate is less than 0.5 Mbps
+
+```js
+call.pvcCall.on('webrtc-stats', (data) => {
+  if (data.videoOutboundBitrate <= 4000000) {
+    // Do something useful
+  }
+}));
+```
+
+## How do I use my own logger?
+
+Sending Video Client logs to your environment's backend is important for helping us to diagnose any issues your customers may experience.
+
+First, create your new `LoggerGlobal` and set the options you would like (Note: This should only be done once per application!):
+
+```ts
+import { LoggerGlobal } from "@video/log-client";
+
+const yourLogger = new LoggerGlobal();
+yourLogger.setOptions({
+  host: https://yourEndpoint,
+  interval: 5000, // This refers to the interval in which your logs will be sent, 5000 === 5000 Milliseconds.
+  level: "debug", // Please refer to the list below for the available levels.
+});
+
+// Here you can also add some Global Aggregate and Meta
+yourLogger.setGlobalAggregate("baz", "qux");
+yourLogger.setGlobalMeta("logId", "logIdOverride");
+```
+
+Now that you have your global logger setup you can begin creating loggers using `LoggerCore`. As opposed to your `LoggerGlobal` multiple `LoggerCore` can be created.
+
+```ts
+import LoggerCore from "@video/log-client";
+//Create our new logger
+const logger = new LoggerCore("log");
+
+//Lets set some meta and aggregates for our logger
+logger.setLoggerMeta("component", "logger1");
+//This aggregate will be attached to the full payload of your logs when writing to the server, this is the preferred usage of an aggregate but does not offer as tight of control.
+logger.setLoggerAggregate("message", "myMessage");
+//This aggregate will be applied to every message, this is not the preffered usage of an aggregate but does allow for tight control over addition/removal of aggregates.
+logger.setMessageAggregate("message", "myMessage");
+
+// Now that we have our Logger and all of it's aggregates and meta that we want set we can start logging.
+logger.warn("logging a warning", {
+  warning: "my warning",
+});
+
+logger.debug("logging a debug", {
+  debug: "my debug",
+});
+```
+
+Available LoggerCore methods:
+| Method | Description |
+| --- | --- |
+| setMessageAggregate(key: string, value: string \| number \| boolean): void | Allows for the setting of aggregates that will be applied to every message, this will allow for very tight control over the addition/removal of aggregates on your logs. |
+| removeMessageAggregate(key: string): void | Clears a specific message aggregate set on the logger. |
+| clearMessageAggregates(): void | Clears all message aggregate data set on the logger. |
+| setLoggerAggregate(key: string, value: string \| number \| boolean): void | Sets aggregates for the full payload of your logs when writing to the server, these are not attached to every message payload like the message aggregates. |
+| setLoggerMeta(key: typeof PackageMetaKeys\[number\], value: string): void | Adds metadata to your logger. |
+| log(level: Level, message: string, data: Log): void | Creates and sends a log to your Kibana instance. |
+| throttledLog(level: Level, milliseconds: number, message: string, data: Log): void | The same usage as the log method but this method will be throttled by the number of milliseconds passed to it. |
+| extend(Logger: LoggerCore): void | Allows the extension of a LoggerCore instance using another LoggerCore instance. |
+| destroy(): void | Destroys your logger core instance. |
+
+Available levels for the logger:
+
+```ts
+const LEVELS = [
+  "trace",
+  "debug",
+  "network",
+  "timing",
+  "local",
+  "info",
+  "warn",
+  "notice",
+  "deprecated",
+  "error",
+  "fatal",
+];
+```
+
+feedback
