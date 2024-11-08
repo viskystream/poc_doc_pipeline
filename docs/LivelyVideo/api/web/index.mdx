@@ -1,0 +1,3159 @@
+# @video/video-client-web
+
+## Classes
+
+### CallState
+
+#### Extends
+
+- `ObservableEventEmitter`\<[`CallStateEvents`](index.mdx#callstateevents)\>
+
+#### Constructors
+
+##### new CallState()
+
+> **new CallState**(`opts`?): [`CallState`](index.mdx#callstate)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `opts`? | [`CallStateOptions`](index.mdx#callstateoptions) |
+
+###### Returns
+
+[`CallState`](index.mdx#callstate)
+
+###### Overrides
+
+`ObservableEventEmitter<CallStateEvents>.constructor`
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:34](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L34)
+
+#### Properties
+
+| Property | Type | Default value |
+| ------ | ------ | ------ |
+| `[Emitter]` | `EventEmitter`\<`any`\> | `undefined` |
+| `[Observers]` | `Map`\<`string`, `IReactionDisposer`\> | `undefined` |
+| `activePlaceholder` | `null` \| `ActivePlaceholderAPI`\<`HTMLCanvasElement` \| `HTMLVideoElement`\> | `null` |
+| `broadcast` | `null` \| `BroadcastAPI` | `null` |
+| `call` | `null` \| `CallAPI` | `null` |
+| `disposing` | `boolean` | `undefined` |
+| `pausedBroadcast` | `boolean` | `false` |
+| `zeroBitrateHandler` | (`ev`) => `void`[] | `[]` |
+
+#### Accessors
+
+##### broadcastPaused
+
+###### Get Signature
+
+> **get** **broadcastPaused**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:26](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L26)
+
+##### isBroadcasting
+
+###### Get Signature
+
+> **get** **isBroadcasting**(): `boolean`
+
+Check if the broadcast is active.
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:80](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L80)
+
+##### isDisposed
+
+###### Get Signature
+
+> **get** **isDisposed**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`ObservableEventEmitter.isDisposed`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:45
+
+#### Methods
+
+##### addInnerDisposer()
+
+> **addInnerDisposer**(...`disposableObjects`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`disposableObjects` | (`Disposable` \| `DisposeFunction`)[] |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.addInnerDisposer`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:43
+
+##### addListener()
+
+> **addListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof CallStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`CallStateEvents`](index.mdx#callstateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.addListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:15
+
+##### autorun()
+
+> `protected` **autorun**(`view`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | () => `void` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.autorun`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:44
+
+##### dispose()
+
+> **dispose**(`reason`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `reason`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.dispose`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:50
+
+##### emit()
+
+> **emit**\<`K`\>(`type`, `ev`?, ...`args`?): `boolean`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof CallStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `ev`? | [`CallStateEvents`](index.mdx#callstateevents) & `object`\[`K`\] |
+| ...`args`? | `any`[] |
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`ObservableEventEmitter.emit`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:18
+
+##### emitError()
+
+> `protected` **emitError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.emitError`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:46
+
+##### emitErrorDeprecated()
+
+> `protected` **emitErrorDeprecated**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.emitErrorDeprecated`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:49
+
+##### getMaxListeners()
+
+> **getMaxListeners**(): `number`
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+`ObservableEventEmitter.getMaxListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:14
+
+##### off()
+
+> **off**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof CallStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`CallStateEvents`](index.mdx#callstateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.off`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:21
+
+##### on()
+
+> **on**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof CallStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`CallStateEvents`](index.mdx#callstateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.on`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:24
+
+##### once()
+
+> **once**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof CallStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`CallStateEvents`](index.mdx#callstateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.once`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:27
+
+##### onZeroBitrate()
+
+> **onZeroBitrate**(`ev`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ev` | `object` |
+| `ev.broadcast` | `BroadcastAPI` |
+| `ev.call` | `CallAPI` |
+| `ev.drop` | `number` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:73](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L73)
+
+##### pauseBroadcast()
+
+> **pauseBroadcast**(`mediaStreamController`): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `mediaStreamController` | `MediaStreamControllerAPI` |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:148](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L148)
+
+##### prependListener()
+
+> **prependListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof CallStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`CallStateEvents`](index.mdx#callstateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.prependListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:30
+
+##### prependOnceListener()
+
+> **prependOnceListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof CallStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`CallStateEvents`](index.mdx#callstateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.prependOnceListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:33
+
+##### removeAllListeners()
+
+> **removeAllListeners**\<`K`\>(`type`?): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof CallStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type`? | `K` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.removeAllListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:36
+
+##### removeListener()
+
+> **removeListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof CallStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`ev`) => `void` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.removeListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:37
+
+##### setMaxListeners()
+
+> **setMaxListeners**(`n`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `n` | `number` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.setMaxListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:13
+
+##### startBroadcastOnExistingCall()
+
+> **startBroadcastOnExistingCall**(`callId`, `options`, `mediaStreamController`, `videoClient`): `Promise`\<`void`\>
+
+Joins the existing call and starts the broadcast.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `callId` | `string` |
+| `options` | `BroadcastOptions` |
+| `mediaStreamController` | `MediaStreamControllerAPI` |
+| `videoClient` | `VideoClientAPI` |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:120](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L120)
+
+##### startBroadcastOnNewCall()
+
+> **startBroadcastOnNewCall**(`callOptions`, `broadcastOptions`, `mediaStreamController`, `videoClient`): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `callOptions` | `CallOptions` |
+| `broadcastOptions` | `BroadcastOptions` |
+| `mediaStreamController` | `MediaStreamControllerAPI` |
+| `videoClient` | `VideoClientAPI` |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:106](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L106)
+
+##### stopBroadcast()
+
+> **stopBroadcast**(): `Promise`\<`void`\>
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:137](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L137)
+
+##### throwError()
+
+> `protected` **throwError**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+`ObservableEventEmitter.throwError`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:47
+
+##### throwErrorDeprecated()
+
+> `protected` **throwErrorDeprecated**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+`ObservableEventEmitter.throwErrorDeprecated`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:48
+
+##### toggleBroadcast()
+
+> **toggleBroadcast**(`callOptionsOrId`, `broadcastOptions`, `mediaStreamController`, `videoClient`): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `callOptionsOrId` | `string` \| `CallOptions` |
+| `broadcastOptions` | `BroadcastOptions` |
+| `mediaStreamController` | `MediaStreamControllerAPI` |
+| `videoClient` | `VideoClientAPI` |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:89](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L89)
+
+##### togglePauseBroadcast()
+
+> **togglePauseBroadcast**(`mediaStreamController`): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `mediaStreamController` | `MediaStreamControllerAPI` |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:175](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L175)
+
+##### unpauseBroadcast()
+
+> **unpauseBroadcast**(`mediaStreamController`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `mediaStreamController` | `MediaStreamControllerAPI` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/call/call-state.ts:163](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L163)
+
+***
+
+### EncoderUiState
+
+#### Extends
+
+- `default`\<[`EncoderUiStateEvents`](index.mdx#encoderuistateevents)\>
+
+#### Constructors
+
+##### new EncoderUiState()
+
+> **new EncoderUiState**(`ctrl`, `options`): [`EncoderUiState`](index.mdx#encoderuistate)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctrl` | `MediaStreamControllerAPI` |
+| `options` | [`EncoderUiOptions`](index.mdx#encoderuioptions) |
+
+###### Returns
+
+[`EncoderUiState`](index.mdx#encoderuistate)
+
+###### Overrides
+
+`BaseUiState<EncoderUiStateEvents>.constructor`
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:83](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L83)
+
+#### Properties
+
+| Property | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `_testMic` | `boolean` | `false` | **Todo** should be deprecated, here for backwards compatibility |
+| `[Emitter]` | `EventEmitter`\<`any`\> | `undefined` | - |
+| `[Observers]` | `Map`\<`string`, `IReactionDisposer`\> | `undefined` | - |
+| `audioCtx` | `AudioContext` | `undefined` | - |
+| `disposing` | `boolean` | `undefined` | - |
+| `iosDevice` | `boolean` | `adapter.device.isIosDevice` | Indicates if we are using a mobile device |
+| `isFullscreen` | `boolean` | `false` | Indicates whether application is fullscreen. |
+| `logger` | `LoggerCore` | `undefined` | Creating our logger core |
+| `mediaStreamController` | `MediaStreamControllerAPI` | `undefined` | - |
+| `mobileDevice` | `boolean` | `adapter.device.isMobileDevice` | Indicates if we are using a mobile device |
+| `newWindow` | `null` | `null` | Indicates whether the application has been opened in a new window. |
+| `newWindowElement` | `null` \| `VideoElement` | `null` | New window DOM element |
+| `player` | `null` \| `PlayerAPI`\<`VideoElement`\> | `null` | - |
+| `playerOptions` | `null` \| `RequestPlayerOptions` | `null` | - |
+| `portal` | `boolean` | `false` | Indicates whether the application has launched in a React portal. |
+| `portalElement` | `null` \| `HTMLDivElement` | `null` | React Portal DOM element |
+| `prevVideoDeviceId` | `null` \| `string` | `null` | Keeps track of previous state for videoDeviceId |
+| `resolutionsInUseManager` | `null` \| `ResolutionsInUseManagerAPI` | `null` | - |
+| `screenShareSupported` | `boolean` | `!adapter.device.isMobileDevice` | Indicates if screenShare is supported |
+| `videoClient` | `null` \| `VideoClientAPI` | `null` | - |
+| `videoElement` | `RefObject`\<`HTMLVideoElement`\> | `undefined` | The reference to the HTMLVideoElement. |
+| `videoMouseOver` | `boolean` | `adapter.device.isMobileDevice` | Watches for mouse over on VideoWrapper |
+| `videoWrapperElement` | `RefObject`\<`HTMLDivElement`\> | `undefined` | Video Container wrapper element. |
+| `viewSettings` | `boolean` | `false` | Indicates whether the encoder settings are visible. |
+| `viewVideoCallSlider` | `boolean` | `false` | Indicates whether the call settings are visible. |
+| `volumeRangeSupported` | `boolean` | `!adapter.device.isIosDevice` | Indicates if screenShare is supported |
+| `displayName` | `"EncoderUiState"` | `"EncoderUiState"` | - |
+
+#### Accessors
+
+##### aspectRatioPadding
+
+###### Get Signature
+
+> **get** **aspectRatioPadding**(): `null` \| `string`
+
+Current aspect ratio. E.g. 16/9
+
+###### Returns
+
+`null` \| `string`
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:207](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L207)
+
+##### currentAvailableResolutions
+
+###### Get Signature
+
+> **get** **currentAvailableResolutions**(): `number`[]
+
+###### Returns
+
+`number`[]
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:297](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L297)
+
+##### isDisposed
+
+###### Get Signature
+
+> **get** **isDisposed**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`BaseUiState.isDisposed`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:45
+
+##### muted
+
+###### Get Signature
+
+> **get** **muted**(): `null` \| `boolean`
+
+Indicates whether the video is muted or not.
+
+###### Todo
+
+this should probably be deprecated
+
+###### Returns
+
+`null` \| `boolean`
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:163](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L163)
+
+##### testMic
+
+###### Get Signature
+
+> **get** **testMic**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Set Signature
+
+> **set** **testMic**(`val`): `void`
+
+###### Todo
+
+testMic should be deprecated in favor of this.player.localAudioMuted
+Indicates whether we are testing the mic or not.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `val` | `boolean` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:181](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L181)
+
+#### Methods
+
+##### addInnerDisposer()
+
+> **addInnerDisposer**(...`disposableObjects`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`disposableObjects` | (`Disposable` \| `DisposeFunction`)[] |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.addInnerDisposer`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:43
+
+##### addListener()
+
+> **addListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof BaseUiStateEvents \| keyof EncoderUiStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`EncoderUiStateEvents`](index.mdx#encoderuistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.addListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:15
+
+##### autorun()
+
+> `protected` **autorun**(`view`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | () => `void` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.autorun`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:44
+
+##### dispose()
+
+> **dispose**(`reason`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `reason`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.dispose`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:50
+
+##### emit()
+
+> **emit**\<`K`\>(`type`, `ev`?, ...`args`?): `boolean`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof BaseUiStateEvents \| keyof EncoderUiStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `ev`? | [`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`EncoderUiStateEvents`](index.mdx#encoderuistateevents) & `object`\[`K`\] |
+| ...`args`? | `any`[] |
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`BaseUiState.emit`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:18
+
+##### emitError()
+
+> `protected` **emitError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.emitError`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:46
+
+##### emitErrorDeprecated()
+
+> `protected` **emitErrorDeprecated**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.emitErrorDeprecated`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:49
+
+##### getMaxListeners()
+
+> **getMaxListeners**(): `number`
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+`BaseUiState.getMaxListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:14
+
+##### handleDriverNotSupportedError()
+
+> **handleDriverNotSupportedError**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:251](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L251)
+
+##### handleMscError()
+
+> **handleMscError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:229](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L229)
+
+##### handlePlayerError()
+
+> **handlePlayerError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:241](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L241)
+
+##### handleResolutionsInUseError()
+
+> **handleResolutionsInUseError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `ResolutionsInUseError` & `IVideoClientError` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:260](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L260)
+
+##### handleScreenCapture()
+
+> **handleScreenCapture**(): `void`
+
+@todo: Add logging for mediaController in case of mediaStreamController being null.
+Toggle `videoDeviceId`.
+
+###### Returns
+
+`void`
+
+###### Description
+
+Toggles the encoder to/from screenCapture and sets uiState.videoDeviceId to
+either the previous videoDeviceId or screencapture.
+
+###### Example
+
+```ts
+handleScreenCapture();
+```
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:286](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L286)
+
+##### init()
+
+> **init**(`options`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`EncoderUiOptions`](index.mdx#encoderuioptions) |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:116](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L116)
+
+##### off()
+
+> **off**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof BaseUiStateEvents \| keyof EncoderUiStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`EncoderUiStateEvents`](index.mdx#encoderuistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.off`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:21
+
+##### on()
+
+> **on**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof BaseUiStateEvents \| keyof EncoderUiStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`EncoderUiStateEvents`](index.mdx#encoderuistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.on`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:24
+
+##### once()
+
+> **once**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof BaseUiStateEvents \| keyof EncoderUiStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`EncoderUiStateEvents`](index.mdx#encoderuistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.once`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:27
+
+##### onFullscreenChange()
+
+> **onFullscreenChange**(): `void`
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.onFullscreenChange`
+
+###### Defined in
+
+[web/src/store/utils/ui-state.ts:73](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/utils/ui-state.ts#L73)
+
+##### prependListener()
+
+> **prependListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof BaseUiStateEvents \| keyof EncoderUiStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`EncoderUiStateEvents`](index.mdx#encoderuistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.prependListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:30
+
+##### prependOnceListener()
+
+> **prependOnceListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof BaseUiStateEvents \| keyof EncoderUiStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`EncoderUiStateEvents`](index.mdx#encoderuistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.prependOnceListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:33
+
+##### removeAllListeners()
+
+> **removeAllListeners**\<`K`\>(`type`?): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof BaseUiStateEvents \| keyof EncoderUiStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type`? | `K` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.removeAllListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:36
+
+##### removeListener()
+
+> **removeListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof BaseUiStateEvents \| keyof EncoderUiStateEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`ev`) => `void` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.removeListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:37
+
+##### setMaxListeners()
+
+> **setMaxListeners**(`n`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `n` | `number` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.setMaxListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:13
+
+##### throwError()
+
+> `protected` **throwError**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+`BaseUiState.throwError`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:47
+
+##### throwErrorDeprecated()
+
+> `protected` **throwErrorDeprecated**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+`BaseUiState.throwErrorDeprecated`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:48
+
+##### toggleFullscreen()
+
+> **toggleFullscreen**(): `Promise`\<`void`\>
+
+Toggle `isFullscreen`
+
+###### Returns
+
+`Promise`\<`void`\>
+
+Promise
+
+###### Async
+
+###### Description
+
+Toggles the encoder to/from fullscreen and sets uiState.isFullscreen
+to true/false.
+
+###### Example
+
+```ts
+toggleFullscreen();
+// Sets encoder to/from fullscreen and updates uiState.isFullscreen = true|false;
+```
+
+###### Inherited from
+
+`BaseUiState.toggleFullscreen`
+
+###### Defined in
+
+[web/src/store/utils/ui-state.ts:159](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/utils/ui-state.ts#L159)
+
+##### toggleMute()
+
+> **toggleMute**(): `void`
+
+Toggle mute.
+
+###### Returns
+
+`void`
+
+###### Description
+
+Toggles the `muted` property on the &lt;video&gt;.
+
+###### Example
+
+```ts
+toggleMute();
+// Sets &lt;video&gt; muted property to true|false and updates uiState.muted = true|false;
+```
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:223](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L223)
+
+##### toggleVideoCallSlider()
+
+> **toggleVideoCallSlider**(): `void`
+
+Toggle `viewVideoCallSlider`.
+
+###### Returns
+
+`void`
+
+###### Description
+
+Toggles the video call settings slider to/from visible and sets uiState.viewVideoCallSlider
+to true/false.
+
+###### Example
+
+```ts
+toggleVideoCallSlider();
+// Sets video call settings slider to/from visible and updates uiState.viewVideoCallSlider = true|false;
+```
+
+###### Defined in
+
+[web/src/store/encoder/ui-state.ts:309](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L309)
+
+***
+
+### MultistreamState
+
+#### Extends
+
+- `ObservableEventEmitter`\<[`MultistreamEvents`](index.mdx#multistreamevents)\>
+
+#### Constructors
+
+##### new MultistreamState()
+
+> **new MultistreamState**(`options`): [`MultistreamState`](index.mdx#multistreamstate)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | `MultiStreamOptions` |
+
+###### Returns
+
+[`MultistreamState`](index.mdx#multistreamstate)
+
+###### Overrides
+
+`ObservableEventEmitter<MultistreamEvents>.constructor`
+
+###### Defined in
+
+[web/src/store/multistream/ui-state.ts:70](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/multistream/ui-state.ts#L70)
+
+#### Properties
+
+| Property | Type | Default value |
+| ------ | ------ | ------ |
+| `[Emitter]` | `EventEmitter`\<`any`\> | `undefined` |
+| `[Observers]` | `Map`\<`string`, `IReactionDisposer`\> | `undefined` |
+| `activePublicKeys` | `string`[] | `[]` |
+| `currentUnmutedStream` | `null` \| `string` | `null` |
+| `disposing` | `boolean` | `undefined` |
+| `isInitialLoadDone` | `boolean` | `false` |
+| `manifestHost` | `string` | `undefined` |
+| `manifestPollingInterval` | `null` \| `number` | `null` |
+| `maxPlayingStreams` | `number` | `undefined` |
+| `muteOnFirstPlay` | `boolean` | `undefined` |
+| `playerOptions` | `Partial`\<`RequestPlayerOptions`\> | `{}` |
+| `playersWrapperElement` | `RefObject`\<`HTMLDivElement`\> | `undefined` |
+| `publicKeys` | `string`[] | `undefined` |
+| `streams` | `Streams` | `{}` |
+| `videoClient` | `VideoClientAPI` | `undefined` |
+| `displayName` | `"MultistreamState"` | `"MultistreamState"` |
+
+#### Accessors
+
+##### isDisposed
+
+###### Get Signature
+
+> **get** **isDisposed**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`ObservableEventEmitter.isDisposed`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:45
+
+#### Methods
+
+##### addInnerDisposer()
+
+> **addInnerDisposer**(...`disposableObjects`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`disposableObjects` | (`Disposable` \| `DisposeFunction`)[] |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.addInnerDisposer`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:43
+
+##### addListener()
+
+> **addListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof MultistreamEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`MultistreamEvents`](index.mdx#multistreamevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.addListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:15
+
+##### autorun()
+
+> `protected` **autorun**(`view`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | () => `void` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.autorun`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:44
+
+##### dispose()
+
+> **dispose**(`reason`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `reason`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.dispose`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:50
+
+##### emit()
+
+> **emit**\<`K`\>(`type`, `ev`?, ...`args`?): `boolean`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof MultistreamEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `ev`? | [`MultistreamEvents`](index.mdx#multistreamevents) & `object`\[`K`\] |
+| ...`args`? | `any`[] |
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`ObservableEventEmitter.emit`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:18
+
+##### emitError()
+
+> `protected` **emitError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.emitError`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:46
+
+##### emitErrorDeprecated()
+
+> `protected` **emitErrorDeprecated**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`ObservableEventEmitter.emitErrorDeprecated`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:49
+
+##### fetchManifestAndSelectPoster()
+
+> **fetchManifestAndSelectPoster**(`__namedParameters`): `Promise`\<`null` \| `object`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | `object` |
+| `__namedParameters.manifestUrl` | `string` |
+| `__namedParameters.publicKey` | `string` |
+
+###### Returns
+
+`Promise`\<`null` \| `object`\>
+
+###### Defined in
+
+[web/src/store/multistream/ui-state.ts:284](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/multistream/ui-state.ts#L284)
+
+##### getMaxListeners()
+
+> **getMaxListeners**(): `number`
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+`ObservableEventEmitter.getMaxListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:14
+
+##### off()
+
+> **off**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof MultistreamEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`MultistreamEvents`](index.mdx#multistreamevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.off`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:21
+
+##### on()
+
+> **on**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof MultistreamEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`MultistreamEvents`](index.mdx#multistreamevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.on`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:24
+
+##### once()
+
+> **once**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof MultistreamEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`MultistreamEvents`](index.mdx#multistreamevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.once`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:27
+
+##### prependListener()
+
+> **prependListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof MultistreamEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`MultistreamEvents`](index.mdx#multistreamevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.prependListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:30
+
+##### prependOnceListener()
+
+> **prependOnceListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof MultistreamEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`MultistreamEvents`](index.mdx#multistreamevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.prependOnceListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:33
+
+##### removeAllListeners()
+
+> **removeAllListeners**\<`K`\>(`type`?): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof MultistreamEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type`? | `K` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.removeAllListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:36
+
+##### removeListener()
+
+> **removeListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| keyof MultistreamEvents |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`ev`) => `void` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.removeListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:37
+
+##### setManifestUrls()
+
+> **setManifestUrls**(`publicKeys`): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `publicKeys` | `string`[] |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[web/src/store/multistream/ui-state.ts:154](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/multistream/ui-state.ts#L154)
+
+##### setMaxListeners()
+
+> **setMaxListeners**(`n`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `n` | `number` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`ObservableEventEmitter.setMaxListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:13
+
+##### startPlayer()
+
+> **startPlayer**(`publicKey`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `publicKey` | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/multistream/ui-state.ts:189](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/multistream/ui-state.ts#L189)
+
+##### stopPlayer()
+
+> **stopPlayer**(`publicKey`, `removeFromStreams`): `void`
+
+###### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `publicKey` | `string` | `undefined` |
+| `removeFromStreams` | `boolean` | `false` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/multistream/ui-state.ts:260](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/multistream/ui-state.ts#L260)
+
+##### throwError()
+
+> `protected` **throwError**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+`ObservableEventEmitter.throwError`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:47
+
+##### throwErrorDeprecated()
+
+> `protected` **throwErrorDeprecated**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+`ObservableEventEmitter.throwErrorDeprecated`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:48
+
+##### updatePublicKeys()
+
+> **updatePublicKeys**(`publicKeys`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `publicKeys` | `string`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[web/src/store/multistream/ui-state.ts:314](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/multistream/ui-state.ts#L314)
+
+***
+
+### PlayerUiState
+
+#### Extends
+
+- `default`\<[`PlayerUiStateEvents`](index.mdx#playeruistateevents)\>
+
+#### Constructors
+
+##### new PlayerUiState()
+
+> **new PlayerUiState**(`basePlayer`, `options`?): [`PlayerUiState`](index.mdx#playeruistate)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `basePlayer` | `PlayerAPI`\<`VideoElement`\> |
+| `options`? | [`PlayerUIOptions`](index.mdx#playeruioptions) |
+
+###### Returns
+
+[`PlayerUiState`](index.mdx#playeruistate)
+
+###### Overrides
+
+`BaseUiState<PlayerUiStateEvents>.constructor`
+
+###### Defined in
+
+[web/src/store/player/ui-state.ts:53](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/player/ui-state.ts#L53)
+
+#### Properties
+
+| Property | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `_options` | `undefined` \| [`PlayerUIOptions`](index.mdx#playeruioptions) | `undefined` | - |
+| `[Emitter]` | `EventEmitter`\<`any`\> | `undefined` | - |
+| `[Observers]` | `Map`\<`string`, `IReactionDisposer`\> | `undefined` | - |
+| `disposing` | `boolean` | `undefined` | - |
+| `iosDevice` | `boolean` | `adapter.device.isIosDevice` | Indicates if we are using a mobile device |
+| `isFullscreen` | `boolean` | `false` | Indicates whether application is fullscreen. |
+| `logger` | `LoggerCore` | `undefined` | Creating our logger core |
+| `mobileDevice` | `boolean` | `adapter.device.isMobileDevice` | Indicates if we are using a mobile device |
+| `multistreamPlayerPublicKey` | `null` \| `string` | `null` | - |
+| `newWindow` | `null` | `null` | Indicates whether the application has been opened in a new window. |
+| `newWindowElement` | `null` \| `VideoElement` | `null` | New window DOM element |
+| `player` | `PlayerAPI`\<`VideoElement`\> | `undefined` | - |
+| `portal` | `boolean` | `false` | Indicates whether the application has launched in a React portal. |
+| `portalElement` | `null` \| `HTMLDivElement` | `null` | React Portal DOM element |
+| `qualityMouseOver` | `boolean` | `false` | Watches for mouse over on the qualitySelect modal |
+| `screenShareSupported` | `boolean` | `!adapter.device.isMobileDevice` | Indicates if screenShare is supported |
+| `videoElement` | `RefObject`\<`HTMLVideoElement`\> | `undefined` | The reference to the HTMLVideoElement. |
+| `videoMouseOver` | `boolean` | `adapter.device.isMobileDevice` | Watches for mouse over on VideoWrapper |
+| `videoWrapperElement` | `RefObject`\<`HTMLDivElement`\> | `undefined` | Video Container wrapper element. |
+| `viewCount` | `number` | `0` | Reactive view count |
+| `viewGetSound` | `boolean` | `true` | Indicates whether the get sound element(s) is/are visible. |
+| `viewSettings` | `boolean` | `false` | Indicates whether the encoder settings are visible. |
+| `viewVideoCallSlider` | `boolean` | `false` | Indicates whether the call settings are visible. |
+| `volumeRangeSupported` | `boolean` | `!adapter.device.isIosDevice` | Indicates if screenShare is supported |
+| `displayName` | `"PlayerUiState"` | `"PlayerUiState"` | - |
+
+#### Accessors
+
+##### availableBitrates
+
+###### Get Signature
+
+> **get** **availableBitrates**(): `BitrateHelper`[]
+
+###### Returns
+
+`BitrateHelper`[]
+
+###### Defined in
+
+[web/src/store/player/ui-state.ts:106](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/player/ui-state.ts#L106)
+
+##### availablePlayers
+
+###### Get Signature
+
+> **get** **availablePlayers**(): `PlayerAnySpec`[]
+
+###### Returns
+
+`PlayerAnySpec`[]
+
+###### Defined in
+
+[web/src/store/player/ui-state.ts:113](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/player/ui-state.ts#L113)
+
+##### availableQualities
+
+###### Get Signature
+
+> **get** **availableQualities**(): `Quality`[]
+
+###### Returns
+
+`Quality`[]
+
+###### Defined in
+
+[web/src/store/player/ui-state.ts:99](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/player/ui-state.ts#L99)
+
+##### currentPlayer
+
+###### Get Signature
+
+> **get** **currentPlayer**(): `undefined` \| `null` \| `PlayerAPI`\<`VideoElement`\>
+
+@deprecated.
+
+###### Returns
+
+`undefined` \| `null` \| `PlayerAPI`\<`VideoElement`\>
+
+###### Defined in
+
+[web/src/store/player/ui-state.ts:135](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/player/ui-state.ts#L135)
+
+##### encoderMuted
+
+###### Get Signature
+
+> **get** **encoderMuted**(): `null` \| `boolean`
+
+###### Deprecated
+
+Use playerUiState.player.consumerAudioEnabled
+
+###### Returns
+
+`null` \| `boolean`
+
+###### Defined in
+
+[web/src/store/player/ui-state.ts:147](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/player/ui-state.ts#L147)
+
+##### encoderNoVideo
+
+###### Get Signature
+
+> **get** **encoderNoVideo**(): `null` \| `boolean`
+
+###### Deprecated
+
+Use playerUiState.player.consumerVideoEnabled
+
+###### Returns
+
+`null` \| `boolean`
+
+###### Defined in
+
+[web/src/store/player/ui-state.ts:154](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/player/ui-state.ts#L154)
+
+##### isDisposed
+
+###### Get Signature
+
+> **get** **isDisposed**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`BaseUiState.isDisposed`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:45
+
+##### showToolbar
+
+###### Get Signature
+
+> **get** **showToolbar**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[web/src/store/player/ui-state.ts:163](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/player/ui-state.ts#L163)
+
+#### Methods
+
+##### addInnerDisposer()
+
+> **addInnerDisposer**(...`disposableObjects`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`disposableObjects` | (`Disposable` \| `DisposeFunction`)[] |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.addInnerDisposer`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:43
+
+##### addListener()
+
+> **addListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"isFullscreen"` \| `"newWindow"` \| `"newWindowElement"` \| `"portal"` \| `"portalElement"` \| `"viewSettings"` \| `"viewVideoCallSlider"` \| `"videoMouseOver"` \| `"screenShareSupported"` \| `"volumeRangeSupported"` \| `"availableQualities"` \| `"currentPlayer"` \| `"availablePlayers"` \| `"viewGetSound"` \| `"qualityMouseOver"` \| `"encoderMuted"` \| `"encoderNoVideo"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`PlayerUiStateEvents`](index.mdx#playeruistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.addListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:15
+
+##### autorun()
+
+> `protected` **autorun**(`view`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | () => `void` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.autorun`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:44
+
+##### dispose()
+
+> **dispose**(`reason`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `reason`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.dispose`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:50
+
+##### emit()
+
+> **emit**\<`K`\>(`type`, `ev`?, ...`args`?): `boolean`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"isFullscreen"` \| `"newWindow"` \| `"newWindowElement"` \| `"portal"` \| `"portalElement"` \| `"viewSettings"` \| `"viewVideoCallSlider"` \| `"videoMouseOver"` \| `"screenShareSupported"` \| `"volumeRangeSupported"` \| `"availableQualities"` \| `"currentPlayer"` \| `"availablePlayers"` \| `"viewGetSound"` \| `"qualityMouseOver"` \| `"encoderMuted"` \| `"encoderNoVideo"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `ev`? | [`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`PlayerUiStateEvents`](index.mdx#playeruistateevents) & `object`\[`K`\] |
+| ...`args`? | `any`[] |
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`BaseUiState.emit`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:18
+
+##### emitError()
+
+> `protected` **emitError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.emitError`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:46
+
+##### emitErrorDeprecated()
+
+> `protected` **emitErrorDeprecated**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.emitErrorDeprecated`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:49
+
+##### getMaxListeners()
+
+> **getMaxListeners**(): `number`
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+`BaseUiState.getMaxListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:14
+
+##### off()
+
+> **off**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"isFullscreen"` \| `"newWindow"` \| `"newWindowElement"` \| `"portal"` \| `"portalElement"` \| `"viewSettings"` \| `"viewVideoCallSlider"` \| `"videoMouseOver"` \| `"screenShareSupported"` \| `"volumeRangeSupported"` \| `"availableQualities"` \| `"currentPlayer"` \| `"availablePlayers"` \| `"viewGetSound"` \| `"qualityMouseOver"` \| `"encoderMuted"` \| `"encoderNoVideo"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`PlayerUiStateEvents`](index.mdx#playeruistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.off`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:21
+
+##### on()
+
+> **on**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"isFullscreen"` \| `"newWindow"` \| `"newWindowElement"` \| `"portal"` \| `"portalElement"` \| `"viewSettings"` \| `"viewVideoCallSlider"` \| `"videoMouseOver"` \| `"screenShareSupported"` \| `"volumeRangeSupported"` \| `"availableQualities"` \| `"currentPlayer"` \| `"availablePlayers"` \| `"viewGetSound"` \| `"qualityMouseOver"` \| `"encoderMuted"` \| `"encoderNoVideo"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`PlayerUiStateEvents`](index.mdx#playeruistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.on`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:24
+
+##### once()
+
+> **once**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"isFullscreen"` \| `"newWindow"` \| `"newWindowElement"` \| `"portal"` \| `"portalElement"` \| `"viewSettings"` \| `"viewVideoCallSlider"` \| `"videoMouseOver"` \| `"screenShareSupported"` \| `"volumeRangeSupported"` \| `"availableQualities"` \| `"currentPlayer"` \| `"availablePlayers"` \| `"viewGetSound"` \| `"qualityMouseOver"` \| `"encoderMuted"` \| `"encoderNoVideo"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`PlayerUiStateEvents`](index.mdx#playeruistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.once`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:27
+
+##### onFullscreenChange()
+
+> **onFullscreenChange**(): `void`
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`BaseUiState.onFullscreenChange`
+
+###### Defined in
+
+[web/src/store/utils/ui-state.ts:73](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/utils/ui-state.ts#L73)
+
+##### prependListener()
+
+> **prependListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"isFullscreen"` \| `"newWindow"` \| `"newWindowElement"` \| `"portal"` \| `"portalElement"` \| `"viewSettings"` \| `"viewVideoCallSlider"` \| `"videoMouseOver"` \| `"screenShareSupported"` \| `"volumeRangeSupported"` \| `"availableQualities"` \| `"currentPlayer"` \| `"availablePlayers"` \| `"viewGetSound"` \| `"qualityMouseOver"` \| `"encoderMuted"` \| `"encoderNoVideo"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`PlayerUiStateEvents`](index.mdx#playeruistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.prependListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:30
+
+##### prependOnceListener()
+
+> **prependOnceListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"isFullscreen"` \| `"newWindow"` \| `"newWindowElement"` \| `"portal"` \| `"portalElement"` \| `"viewSettings"` \| `"viewVideoCallSlider"` \| `"videoMouseOver"` \| `"screenShareSupported"` \| `"volumeRangeSupported"` \| `"availableQualities"` \| `"currentPlayer"` \| `"availablePlayers"` \| `"viewGetSound"` \| `"qualityMouseOver"` \| `"encoderMuted"` \| `"encoderNoVideo"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`BaseUiStateEvents`](index.mdx#baseuistateevents) & [`PlayerUiStateEvents`](index.mdx#playeruistateevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.prependOnceListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:33
+
+##### removeAllListeners()
+
+> **removeAllListeners**\<`K`\>(`type`?): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"isFullscreen"` \| `"newWindow"` \| `"newWindowElement"` \| `"portal"` \| `"portalElement"` \| `"viewSettings"` \| `"viewVideoCallSlider"` \| `"videoMouseOver"` \| `"screenShareSupported"` \| `"volumeRangeSupported"` \| `"availableQualities"` \| `"currentPlayer"` \| `"availablePlayers"` \| `"viewGetSound"` \| `"qualityMouseOver"` \| `"encoderMuted"` \| `"encoderNoVideo"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type`? | `K` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.removeAllListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:36
+
+##### removeListener()
+
+> **removeListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"isFullscreen"` \| `"newWindow"` \| `"newWindowElement"` \| `"portal"` \| `"portalElement"` \| `"viewSettings"` \| `"viewVideoCallSlider"` \| `"videoMouseOver"` \| `"screenShareSupported"` \| `"volumeRangeSupported"` \| `"availableQualities"` \| `"currentPlayer"` \| `"availablePlayers"` \| `"viewGetSound"` \| `"qualityMouseOver"` \| `"encoderMuted"` \| `"encoderNoVideo"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`ev`) => `void` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.removeListener`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:37
+
+##### setMaxListeners()
+
+> **setMaxListeners**(`n`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `n` | `number` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`BaseUiState.setMaxListeners`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:13
+
+##### throwError()
+
+> `protected` **throwError**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `IVideoClientError` |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+`BaseUiState.throwError`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:47
+
+##### throwErrorDeprecated()
+
+> `protected` **throwErrorDeprecated**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+`BaseUiState.throwErrorDeprecated`
+
+###### Defined in
+
+core/lib/internal/utils/events/event-emitter.d.ts:48
+
+##### toggleFullscreen()
+
+> **toggleFullscreen**(): `Promise`\<`void`\>
+
+Toggle `isFullscreen`
+
+###### Returns
+
+`Promise`\<`void`\>
+
+Promise
+
+###### Async
+
+###### Description
+
+Toggles the encoder to/from fullscreen and sets uiState.isFullscreen
+to true/false.
+
+###### Example
+
+```ts
+toggleFullscreen();
+// Sets encoder to/from fullscreen and updates uiState.isFullscreen = true|false;
+```
+
+###### Inherited from
+
+`BaseUiState.toggleFullscreen`
+
+###### Defined in
+
+[web/src/store/utils/ui-state.ts:159](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/utils/ui-state.ts#L159)
+
+## Interfaces
+
+### BaseUiStateEvents
+
+#### Extended by
+
+- [`PlayerUiStateEvents`](index.mdx#playeruistateevents)
+
+#### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| `isFullscreen` | `boolean` | **Description** Is emitted when the player video is/is not in fullscreen mode. **Example** `playerUiState.on("isFullscreen", (bool) => { if(bool) { // use fullscreen styles} }); encoderUiState.on("isFullscreen", (bool) => { if(bool) { // use fullscreen styles} })` |
+| `newWindow` | `null` | - |
+| `newWindowElement` | `null` \| `VideoElement` | - |
+| `portal` | `boolean` | - |
+| `portalElement` | `null` \| `HTMLDivElement` | - |
+| `screenShareSupported` | `boolean` | **Description** Is emitted when screenshare component is supported. **Example** `playerUiState.on("screenShareSupported", (bool) => { if(bool) { // render screenshare button} })` |
+| `videoMouseOver` | `boolean` | - |
+| `viewSettings` | `boolean` | - |
+| `viewVideoCallSlider` | `boolean` | - |
+| `volumeRangeSupported` | `boolean` | **Description** Is emitted when volumeRange component is supported. **Example** `playerUiState.on("volumeRangeSupported", (bool) => { if(bool) { // render volumeRange component} })` |
+
+***
+
+### PlayerUIOptions
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `autoPlay?` | `boolean` |
+| `logger?` | `LoggerCore` |
+| `multistreamPlayerPublicKey?` | `string` |
+| `muted?` | `boolean` |
+| `mutedAutoplayFallback?` | `boolean` |
+| `volume?` | `number` |
+
+***
+
+### PlayerUiStateEvents
+
+#### Extends
+
+- [`BaseUiStateEvents`](index.mdx#baseuistateevents)
+
+#### Properties
+
+| Property | Type | Description | Overrides |
+| ------ | ------ | ------ | ------ |
+| `availablePlayers` | `PlayerAnySpec`[] | - | - |
+| `availableQualities` | `Quality`[] | - | - |
+| `currentPlayer` | `undefined` \| `null` \| `PlayerAPI`\<`VideoElement`\> | - | - |
+| `encoderMuted` | `boolean` | **Description** Is emitted when the broadcaster has muted/unmuted their audio. **Example** `playerUiState.on("encoderMuted", (bool) => { if(bool) { // show a muted icon } })` | - |
+| ~~`encoderNoVideo`~~ | `boolean` | **Deprecated** Use playerUiState.player.consumerVideoEnabled **Description** Is emitted when the broadcaster has turned off/on their video. **Example** `playerUiState.on("encoderNoVideo", (bool) => { if(bool) { // show a video poster } })` | - |
+| `isFullscreen` | `boolean` | **Description** Is emitted when the player video is/is not in fullscreen mode. **Example** `playerUiState.on("isFullscreen", (bool) => { if(bool) { // use fullscreen styles} }); encoderUiState.on("isFullscreen", (bool) => { if(bool) { // use fullscreen styles} })` | - |
+| `newWindow` | `null` | - | - |
+| `newWindowElement` | `null` \| `VideoElement` | - | - |
+| `portal` | `boolean` | - | - |
+| `portalElement` | `null` \| `HTMLDivElement` | - | - |
+| `qualityMouseOver` | `boolean` | - | - |
+| `screenShareSupported` | `boolean` | **Description** Is emitted when screenshare component is supported. **Example** `playerUiState.on("screenShareSupported", (bool) => { if(bool) { // render screenshare button} })` | - |
+| `videoMouseOver` | `boolean` | **Description** Is emitted when the user hovers mouse over/off the video element. **Example** `playerUiState.on("videoMouseOver", (bool) => { if(bool) { // show controls} })` | [`BaseUiStateEvents`](index.mdx#baseuistateevents).`videoMouseOver` |
+| `viewGetSound` | `boolean` | - | - |
+| `viewSettings` | `boolean` | - | - |
+| `viewVideoCallSlider` | `boolean` | - | - |
+| `volumeRangeSupported` | `boolean` | **Description** Is emitted when volumeRange component is supported. **Example** `playerUiState.on("volumeRangeSupported", (bool) => { if(bool) { // render volumeRange component} })` | - |
+
+***
+
+### TokenRequest
+
+#### Todo
+
+fix this. should not be coming from web
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `data` | `Record`\<`string`, `unknown`\> |
+| `scopes` | `string`[] |
+| `userId` | `string` |
+
+## Type Aliases
+
+### CallStateEvents
+
+> **CallStateEvents**: `object`
+
+#### Type declaration
+
+##### broadcastPaused
+
+> **broadcastPaused**: `boolean`
+
+##### call
+
+> **call**: `types.CallAPI` \| `null`
+
+#### Defined in
+
+[web/src/store/call/call-state.ts:10](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L10)
+
+***
+
+### CallStateOptions
+
+> **CallStateOptions**: `object`
+
+#### Type declaration
+
+##### activePlaceholder
+
+> **activePlaceholder**: `object`
+
+##### activePlaceholder.options?
+
+> `optional` **options**: `ActivePlaceholderOptions`
+
+##### activePlaceholder.pauseBehaviour
+
+> **pauseBehaviour**: `"video"` \| `"canvas"`
+
+#### Defined in
+
+[web/src/store/call/call-state.ts:15](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/call/call-state.ts#L15)
+
+***
+
+### EncoderUiOptions
+
+> **EncoderUiOptions**: `OrigEncoderUiOptions` \| `ExperimentalEncoderUiOptions`
+
+#### Defined in
+
+[web/src/store/encoder/ui-state.ts:23](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L23)
+
+***
+
+### EncoderUiStateEvents
+
+> **EncoderUiStateEvents**: `object`
+
+#### Type declaration
+
+##### driverNotSupported
+
+> **driverNotSupported**: `void`
+
+###### Description
+
+Is emitted when the driver for the player is no longer supported. Requires entire tear down.
+
+###### Example
+
+```ts
+encoderUiState.on("driverNotSupported", () => {  // dispose EncoderUi and restart } })
+```
+
+##### mediaStreamController
+
+> **mediaStreamController**: [`EncoderUiState`](index.mdx#encoderuistate)\[`"mediaStreamController"`\]
+
+###### Arg
+
+MediaStreamController | null
+
+###### Description
+
+Is emitted when the mediaStreamController has been set.
+
+###### Example
+
+```ts
+encoderUiState.on("mediaStreamController", (ctrl) => { if(ctrl) { // do something with mediaStreamController})
+```
+
+##### prevVideoDeviceId
+
+> **prevVideoDeviceId**: [`EncoderUiState`](index.mdx#encoderuistate)\[`"prevVideoDeviceId"`\]
+
+###### Arg
+
+string | null
+
+###### Description
+
+Is emitted when the previous videoDeviceId changes (e.g. when a user changes their video devices, this will keep track of the previous state).
+
+###### Example
+
+```ts
+encoderUiState.on("prevVideoDeviceId", (val) => { if(val === "screencapture") { // handle exiting screencapture mode} })
+```
+
+##### testMic
+
+> **testMic**: [`EncoderUiState`](index.mdx#encoderuistate)\[`"testMic"`\]
+
+###### Arg
+
+boolean
+
+###### Description
+
+Is emitted when the user tests/stops testing their microphone.
+
+###### Example
+
+```ts
+encoderUiState.on("testMic", (bool) => { if(bool) { // show correct "test mic" button state} })
+```
+
+#### Defined in
+
+[web/src/store/encoder/ui-state.ts:31](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/encoder/ui-state.ts#L31)
+
+***
+
+### MultistreamEvents
+
+> **MultistreamEvents**: `object`
+
+#### Type declaration
+
+##### activePublicKeys
+
+> **activePublicKeys**: `string`[]
+
+##### isInitialLoadDone
+
+> **isInitialLoadDone**: `boolean`
+
+##### manifest-fetch-error
+
+> **manifest-fetch-error**: `object`
+
+##### manifest-fetch-error.publicKey
+
+> **publicKey**: `string`
+
+##### manifest-fetch-error.response
+
+> **response**: `Response`
+
+##### publicKeys
+
+> **publicKeys**: `string`[]
+
+#### Defined in
+
+[web/src/store/multistream/ui-state.ts:36](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/multistream/ui-state.ts#L36)
+
+## Variables
+
+### videoStylesNamespace
+
+> `const` **videoStylesNamespace**: `"video"` = `"video"`
+
+#### Defined in
+
+[web/src/store/utils/helpers.ts:33](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/utils/helpers.ts#L33)
+
+## Functions
+
+### createVideoElement()
+
+> **createVideoElement**(`autoplay`): `VideoElement`
+
+#### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `autoplay` | `boolean` | `true` |
+
+#### Returns
+
+`VideoElement`
+
+#### Defined in
+
+[web/src/store/utils/helpers.ts:6](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/utils/helpers.ts#L6)
+
+***
+
+### getDevices()
+
+> **getDevices**(`deviceArray`, `inputType`): `null` \| `MediaDeviceInfo`[]
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `deviceArray` | `MediaDeviceInfo`[] |
+| `inputType` | `string` |
+
+#### Returns
+
+`null` \| `MediaDeviceInfo`[]
+
+#### Defined in
+
+[web/src/store/utils/helpers.ts:18](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/web/src/store/utils/helpers.ts#L18)

@@ -3,6 +3,9 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import fs from 'fs';
 import path from 'path';
+import typedocBaseConfig from "./typedoc/base-config.json"
+import typedocWebConfig from "./typedoc/typedoc-web.json"
+import typedocCoreConfig from "./typedoc/typedoc-core.json"
 
 const vendor = process.env.VENDOR || 'vendor1';
 const company = process.env.COMPANY || 'company_a';
@@ -136,6 +139,16 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
+  plugins: [
+    [
+      'docusaurus-plugin-typedoc',
+      {...typedocBaseConfig, ...typedocWebConfig},
+    ],
+    [
+      'docusaurus-plugin-typedoc',
+      {...typedocBaseConfig, ...typedocCoreConfig},
+    ],
+  ],
 };
 
 export default config;

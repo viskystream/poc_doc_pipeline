@@ -1,0 +1,3602 @@
+# @video/video-client-core
+
+## References
+
+### AutoQualityLevel
+
+Re-exports [AutoQualityLevel](namespaces/types.mdx#autoqualitylevel)
+
+### SourceScoreLevel
+
+Re-exports [SourceScoreLevel](namespaces/types.mdx#sourcescorelevel)
+
+### TranscodeScoreLevel
+
+Re-exports [TranscodeScoreLevel](namespaces/types.mdx#transcodescorelevel)
+
+## Classes
+
+### InstanceCollector
+
+#### Extends
+
+- `EventEmitter`\<`object`\>
+
+#### Implements
+
+- [`Disposable`](namespaces/types.mdx#disposable)
+
+#### Constructors
+
+##### new InstanceCollector()
+
+> **new InstanceCollector**(`options`): [`InstanceCollector`](index.mdx#instancecollector)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | `InstanceCollectorOptions` |
+
+###### Returns
+
+[`InstanceCollector`](index.mdx#instancecollector)
+
+###### Overrides
+
+`EventEmitter<{ disposed: void }>.constructor`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/debug/instance-collector.ts:38](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/debug/instance-collector.ts#L38)
+
+#### Properties
+
+| Property | Type | Default value |
+| ------ | ------ | ------ |
+| `isDisposed` | `boolean` | `false` |
+| `metas` | `WeakMap`\<`object`, `Meta`\> | `undefined` |
+| `objects` | `CollectorMap` | `undefined` |
+| `defaultMaxListeners` | `number` | `undefined` |
+
+#### Methods
+
+##### addListener()
+
+> **addListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`WithInternal`\<`object`\>\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`addListener`](namespaces/types.mdx#addlistener-5)
+
+###### Inherited from
+
+`EventEmitter.addListener`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:30](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L30)
+
+##### dispose()
+
+> **dispose**(`reason`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `reason`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`dispose`](namespaces/types.mdx#dispose-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/debug/instance-collector.ts:89](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/debug/instance-collector.ts#L89)
+
+##### emit()
+
+> **emit**\<`K`\>(`type`, `ev`?, ...`args`?): `boolean`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `ev`? | `object`\[`K`\] |
+| ...`args`? | `any`[] |
+
+###### Returns
+
+`boolean`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`emit`](namespaces/types.mdx#emit-5)
+
+###### Inherited from
+
+`EventEmitter.emit`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:28](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L28)
+
+##### eventNames()
+
+> **eventNames**(): `string`[]
+
+###### Returns
+
+`string`[]
+
+###### Inherited from
+
+`EventEmitter.eventNames`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:22](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L22)
+
+##### getMaxListeners()
+
+> **getMaxListeners**(): `number`
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+`EventEmitter.getMaxListeners`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:26](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L26)
+
+##### getObjects()
+
+> **getObjects**\<`T`\>(`type`): [`CollectableMap`\[`T`\], `Meta`][]
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* `"websocket"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `T` |
+
+###### Returns
+
+[`CollectableMap`\[`T`\], `Meta`][]
+
+###### Defined in
+
+[video-client/core/src/internal/utils/debug/instance-collector.ts:81](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/debug/instance-collector.ts#L81)
+
+##### listenerCount()
+
+> **listenerCount**\<`K`\>(`type`): `number`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+`EventEmitter.listenerCount`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:48](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L48)
+
+##### listeners()
+
+> **listeners**\<`K`\>(`type`): `Listener`\<`WithInternal`\<`object`\>\[`K`\]\>[]
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+
+###### Returns
+
+`Listener`\<`WithInternal`\<`object`\>\[`K`\]\>[]
+
+###### Inherited from
+
+`EventEmitter.listeners`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:46](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L46)
+
+##### off()
+
+> **off**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`WithInternal`\<`object`\>\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`off`](namespaces/types.mdx#off-5)
+
+###### Inherited from
+
+`EventEmitter.off`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:42](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L42)
+
+##### on()
+
+> **on**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`WithInternal`\<`object`\>\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`on`](namespaces/types.mdx#on-5)
+
+###### Inherited from
+
+`EventEmitter.on`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:32](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L32)
+
+##### once()
+
+> **once**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`WithInternal`\<`object`\>\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`once`](namespaces/types.mdx#once-5)
+
+###### Inherited from
+
+`EventEmitter.once`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:34](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L34)
+
+##### prependListener()
+
+> **prependListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`WithInternal`\<`object`\>\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`prependListener`](namespaces/types.mdx#prependlistener-5)
+
+###### Inherited from
+
+`EventEmitter.prependListener`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:36](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L36)
+
+##### prependOnceListener()
+
+> **prependOnceListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`WithInternal`\<`object`\>\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`prependOnceListener`](namespaces/types.mdx#prependoncelistener-5)
+
+###### Inherited from
+
+`EventEmitter.prependOnceListener`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:38](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L38)
+
+##### rawListeners()
+
+> **rawListeners**\<`K`\>(`type`): `Listener`\<`WithInternal`\<`object`\>\[`K`\]\>[]
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+
+###### Returns
+
+`Listener`\<`WithInternal`\<`object`\>\[`K`\]\>[]
+
+###### Inherited from
+
+`EventEmitter.rawListeners`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:50](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L50)
+
+##### removeAllListeners()
+
+> **removeAllListeners**\<`K`\>(`type`?): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type`? | `K` |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`removeAllListeners`](namespaces/types.mdx#removealllisteners-5)
+
+###### Inherited from
+
+`EventEmitter.removeAllListeners`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:44](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L44)
+
+##### removeListener()
+
+> **removeListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"newListener"` \| `"disposed"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`ev`) => `void` |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`Disposable`](namespaces/types.mdx#disposable).[`removeListener`](namespaces/types.mdx#removelistener-5)
+
+###### Inherited from
+
+`EventEmitter.removeListener`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:40](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L40)
+
+##### setMaxListeners()
+
+> **setMaxListeners**(`n`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `n` | `number` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+`EventEmitter.setMaxListeners`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:24](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L24)
+
+##### disposeInstance()
+
+> `static` **disposeInstance**\<`T`\>(`type`, `object`): `void`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* `"websocket"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `T` |
+| `object` | `CollectableMap`\[`T`\] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/debug/instance-collector.ts:75](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/debug/instance-collector.ts#L75)
+
+##### listenerCount()
+
+> `static` **listenerCount**(`emitter`, `type`): `number`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `emitter` | `IEventEmitter`\<`unknown`\> |
+| `type` | `string` \| `number` |
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+`EventEmitter.listenerCount`
+
+###### Defined in
+
+[video-client/events-typed/index.d.ts:18](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/events-typed/index.d.ts#L18)
+
+##### reportNewInstance()
+
+> `static` **reportNewInstance**\<`T`\>(`type`, `object`, `meta`?): `void`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* `"websocket"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `T` |
+| `object` | `CollectableMap`\[`T`\] |
+| `meta`? | `Meta` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/debug/instance-collector.ts:67](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/debug/instance-collector.ts#L67)
+
+***
+
+### MediaElementSupervisor
+
+#### Extends
+
+- [`ObservableEventEmitter`](index.mdx#observableeventemittere)\<`MediaElementSupervisorEvents`\>
+
+#### Properties
+
+| Property | Type | Default value |
+| ------ | ------ | ------ |
+| `[Emitter]` | `EventEmitter`\<`any`\> | `undefined` |
+| `[Observers]` | `Map`\<`string`, `IReactionDisposer`\> | `undefined` |
+| `activePlayer` | `null` \| `CorePlayer`\<`CorePlayerOptions`, `unknown`, [`PlayerEvents`](namespaces/types.mdx#playereventshostelement), [`VideoElement`](namespaces/types.mdx#videoelement)\> | `null` |
+| `debugSuspendTimeupdate` | `boolean` | `false` |
+| `disposing` | `boolean` | `false` |
+| `element` | [`VideoElement`](namespaces/types.mdx#videoelement) | `undefined` |
+
+#### Accessors
+
+##### autoplay
+
+###### Get Signature
+
+> **get** **autoplay**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Set Signature
+
+> **set** **autoplay**(`val`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `val` | `boolean` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:71](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L71)
+
+##### buffered
+
+###### Get Signature
+
+> **get** **buffered**(): `TimeRanges`
+
+###### Returns
+
+`TimeRanges`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:79](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L79)
+
+##### currentTime
+
+###### Get Signature
+
+> **get** **currentTime**(): `number`
+
+###### Returns
+
+`number`
+
+###### Set Signature
+
+> **set** **currentTime**(`val`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `val` | `number` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:91](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L91)
+
+##### ended
+
+###### Get Signature
+
+> **get** **ended**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:83](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L83)
+
+##### error
+
+###### Get Signature
+
+> **get** **error**(): `null` \| `MediaError`
+
+###### Returns
+
+`null` \| `MediaError`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:67](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L67)
+
+##### isDisposed
+
+###### Get Signature
+
+> **get** **isDisposed**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`isDisposed`](index.mdx#isdisposed-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:147](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L147)
+
+##### muted
+
+###### Get Signature
+
+> **get** **muted**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Set Signature
+
+> **set** **muted**(`val`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `val` | `boolean` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:47](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L47)
+
+##### paused
+
+###### Get Signature
+
+> **get** **paused**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:55](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L55)
+
+##### playbackRate
+
+###### Get Signature
+
+> **get** **playbackRate**(): `number`
+
+###### Returns
+
+`number`
+
+###### Set Signature
+
+> **set** **playbackRate**(`val`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `val` | `number` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:99](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L99)
+
+##### readyState
+
+###### Get Signature
+
+> **get** **readyState**(): `number`
+
+###### Returns
+
+`number`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:87](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L87)
+
+##### sourceKind
+
+###### Get Signature
+
+> **get** **sourceKind**(): `null` \| `"src"` \| `"srcObject"`
+
+###### Returns
+
+`null` \| `"src"` \| `"srcObject"`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:107](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L107)
+
+##### srcObject
+
+###### Get Signature
+
+> **get** **srcObject**(): `unknown`
+
+###### Returns
+
+`unknown`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:118](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L118)
+
+##### volume
+
+###### Get Signature
+
+> **get** **volume**(): `number`
+
+###### Returns
+
+`number`
+
+###### Set Signature
+
+> **set** **volume**(`val`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `val` | `number` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:59](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L59)
+
+#### Methods
+
+##### addInnerDisposer()
+
+> **addInnerDisposer**(...`disposableObjects`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`disposableObjects` | ([`Disposable`](namespaces/types.mdx#disposable) \| [`DisposeFunction`](namespaces/types.mdx#disposefunction))[] |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`addInnerDisposer`](index.mdx#addinnerdisposer-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:133](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L133)
+
+##### addListener()
+
+> **addListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"loadeddata"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`MediaElementSupervisorEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`addListener`](index.mdx#addlistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:59](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L59)
+
+##### attachToPlayer()
+
+> **attachToPlayer**(`player`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `player` | `CorePlayer`\<`CorePlayerOptions`, `unknown`, [`PlayerEvents`](namespaces/types.mdx#playereventshostelement), [`VideoElement`](namespaces/types.mdx#videoelement)\> |
+
+###### Returns
+
+`this`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:129](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L129)
+
+##### autorun()
+
+> `protected` **autorun**(`view`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | () => `void` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`autorun`](index.mdx#autorun-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:143](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L143)
+
+##### createScreenshot()
+
+> **createScreenshot**(): `null` \| `string`
+
+###### Returns
+
+`null` \| `string`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:149](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L149)
+
+##### dispose()
+
+> **dispose**(`reason`): `void`
+
+###### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `reason` | `string` | `"not provided"` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`dispose`](index.mdx#dispose-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:184](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L184)
+
+##### dumpVideoElement()
+
+> **dumpVideoElement**(): `AggregateLogs`
+
+###### Returns
+
+`AggregateLogs`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:174](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L174)
+
+##### emit()
+
+> **emit**\<`K`\>(`type`, `ev`?, ...`args`?): `boolean`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"loadeddata"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `ev`? | `MediaElementSupervisorEvents` & `object`\[`K`\] |
+| ...`args`? | `any`[] |
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`emit`](index.mdx#emit-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:67](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L67)
+
+##### emitError()
+
+> `protected` **emitError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | [`IVideoClientError`](namespaces/types.mdx#ivideoclienterror) |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`emitError`](index.mdx#emiterror-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:151](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L151)
+
+##### emitErrorDeprecated()
+
+> `protected` **emitErrorDeprecated**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`emitErrorDeprecated`](index.mdx#emiterrordeprecated-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:169](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L169)
+
+##### getMaxListeners()
+
+> **getMaxListeners**(): `number`
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`getMaxListeners`](index.mdx#getmaxlisteners-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:55](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L55)
+
+##### hasPoster()
+
+> **hasPoster**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:145](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L145)
+
+##### isSourceSet()
+
+> **isSourceSet**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:178](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L178)
+
+##### isVideoPlaying()
+
+> **isVideoPlaying**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:137](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L137)
+
+##### off()
+
+> **off**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"loadeddata"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`MediaElementSupervisorEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`off`](index.mdx#off-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:71](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L71)
+
+##### on()
+
+> **on**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"loadeddata"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`MediaElementSupervisorEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`on`](index.mdx#on-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:79](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L79)
+
+##### once()
+
+> **once**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"loadeddata"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`MediaElementSupervisorEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`once`](index.mdx#once-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:87](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L87)
+
+##### pause()
+
+> **pause**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:160](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L160)
+
+##### play()
+
+> **play**(): `Promise`\<`void`\>
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:186](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L186)
+
+##### prependListener()
+
+> **prependListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"loadeddata"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`MediaElementSupervisorEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`prependListener`](index.mdx#prependlistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:95](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L95)
+
+##### prependOnceListener()
+
+> **prependOnceListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"loadeddata"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`MediaElementSupervisorEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`prependOnceListener`](index.mdx#prependoncelistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:103](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L103)
+
+##### removeAllListeners()
+
+> **removeAllListeners**\<`K`\>(`type`?): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"loadeddata"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type`? | `K` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`removeAllListeners`](index.mdx#removealllisteners-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:111](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L111)
+
+##### removeListener()
+
+> **removeListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"loadeddata"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`ev`) => `void` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`removeListener`](index.mdx#removelistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:119](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L119)
+
+##### setMaxListeners()
+
+> **setMaxListeners**(`n`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `n` | `number` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`setMaxListeners`](index.mdx#setmaxlisteners-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:50](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L50)
+
+##### setPoster()
+
+> **setPoster**(`val`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `val` | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:141](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L141)
+
+##### throwError()
+
+> `protected` **throwError**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | [`IVideoClientError`](namespaces/types.mdx#ivideoclienterror) |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`throwError`](index.mdx#throwerror-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:159](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L159)
+
+##### throwErrorDeprecated()
+
+> `protected` **throwErrorDeprecated**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`throwErrorDeprecated`](index.mdx#throwerrordeprecated-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:164](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L164)
+
+##### updateSrc()
+
+> **updateSrc**(`val`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `val` | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:164](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L164)
+
+##### updateSrcObject()
+
+> **updateSrcObject**(`val`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `val` | `null` \| [`MediaStream`](namespaces/adapter.mdx#mediastream) |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:169](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L169)
+
+##### getSupervisor()
+
+> `static` **getSupervisor**(`element`): [`MediaElementSupervisor`](index.mdx#mediaelementsupervisor)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `element` | [`VideoElement`](namespaces/types.mdx#videoelement) |
+
+###### Returns
+
+[`MediaElementSupervisor`](index.mdx#mediaelementsupervisor)
+
+###### Defined in
+
+[video-client/core/src/internal/player/media-element-supervisor.ts:122](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/media-element-supervisor.ts#L122)
+
+***
+
+### ObservableEventEmitter\<E\>
+
+#### Extended by
+
+- [`RecorderCore`](index.mdx#recordercore)
+- [`UserInteraction`](index.mdx#userinteraction)
+- [`MediaElementSupervisor`](index.mdx#mediaelementsupervisor)
+
+#### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `E` | `object` |
+
+#### Implements
+
+- [`Merge`](namespaces/types.mdx#mergea-b-c)\<`IEventEmitter`\<`E`\>, [`Disposable`](namespaces/types.mdx#disposable)\>
+
+#### Constructors
+
+##### new ObservableEventEmitter()
+
+> **new ObservableEventEmitter**\<`E`\>(`bounded`): [`ObservableEventEmitter`](index.mdx#observableeventemittere)\<`E`\>
+
+###### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `bounded` | `boolean` | `true` |
+
+###### Returns
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere)\<`E`\>
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:29](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L29)
+
+#### Properties
+
+| Property | Type | Default value |
+| ------ | ------ | ------ |
+| `[Emitter]` | `EventEmitter`\<`any`\> | `undefined` |
+| `[Observers]` | `Map`\<`string`, `IReactionDisposer`\> | `undefined` |
+| `disposing` | `boolean` | `false` |
+
+#### Accessors
+
+##### isDisposed
+
+###### Get Signature
+
+> **get** **isDisposed**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Implementation of
+
+`Merge.isDisposed`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:147](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L147)
+
+#### Methods
+
+##### addInnerDisposer()
+
+> **addInnerDisposer**(...`disposableObjects`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`disposableObjects` | ([`Disposable`](namespaces/types.mdx#disposable) \| [`DisposeFunction`](namespaces/types.mdx#disposefunction))[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:133](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L133)
+
+##### addListener()
+
+> **addListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `string` \| `number` \| `symbol` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`E` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+`Merge.addListener`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:59](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L59)
+
+##### autorun()
+
+> `protected` **autorun**(`view`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | () => `void` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:143](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L143)
+
+##### dispose()
+
+> **dispose**(`reason`): `void`
+
+###### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `reason` | `string` | `"not provided"` |
+
+###### Returns
+
+`void`
+
+###### Implementation of
+
+`Merge.dispose`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:184](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L184)
+
+##### emit()
+
+> **emit**\<`K`\>(`type`, `ev`?, ...`args`?): `boolean`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `string` \| `number` \| `symbol` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `ev`? | `E` & `object`\[`K`\] |
+| ...`args`? | `any`[] |
+
+###### Returns
+
+`boolean`
+
+###### Implementation of
+
+`Merge.emit`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:67](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L67)
+
+##### emitError()
+
+> `protected` **emitError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | [`IVideoClientError`](namespaces/types.mdx#ivideoclienterror) |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:151](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L151)
+
+##### emitErrorDeprecated()
+
+> `protected` **emitErrorDeprecated**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:169](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L169)
+
+##### getMaxListeners()
+
+> **getMaxListeners**(): `number`
+
+###### Returns
+
+`number`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:55](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L55)
+
+##### off()
+
+> **off**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `string` \| `number` \| `symbol` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`E` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+`Merge.off`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:71](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L71)
+
+##### on()
+
+> **on**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `string` \| `number` \| `symbol` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`E` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+`Merge.on`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:79](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L79)
+
+##### once()
+
+> **once**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `string` \| `number` \| `symbol` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`E` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+`Merge.once`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:87](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L87)
+
+##### prependListener()
+
+> **prependListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `string` \| `number` \| `symbol` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`E` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+`Merge.prependListener`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:95](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L95)
+
+##### prependOnceListener()
+
+> **prependOnceListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `string` \| `number` \| `symbol` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`E` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+`Merge.prependOnceListener`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:103](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L103)
+
+##### removeAllListeners()
+
+> **removeAllListeners**\<`K`\>(`type`?): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `string` \| `number` \| `symbol` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type`? | `K` |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+`Merge.removeAllListeners`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:111](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L111)
+
+##### removeListener()
+
+> **removeListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `string` \| `number` \| `symbol` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`ev`) => `void` |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+`Merge.removeListener`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:119](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L119)
+
+##### setMaxListeners()
+
+> **setMaxListeners**(`n`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `n` | `number` |
+
+###### Returns
+
+`this`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:50](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L50)
+
+##### throwError()
+
+> `protected` **throwError**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | [`IVideoClientError`](namespaces/types.mdx#ivideoclienterror) |
+
+###### Returns
+
+`never`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:159](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L159)
+
+##### throwErrorDeprecated()
+
+> `protected` **throwErrorDeprecated**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`never`
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:164](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L164)
+
+***
+
+### RecorderCore
+
+#### Extends
+
+- [`ObservableEventEmitter`](index.mdx#observableeventemittere)\<`RecorderEvents`\>
+
+#### Constructors
+
+##### new RecorderCore()
+
+> **new RecorderCore**(`stream`, `options`): [`RecorderCore`](index.mdx#recordercore)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `stream` | `null` \| [`MediaStream`](namespaces/adapter.mdx#mediastream) |
+| `options` | `RecorderOptions` |
+
+###### Returns
+
+[`RecorderCore`](index.mdx#recordercore)
+
+###### Overrides
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`constructor`](index.mdx#constructors-1)
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:97](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L97)
+
+#### Properties
+
+| Property | Type | Default value |
+| ------ | ------ | ------ |
+| `[Emitter]` | `EventEmitter`\<`any`\> | `undefined` |
+| `[Observers]` | `Map`\<`string`, `IReactionDisposer`\> | `undefined` |
+| `closing` | `boolean` | `false` |
+| `dataAggregate` | `unknown`[] | `[]` |
+| `dataWritten` | `boolean` | `false` |
+| `destroyed` | `boolean` | `false` |
+| `disposing` | `boolean` | `false` |
+| `localFilePath` | `null` \| [`FileSystemFileHandle`](namespaces/adapter.mdx#filesystemfilehandle) | `null` |
+| `locked` | `boolean` | `false` |
+| `maxRecordingLength` | `number` | `0` |
+| `options` | `RecorderOptions` | `undefined` |
+| `recorder` | `null` \| [`MediaRecorder`](namespaces/adapter.mdx#mediarecorder) | `null` |
+| `saving` | `boolean` | `false` |
+| `storageAlertSent` | `boolean` | `false` |
+| `stream` | `null` \| [`MediaStream`](namespaces/adapter.mdx#mediastream) | `undefined` |
+| `totalStorageAvailable` | `number` | `0` |
+| `userClosedSave` | `boolean` | `false` |
+| `writable` | `null` \| [`FileSystemWritableFileStream`](namespaces/adapter.mdx#filesystemwritablefilestream) | `null` |
+| `displayName` | `"Recorder"` | `"Recorder"` |
+
+#### Accessors
+
+##### isDisposed
+
+###### Get Signature
+
+> **get** **isDisposed**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`isDisposed`](index.mdx#isdisposed-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:147](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L147)
+
+##### recorderOptions
+
+###### Get Signature
+
+> **get** **recorderOptions**(): `RecorderOptions`
+
+###### Returns
+
+`RecorderOptions`
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:318](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L318)
+
+##### state
+
+###### Get Signature
+
+> **get** **state**(): `"inactive"` \| `"paused"` \| `"recording"`
+
+###### Returns
+
+`"inactive"` \| `"paused"` \| `"recording"`
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:311](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L311)
+
+#### Methods
+
+##### addAudioTrack()
+
+> **addAudioTrack**(`audioTrack`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `audioTrack` | [`MediaStreamTrack`](namespaces/adapter.mdx#mediastreamtrack) |
+
+###### Returns
+
+`void`
+
+###### Method
+
+addAudioTrack Adds an audio track to the stream
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:533](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L533)
+
+##### addInnerDisposer()
+
+> **addInnerDisposer**(...`disposableObjects`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`disposableObjects` | ([`Disposable`](namespaces/types.mdx#disposable) \| [`DisposeFunction`](namespaces/types.mdx#disposefunction))[] |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`addInnerDisposer`](index.mdx#addinnerdisposer-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:133](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L133)
+
+##### addListener()
+
+> **addListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `RecorderEvents` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`RecorderEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`addListener`](index.mdx#addlistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:59](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L59)
+
+##### apply()
+
+> **apply**(`options`): `void`
+
+###### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | `object` | audio & video bits per second |
+| `options.audioBitsPerSecond`? | `string` | - |
+| `options.stream`? | `string` | - |
+| `options.videoBitsPerSecond`? | `string` | - |
+
+###### Returns
+
+`void`
+
+###### Method
+
+apply reload the recorder to reproduce a new keyframe, do this by retrieving devices again
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:288](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L288)
+
+##### autorun()
+
+> `protected` **autorun**(`view`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | () => `void` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`autorun`](index.mdx#autorun-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:143](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L143)
+
+##### close()
+
+> **close**(): `Promise`\<`Result`\>
+
+###### Returns
+
+`Promise`\<`Result`\>
+
+###### Method
+
+close closes the recorder, emits an error if a recording is not already happening
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:435](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L435)
+
+##### createStream()
+
+> **createStream**(): `Promise`\<[`MediaStream`](namespaces/adapter.mdx#mediastream)\>
+
+###### Returns
+
+`Promise`\<[`MediaStream`](namespaces/adapter.mdx#mediastream)\>
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:481](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L481)
+
+##### dispose()
+
+> **dispose**(`reason`): `void`
+
+###### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `reason` | `string` | `"not provided"` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`dispose`](index.mdx#dispose-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:184](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L184)
+
+##### emit()
+
+> **emit**\<`K`\>(`type`, `ev`?, ...`args`?): `boolean`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `RecorderEvents` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `ev`? | `RecorderEvents` & `object`\[`K`\] |
+| ...`args`? | `any`[] |
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`emit`](index.mdx#emit-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:67](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L67)
+
+##### emitError()
+
+> `protected` **emitError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | [`IVideoClientError`](namespaces/types.mdx#ivideoclienterror) |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`emitError`](index.mdx#emiterror-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:151](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L151)
+
+##### emitErrorDeprecated()
+
+> `protected` **emitErrorDeprecated**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`emitErrorDeprecated`](index.mdx#emiterrordeprecated-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:169](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L169)
+
+##### getMaxListeners()
+
+> **getMaxListeners**(): `number`
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`getMaxListeners`](index.mdx#getmaxlisteners-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:55](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L55)
+
+##### handleNewData()
+
+> **handleNewData**(`ev`): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ev` | [`BlobEvent`](namespaces/adapter.mdx#blobevent) |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:206](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L206)
+
+##### handlePause()
+
+> **handlePause**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:190](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L190)
+
+##### handleResume()
+
+> **handleResume**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:194](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L194)
+
+##### handleStart()
+
+> **handleStart**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:198](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L198)
+
+##### handleStop()
+
+> **handleStop**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:202](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L202)
+
+##### lock()
+
+> **lock**(): `void`
+
+private helpers to lock device retrieval and local stream setup
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:274](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L274)
+
+##### newMediaRecorder()
+
+> **newMediaRecorder**(`stream`, `options`): [`MediaRecorder`](namespaces/adapter.mdx#mediarecorder)
+
+private function designed to setup a generic recorder with its events
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `stream` | [`MediaStream`](namespaces/adapter.mdx#mediastream) |
+| `options` | [`MediaRecorderOptions`](namespaces/adapter.mdx#mediarecorderoptions) |
+
+###### Returns
+
+[`MediaRecorder`](namespaces/adapter.mdx#mediarecorder)
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:165](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L165)
+
+##### off()
+
+> **off**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `RecorderEvents` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`RecorderEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`off`](index.mdx#off-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:71](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L71)
+
+##### on()
+
+> **on**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `RecorderEvents` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`RecorderEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`on`](index.mdx#on-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:79](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L79)
+
+##### once()
+
+> **once**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `RecorderEvents` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`RecorderEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`once`](index.mdx#once-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:87](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L87)
+
+##### pause()
+
+> **pause**(): `Result`
+
+###### Returns
+
+`Result`
+
+###### Method
+
+pause pauses a recording, emits an error if a recording is not already happening
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:417](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L417)
+
+##### prependListener()
+
+> **prependListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `RecorderEvents` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`RecorderEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`prependListener`](index.mdx#prependlistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:95](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L95)
+
+##### prependOnceListener()
+
+> **prependOnceListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `RecorderEvents` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<`RecorderEvents` & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`prependOnceListener`](index.mdx#prependoncelistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:103](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L103)
+
+##### record()
+
+> **record**(): `Promise`\<`Result`\>
+
+###### Returns
+
+`Promise`\<`Result`\>
+
+###### Method
+
+record starts or resumes recording, emits an error if there is no active stream
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:359](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L359)
+
+##### removeAllListeners()
+
+> **removeAllListeners**\<`K`\>(`type`?): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `RecorderEvents` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type`? | `K` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`removeAllListeners`](index.mdx#removealllisteners-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:111](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L111)
+
+##### removeAudioTrack()
+
+> **removeAudioTrack**(`audioTrack`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `audioTrack` | `object` |
+| `audioTrack.id` | `string` |
+
+###### Returns
+
+`void`
+
+###### Method
+
+removeAudioTrack removes an audio track from the stream
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:540](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L540)
+
+##### removeListener()
+
+> **removeListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `RecorderEvents` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`ev`) => `void` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`removeListener`](index.mdx#removelistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:119](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L119)
+
+##### save()
+
+> **save**(): `Promise`\<`Result`\>
+
+###### Returns
+
+`Promise`\<`Result`\>
+
+###### Method
+
+pause pauses a recording, emits an error if a recording is not already happening
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:394](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L394)
+
+##### setMaxListeners()
+
+> **setMaxListeners**(`n`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `n` | `number` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`setMaxListeners`](index.mdx#setmaxlisteners-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:50](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L50)
+
+##### setupRecorder()
+
+> **setupRecorder**(): `Promise`\<`Result`\>
+
+###### Returns
+
+`Promise`\<`Result`\>
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:331](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L331)
+
+##### throwError()
+
+> `protected` **throwError**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | [`IVideoClientError`](namespaces/types.mdx#ivideoclienterror) |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`throwError`](index.mdx#throwerror-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:159](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L159)
+
+##### throwErrorDeprecated()
+
+> `protected` **throwErrorDeprecated**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`throwErrorDeprecated`](index.mdx#throwerrordeprecated-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:164](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L164)
+
+##### unlock()
+
+> **unlock**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:279](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L279)
+
+##### isSupported()
+
+> `static` **isSupported**(`mimetype`): `boolean`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `mimetype` | `string` |
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/recorder/index.ts:158](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/recorder/index.ts#L158)
+
+***
+
+### UserInteraction
+
+#### Extends
+
+- [`ObservableEventEmitter`](index.mdx#observableeventemittere)\<[`UserInteractionEvents`](namespaces/types.mdx#userinteractionevents)\>
+
+#### Implements
+
+- [`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi)
+
+#### Constructors
+
+##### new UserInteraction()
+
+> **new UserInteraction**(`options`): [`UserInteraction`](index.mdx#userinteraction)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`UserInteractionOptions`](namespaces/types.mdx#userinteractionoptions) |
+
+###### Returns
+
+[`UserInteraction`](index.mdx#userinteraction)
+
+###### Overrides
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`constructor`](index.mdx#constructors-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/user-interaction/index.ts:30](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/user-interaction/index.ts#L30)
+
+#### Properties
+
+| Property | Type | Default value |
+| ------ | ------ | ------ |
+| `[Emitter]` | `EventEmitter`\<`any`\> | `undefined` |
+| `[Observers]` | `Map`\<`string`, `IReactionDisposer`\> | `undefined` |
+| `disposing` | `boolean` | `false` |
+| `hadInteraction` | `boolean` | `false` |
+| `logger` | `LoggerCore` | `undefined` |
+| `options` | [`UserInteractionOptions`](namespaces/types.mdx#userinteractionoptions) | `undefined` |
+| `displayName` | `"UserInteraction"` | `"UserInteraction"` |
+
+#### Accessors
+
+##### isDisposed
+
+###### Get Signature
+
+> **get** **isDisposed**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).`isDisposed`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`isDisposed`](index.mdx#isdisposed-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:147](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L147)
+
+#### Methods
+
+##### addInnerDisposer()
+
+> **addInnerDisposer**(...`disposableObjects`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`disposableObjects` | ([`Disposable`](namespaces/types.mdx#disposable) \| [`DisposeFunction`](namespaces/types.mdx#disposefunction))[] |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`addInnerDisposer`](index.mdx#addinnerdisposer-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:133](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L133)
+
+##### addListener()
+
+> **addListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"hadInteraction"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`UserInteractionEvents`](namespaces/types.mdx#userinteractionevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`addListener`](namespaces/types.mdx#addlistener-13)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`addListener`](index.mdx#addlistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:59](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L59)
+
+##### autorun()
+
+> `protected` **autorun**(`view`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | () => `void` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`autorun`](index.mdx#autorun-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:143](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L143)
+
+##### dispose()
+
+> **dispose**(`reason`): `void`
+
+###### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `reason` | `string` | `"not provided"` |
+
+###### Returns
+
+`void`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`dispose`](namespaces/types.mdx#dispose-7)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`dispose`](index.mdx#dispose-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:184](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L184)
+
+##### emit()
+
+> **emit**\<`K`\>(`type`, `ev`?, ...`args`?): `boolean`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"hadInteraction"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `ev`? | [`UserInteractionEvents`](namespaces/types.mdx#userinteractionevents) & `object`\[`K`\] |
+| ...`args`? | `any`[] |
+
+###### Returns
+
+`boolean`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`emit`](namespaces/types.mdx#emit-13)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`emit`](index.mdx#emit-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:67](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L67)
+
+##### emitError()
+
+> `protected` **emitError**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | [`IVideoClientError`](namespaces/types.mdx#ivideoclienterror) |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`emitError`](index.mdx#emiterror-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:151](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L151)
+
+##### emitErrorDeprecated()
+
+> `protected` **emitErrorDeprecated**(`err`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`emitErrorDeprecated`](index.mdx#emiterrordeprecated-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:169](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L169)
+
+##### getMaxListeners()
+
+> **getMaxListeners**(): `number`
+
+###### Returns
+
+`number`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`getMaxListeners`](index.mdx#getmaxlisteners-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:55](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L55)
+
+##### off()
+
+> **off**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"hadInteraction"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`UserInteractionEvents`](namespaces/types.mdx#userinteractionevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`off`](namespaces/types.mdx#off-13)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`off`](index.mdx#off-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:71](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L71)
+
+##### on()
+
+> **on**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"hadInteraction"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`UserInteractionEvents`](namespaces/types.mdx#userinteractionevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`on`](namespaces/types.mdx#on-13)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`on`](index.mdx#on-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:79](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L79)
+
+##### once()
+
+> **once**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"hadInteraction"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`UserInteractionEvents`](namespaces/types.mdx#userinteractionevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`once`](namespaces/types.mdx#once-13)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`once`](index.mdx#once-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:87](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L87)
+
+##### prependListener()
+
+> **prependListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"hadInteraction"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`UserInteractionEvents`](namespaces/types.mdx#userinteractionevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`prependListener`](namespaces/types.mdx#prependlistener-13)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`prependListener`](index.mdx#prependlistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:95](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L95)
+
+##### prependOnceListener()
+
+> **prependOnceListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"hadInteraction"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | `Listener`\<[`UserInteractionEvents`](namespaces/types.mdx#userinteractionevents) & `object`\[`K`\]\> |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`prependOnceListener`](namespaces/types.mdx#prependoncelistener-13)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`prependOnceListener`](index.mdx#prependoncelistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:103](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L103)
+
+##### removeAllListeners()
+
+> **removeAllListeners**\<`K`\>(`type`?): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"hadInteraction"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type`? | `K` |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`removeAllListeners`](namespaces/types.mdx#removealllisteners-13)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`removeAllListeners`](index.mdx#removealllisteners-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:111](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L111)
+
+##### removeListener()
+
+> **removeListener**\<`K`\>(`type`, `listener`): `this`
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"disposed"` \| `"hadInteraction"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`ev`) => `void` |
+
+###### Returns
+
+`this`
+
+###### Implementation of
+
+[`UserInteractionAPI`](namespaces/types.mdx#userinteractionapi).[`removeListener`](namespaces/types.mdx#removelistener-13)
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`removeListener`](index.mdx#removelistener-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:119](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L119)
+
+##### setMaxListeners()
+
+> **setMaxListeners**(`n`): `this`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `n` | `number` |
+
+###### Returns
+
+`this`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`setMaxListeners`](index.mdx#setmaxlisteners-2)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:50](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L50)
+
+##### throwError()
+
+> `protected` **throwError**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | [`IVideoClientError`](namespaces/types.mdx#ivideoclienterror) |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`throwError`](index.mdx#throwerror-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:159](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L159)
+
+##### throwErrorDeprecated()
+
+> `protected` **throwErrorDeprecated**(`err`): `never`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `VideoClientErrorDeprecated`\<`VideoClientErrorDeprecated`\<`any`\>\> |
+
+###### Returns
+
+`never`
+
+###### Inherited from
+
+[`ObservableEventEmitter`](index.mdx#observableeventemittere).[`throwErrorDeprecated`](index.mdx#throwerrordeprecated-1)
+
+###### Defined in
+
+[video-client/core/src/internal/utils/events/event-emitter.ts:164](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/events/event-emitter.ts#L164)
+
+## Type Aliases
+
+### VideoClient
+
+> **VideoClient**: [`VideoClientAPI`](namespaces/types.mdx#videoclientapi)
+
+#### Defined in
+
+[video-client/core/src/index.ts:10](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/index.ts#L10)
+
+## Variables
+
+### CONSTRAINTS\_AUDIO\_OPTIMAL\_STRICT
+
+> `const` **CONSTRAINTS\_AUDIO\_OPTIMAL\_STRICT**: [`DeepReadonly`](namespaces/types.mdx#deepreadonlyt)\<[`MediaTrackConstraints`](namespaces/adapter.mdx#mediatrackconstraints)\>
+
+#### Defined in
+
+[video-client/core/src/internal/media-controller.ts:103](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/media-controller.ts#L103)
+
+***
+
+### CONSTRAINTS\_AUDIO\_OPTIMAL\_WEAK
+
+> `const` **CONSTRAINTS\_AUDIO\_OPTIMAL\_WEAK**: [`DeepReadonly`](namespaces/types.mdx#deepreadonlyt)\<[`MediaTrackConstraints`](namespaces/adapter.mdx#mediatrackconstraints)\>
+
+#### Defined in
+
+[video-client/core/src/internal/media-controller.ts:113](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/media-controller.ts#L113)
+
+***
+
+### CONSTRAINTS\_SCREENCAPTURE\_OPTIMAL\_WEAK
+
+> `const` **CONSTRAINTS\_SCREENCAPTURE\_OPTIMAL\_WEAK**: [`DeepReadonly`](namespaces/types.mdx#deepreadonlyt)\<[`MediaTrackConstraints`](namespaces/adapter.mdx#mediatrackconstraints)\>
+
+#### Defined in
+
+[video-client/core/src/internal/media-controller.ts:141](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/media-controller.ts#L141)
+
+***
+
+### CONSTRAINTS\_VIDEO\_OPTIMAL\_STRICT
+
+> `const` **CONSTRAINTS\_VIDEO\_OPTIMAL\_STRICT**: [`DeepReadonly`](namespaces/types.mdx#deepreadonlyt)\<[`MediaTrackConstraints`](namespaces/adapter.mdx#mediatrackconstraints)\>
+
+#### Defined in
+
+[video-client/core/src/internal/media-controller.ts:123](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/media-controller.ts#L123)
+
+***
+
+### CONSTRAINTS\_VIDEO\_OPTIMAL\_WEAK
+
+> `const` **CONSTRAINTS\_VIDEO\_OPTIMAL\_WEAK**: [`DeepReadonly`](namespaces/types.mdx#deepreadonlyt)\<[`MediaTrackConstraints`](namespaces/adapter.mdx#mediatrackconstraints)\>
+
+#### Defined in
+
+[video-client/core/src/internal/media-controller.ts:132](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/media-controller.ts#L132)
+
+***
+
+### mediaController
+
+> `const` **mediaController**: [`MediaControllerAPI`](namespaces/types.mdx#mediacontrollerapi) = `mediaControllerImpl`
+
+#### Defined in
+
+[video-client/core/src/index.ts:12](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/index.ts#L12)
+
+***
+
+### timeupdateWrapper
+
+> `const` **timeupdateWrapper**: `TimeupdateWrapper`
+
+#### Defined in
+
+[video-client/core/src/internal/player/core.ts:107](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/player/core.ts#L107)
+
+***
+
+### VideoClient
+
+> `const` **VideoClient**: [`VideoClientConstructor`](namespaces/types.mdx#videoclientconstructor) = `VideoClientImpl`
+
+#### Defined in
+
+[video-client/core/src/index.ts:10](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/index.ts#L10)
+
+## Functions
+
+### applyUserInteractionHook()
+
+> **applyUserInteractionHook**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[video-client/core/src/utils/common.ts:36](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/utils/common.ts#L36)
+
+***
+
+### contextId()
+
+> **contextId**(): `string` \| `null`
+
+Context ID is global for current session
+
+#### Returns
+
+`string` \| `null`
+
+#### Defined in
+
+[video-client/core/src/utils/common.ts:27](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/utils/common.ts#L27)
+
+***
+
+### instanceId()
+
+> **instanceId**(): `string` \| `null`
+
+Machine ID is global across all VDC instances in the current browser/platform
+
+#### Returns
+
+`string` \| `null`
+
+#### Defined in
+
+[video-client/core/src/utils/common.ts:14](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/utils/common.ts#L14)
+
+***
+
+### makeBounded()
+
+> **makeBounded**\<`T`\>(`target`, `exclude`, `debug`): `T`
+
+#### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* `object` |
+
+#### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `target` | `T` | `undefined` |
+| `exclude` | `string`[] | `[]` |
+| `debug` | `boolean` | `false` |
+
+#### Returns
+
+`T`
+
+#### Defined in
+
+[video-client/core/src/internal/utils/bind.ts:63](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/utils/bind.ts#L63)
+
+## Namespaces
+
+- [adapter](namespaces/adapter.mdx)
+- [errors](namespaces/errors.mdx)
+- [player](namespaces/player.mdx)
+- [types](namespaces/types.mdx)
+- [utils](namespaces/utils.mdx)

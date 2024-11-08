@@ -1,0 +1,23 @@
+{
+    "theme": "default",
+    "excludePrivate": true,
+    "entryPointStrategy": "expand",
+    "outputFileStrategy": "modules",
+    "plugin": ["typedoc-plugin-markdown"],
+    "fileExtension": ".mdx",
+    "interfacePropertiesFormat": "table",
+    "classPropertiesFormat": "table",
+    "enumMembersFormat": "table",
+    "parametersFormat": "table",
+    "readme": "none",
+    "tableColumnSettings": {
+      "hideDefaults": false,
+      "hideInherited": true,
+      "hideModifiers": true,
+      "hideOverrides": false,
+      "hideSources": true,
+      "hideValues": false,
+      "leftAlignHeaders": false
+    }
+  }
+  
