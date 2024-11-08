@@ -1,0 +1,223 @@
+# errors
+
+## References
+
+### ErrorCode
+
+Re-exports [ErrorCode](types.mdx#errorcode)
+
+## Classes
+
+### VideoClientError
+
+Generic VideoClient error. All errors VDC errors inherits this class
+
+#### Extends
+
+- `Error`
+
+#### Implements
+
+- [`IVideoClientError`](types.mdx#ivideoclienterror)
+
+#### Constructors
+
+##### new VideoClientError()
+
+> **new VideoClientError**(`code`, `message`?, `data`?, `inner`?): [`VideoClientError`](errors.mdx#videoclienterror)
+
+###### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `code` | [`ErrorCode`](types.mdx#errorcode) | `undefined` |
+| `message`? | `string` | `undefined` |
+| `data`? | `unknown` | `{}` |
+| `inner`? | `unknown` | `null` |
+
+###### Returns
+
+[`VideoClientError`](errors.mdx#videoclienterror)
+
+###### Overrides
+
+`Error.constructor`
+
+###### Defined in
+
+[video-client/core/src/internal/errors.ts:84](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/errors.ts#L84)
+
+#### Properties
+
+| Property | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `code` | [`ErrorCode`](types.mdx#errorcode) | `undefined` | Contains the very last error code. |
+| ~~`critical?`~~ | `boolean` | `undefined` | **Deprecated** use disposed instead |
+| `inner` | `null` \| [`AnyError`](types.mdx#anyerror) | `null` | Contains an error that caused this error. |
+| `innerCodes` | `Set`\<[`ErrorCode`](types.mdx#errorcode)\> | `undefined` | Contains all error codes from inner errors. |
+| `message` | `string` | `undefined` | - |
+| `name` | `string` | `undefined` | - |
+| `stack?` | `string` | `undefined` | - |
+| `prepareStackTrace?` | (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any` | `undefined` | Optional override for formatting stack traces **See** https://v8.dev/docs/stack-trace-api#customizing-stack-traces |
+| `stackTraceLimit` | `number` | `undefined` | - |
+
+#### Accessors
+
+##### isMuted
+
+###### Get Signature
+
+> **get** **isMuted**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Implementation of
+
+[`IVideoClientError`](types.mdx#ivideoclienterror).`isMuted`
+
+###### Defined in
+
+[video-client/core/src/internal/errors.ts:99](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/errors.ts#L99)
+
+#### Methods
+
+##### aggregates()
+
+> **aggregates**(): `Aggregates`
+
+###### Returns
+
+`Aggregates`
+
+###### Defined in
+
+[video-client/core/src/internal/errors.ts:120](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/errors.ts#L120)
+
+##### mute()
+
+> **mute**(): `void`
+
+Do not log this error.
+
+###### Returns
+
+`void`
+
+###### Implementation of
+
+[`IVideoClientError`](types.mdx#ivideoclienterror).[`mute`](types.mdx#mute)
+
+###### Defined in
+
+[video-client/core/src/internal/errors.ts:133](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/errors.ts#L133)
+
+##### toJSON()
+
+> **toJSON**(): [`Json`](types.mdx#json)
+
+###### Returns
+
+[`Json`](types.mdx#json)
+
+###### Implementation of
+
+[`IVideoClientError`](types.mdx#ivideoclienterror).[`toJSON`](types.mdx#tojson-2)
+
+###### Defined in
+
+[video-client/core/src/internal/errors.ts:103](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/errors.ts#L103)
+
+##### captureStackTrace()
+
+> `static` **captureStackTrace**(`targetObject`, `constructorOpt`?): `void`
+
+Create .stack property on a target object
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `targetObject` | `object` |
+| `constructorOpt`? | `Function` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`Error.captureStackTrace`
+
+###### Defined in
+
+video-client/node\_modules/@types/node/globals.d.ts:4
+
+##### log()
+
+> `static` **log**(`err`, `logger`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | [`IVideoClientError`](types.mdx#ivideoclienterror) |
+| `logger` | `LoggerCore` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/internal/errors.ts:95](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/errors.ts#L95)
+
+## Functions
+
+### createError()
+
+> **createError**\<`C`\>(`code`, `message`?, `data`?, `inner`?): [`AllErrorsMap`](types.mdx#allerrorsmap)\[`C`\] & [`IVideoClientError`](types.mdx#ivideoclienterror)
+
+#### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `C` *extends* keyof [`AllErrorsMap`](types.mdx#allerrorsmap) |
+
+#### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `code` | `C` | `undefined` |
+| `message`? | `string` | `undefined` |
+| `data`? | [`AllErrorsMap`](types.mdx#allerrorsmap)\[`C`\] | `undefined` |
+| `inner`? | `unknown` | `null` |
+
+#### Returns
+
+[`AllErrorsMap`](types.mdx#allerrorsmap)\[`C`\] & [`IVideoClientError`](types.mdx#ivideoclienterror)
+
+#### Defined in
+
+[video-client/core/src/internal/errors.ts:61](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/errors.ts#L61)
+
+***
+
+### wrapError()
+
+> **wrapError**(`err`): [`AnyError`](types.mdx#anyerror) \| `null`
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `err` | `unknown` |
+
+#### Returns
+
+[`AnyError`](types.mdx#anyerror) \| `null`
+
+#### Defined in
+
+[video-client/core/src/internal/errors.ts:32](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/internal/errors.ts#L32)

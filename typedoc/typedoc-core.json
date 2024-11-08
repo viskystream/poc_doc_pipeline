@@ -1,0 +1,6 @@
+{
+  "id": "video-client-core",
+  "entryPoints": ["../video-client/core/src/index.ts"],
+  "tsconfig": "../video-client/core/tsconfig.json",
+  "out": "./docs/LivelyVideo/api/core"
+}

@@ -1,0 +1,3544 @@
+# adapter
+
+## Enumerations
+
+### Feature
+
+#### Enumeration Members
+
+| Enumeration Member | Value |
+| ------ | ------ |
+| `APPLY_CONSTRAINTS` | `0` |
+| `AUDIO_CONTEXT` | `1` |
+| `CPU_USAGE` | `2` |
+| `CREATE_AUDIO_ELEMENT` | `5` |
+| `CREATE_CANVAS_ELEMENT` | `3` |
+| `CREATE_SCREENSHOT` | `6` |
+| `CREATE_VIDEO_ELEMENT` | `4` |
+| `DEBUGGING` | `8` |
+| `DOCUMENT` | `7` |
+| `HLSJS` | `9` |
+| `LOCAL_STORAGE` | `10` |
+| `MATCH_MEDIA` | `11` |
+| `MEDIA_DEVICE` | `13` |
+| `MEDIA_RECORDER` | `14` |
+| `MEDIA_SOURCE` | `15` |
+| `MEDIA_STREAM` | `16` |
+| `MPEGTS` | `21` |
+| `MULTI_TOUCH` | `12` |
+| `NETWORK_INFORMATION` | `17` |
+| `PERMISSIONS` | `20` |
+| `SCREEN_ORIENTATION` | `19` |
+| `URL_LOCATION` | `18` |
+| `URL_SEARCHPARAMS` | `22` |
+| `USER_ACTIVATION` | `23` |
+| `USER_AGENT_DATA` | `24` |
+| `WEBRTC` | `25` |
+
+## Interfaces
+
+### AnalyserNode
+
+#### Extends
+
+- [`AudioNode`](adapter.mdx#audionode)
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `fftSize` | `number` |
+| `frequencyBinCount` | `number` |
+| `maxDecibels` | `number` |
+| `minDecibels` | `number` |
+| `smoothingTimeConstant` | `number` |
+
+#### Methods
+
+##### connect()
+
+###### connect(destinationNode, output, input)
+
+> **connect**(`destinationNode`, `output`?, `input`?): [`AudioNode`](adapter.mdx#audionode)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationNode` | [`AudioNode`](adapter.mdx#audionode) |
+| `output`? | `number` |
+| `input`? | `number` |
+
+###### Returns
+
+[`AudioNode`](adapter.mdx#audionode)
+
+###### Inherited from
+
+[`AudioNode`](adapter.mdx#audionode).[`connect`](adapter.mdx#connect-1)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:24](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L24)
+
+###### connect(destinationParam, output)
+
+> **connect**(`destinationParam`, `output`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationParam` | [`AudioParam`](adapter.mdx#audioparam) |
+| `output`? | `number` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`AudioNode`](adapter.mdx#audionode).[`connect`](adapter.mdx#connect-1)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:25](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L25)
+
+##### getByteFrequencyData()
+
+> **getByteFrequencyData**(`array`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `array` | `Uint8Array` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:9](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L9)
+
+##### getByteTimeDomainData()
+
+> **getByteTimeDomainData**(`array`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `array` | `Uint8Array` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:10](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L10)
+
+##### getFloatFrequencyData()
+
+> **getFloatFrequencyData**(`array`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `array` | `Float32Array` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:11](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L11)
+
+##### getFloatTimeDomainData()
+
+> **getFloatTimeDomainData**(`array`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `array` | `Float32Array` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:12](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L12)
+
+***
+
+### ApplyConstrainsFeature
+
+#### Methods
+
+##### applyConstraints()
+
+> **applyConstraints**(`track`, `constraints`): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `track` | [`MediaStreamTrack`](adapter.mdx#mediastreamtrack) |
+| `constraints` | [`MediaTrackConstraints`](adapter.mdx#mediatrackconstraints) |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/apply-constrains-feature.ts:4](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/apply-constrains-feature.ts#L4)
+
+***
+
+### AudioContext
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `currentTime` | `number` |
+| `destination` | `any` |
+| `sampleRate` | `number` |
+
+#### Methods
+
+##### close()
+
+> **close**(): `Promise`\<`void`\>
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:54](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L54)
+
+##### createAnalyser()
+
+> **createAnalyser**(): [`AnalyserNode`](adapter.mdx#analysernode)
+
+###### Returns
+
+[`AnalyserNode`](adapter.mdx#analysernode)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:55](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L55)
+
+##### createBuffer()
+
+> **createBuffer**(...`args`): `any`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`args` | `any` |
+
+###### Returns
+
+`any`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:61](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L61)
+
+##### createBufferSource()
+
+> **createBufferSource**(): [`AudioBufferSourceNode`](adapter.mdx#audiobuffersourcenode)
+
+###### Returns
+
+[`AudioBufferSourceNode`](adapter.mdx#audiobuffersourcenode)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:60](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L60)
+
+##### createGain()
+
+> **createGain**(): [`GainNode`](adapter.mdx#gainnode)
+
+###### Returns
+
+[`GainNode`](adapter.mdx#gainnode)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:57](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L57)
+
+##### createMediaStreamDestination()
+
+> **createMediaStreamDestination**(): [`MediaStreamAudioDestinationNode`](adapter.mdx#mediastreamaudiodestinationnode)
+
+###### Returns
+
+[`MediaStreamAudioDestinationNode`](adapter.mdx#mediastreamaudiodestinationnode)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:58](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L58)
+
+##### createMediaStreamSource()
+
+> **createMediaStreamSource**(`mediaStream`): [`MediaStreamAudioSourceNode`](adapter.mdx#mediastreamaudiosourcenode)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `mediaStream` | [`MediaStream`](adapter.mdx#mediastream) |
+
+###### Returns
+
+[`MediaStreamAudioSourceNode`](adapter.mdx#mediastreamaudiosourcenode)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:59](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L59)
+
+##### createScriptProcessor()
+
+> **createScriptProcessor**(): `unknown`
+
+###### Returns
+
+`unknown`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:56](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L56)
+
+***
+
+### AudioContextConstructor
+
+#### Constructors
+
+##### new AudioContextConstructor()
+
+> **new AudioContextConstructor**(): [`AudioContext`](adapter.mdx#audiocontext)
+
+###### Returns
+
+[`AudioContext`](adapter.mdx#audiocontext)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:40](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L40)
+
+***
+
+### AudioContextFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `AudioContext` | [`AudioContextConstructor`](adapter.mdx#audiocontextconstructor) |
+
+***
+
+### AudioNode
+
+#### Extended by
+
+- [`AnalyserNode`](adapter.mdx#analysernode)
+- [`GainNode`](adapter.mdx#gainnode)
+- [`MediaStreamAudioDestinationNode`](adapter.mdx#mediastreamaudiodestinationnode)
+
+#### Methods
+
+##### connect()
+
+###### connect(destinationNode, output, input)
+
+> **connect**(`destinationNode`, `output`?, `input`?): [`AudioNode`](adapter.mdx#audionode)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationNode` | [`AudioNode`](adapter.mdx#audionode) |
+| `output`? | `number` |
+| `input`? | `number` |
+
+###### Returns
+
+[`AudioNode`](adapter.mdx#audionode)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:24](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L24)
+
+###### connect(destinationParam, output)
+
+> **connect**(`destinationParam`, `output`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationParam` | [`AudioParam`](adapter.mdx#audioparam) |
+| `output`? | `number` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:25](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L25)
+
+***
+
+### AudioParam
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `value` | `number` |
+
+#### Methods
+
+##### cancelScheduledValues()
+
+> **cancelScheduledValues**(`cancelTime`): [`AudioParam`](adapter.mdx#audioparam)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `cancelTime` | `number` |
+
+###### Returns
+
+[`AudioParam`](adapter.mdx#audioparam)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:30](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L30)
+
+##### exponentialRampToValueAtTime()
+
+> **exponentialRampToValueAtTime**(`value`, `endTime`): [`AudioParam`](adapter.mdx#audioparam)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `number` |
+| `endTime` | `number` |
+
+###### Returns
+
+[`AudioParam`](adapter.mdx#audioparam)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:31](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L31)
+
+***
+
+### BlobEvent
+
+#### Extends
+
+- `Event`
+
+#### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| `AT_TARGET` | `number` | - |
+| `bubbles` | `boolean` | Returns true or false depending on how event was initialized. True if event goes through its target's ancestors in reverse tree order, and false otherwise. |
+| `BUBBLING_PHASE` | `number` | - |
+| `cancelable` | `boolean` | Returns true or false depending on how event was initialized. Its return value does not always carry meaning, but true can indicate that part of the operation during which event was dispatched, can be canceled by invoking the preventDefault() method. |
+| `cancelBubble` | `boolean` | - |
+| `CAPTURING_PHASE` | `number` | - |
+| `composed` | `boolean` | Returns true or false depending on how event was initialized. True if event invokes listeners past a ShadowRoot node that is the root of its target, and false otherwise. |
+| `currentTarget` | `null` \| `EventTarget` | Returns the object whose event listener's callback is currently being invoked. |
+| `data` | `Blob` | - |
+| `defaultPrevented` | `boolean` | Returns true if preventDefault() was invoked successfully to indicate cancelation, and false otherwise. |
+| `eventPhase` | `number` | Returns the event's phase, which is one of NONE, CAPTURING_PHASE, AT_TARGET, and BUBBLING_PHASE. |
+| `isTrusted` | `boolean` | Returns true if event was dispatched by the user agent, and false otherwise. |
+| `NONE` | `number` | - |
+| `returnValue` | `boolean` | - |
+| ~~`srcElement`~~ | `null` \| `EventTarget` | **Deprecated** |
+| `target` | `null` \| `EventTarget` | Returns the object to which event is dispatched (its target). |
+| `timecode` | `number` | - |
+| `timeStamp` | `number` | Returns the event's timestamp as the number of milliseconds measured relative to the time origin. |
+| `type` | `string` | Returns the type of event, e.g. "click", "hashchange", or "submit". |
+
+#### Methods
+
+##### composedPath()
+
+> **composedPath**(): `EventTarget`[]
+
+Returns the invocation target objects of event's path (objects on which listeners will be invoked), except for any nodes in shadow trees of which the shadow root's mode is "closed" that are not reachable from event's currentTarget.
+
+###### Returns
+
+`EventTarget`[]
+
+###### Inherited from
+
+`Event.composedPath`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:345](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L345)
+
+##### initEvent()
+
+> **initEvent**(`type`, `bubbles`?, `cancelable`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `string` |
+| `bubbles`? | `boolean` |
+| `cancelable`? | `boolean` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`Event.initEvent`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:346](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L346)
+
+##### preventDefault()
+
+> **preventDefault**(): `void`
+
+If invoked when the cancelable attribute value is true, and while executing a listener for the event with passive set to false, signals to the operation that caused event to be dispatched that it needs to be canceled.
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`Event.preventDefault`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:350](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L350)
+
+##### stopImmediatePropagation()
+
+> **stopImmediatePropagation**(): `void`
+
+Invoking this method prevents event from reaching any registered event listeners after the current one finishes running and, when dispatched in a tree, also prevents event from reaching any other objects.
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`Event.stopImmediatePropagation`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:354](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L354)
+
+##### stopPropagation()
+
+> **stopPropagation**(): `void`
+
+When dispatched in a tree, invoking this method prevents event from reaching any objects other than the current object.
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`Event.stopPropagation`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:358](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L358)
+
+***
+
+### Console
+
+#### Methods
+
+##### assert()
+
+> **assert**(`value`, `message`?, ...`optionalParams`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+| `message`? | `string` |
+| ...`optionalParams`? | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:6](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L6)
+
+##### clear()
+
+> **clear**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:7](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L7)
+
+##### count()
+
+> **count**(`label`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `label`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:8](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L8)
+
+##### countReset()
+
+> **countReset**(`label`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `label`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:9](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L9)
+
+##### debug()
+
+> **debug**(`message`?, ...`optionalParams`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message`? | `unknown` |
+| ...`optionalParams`? | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:10](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L10)
+
+##### dir()
+
+> **dir**(`obj`, `options`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `obj` | `unknown` |
+| `options`? | `unknown` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:11](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L11)
+
+##### dirxml()
+
+> **dirxml**(...`data`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`data` | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:12](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L12)
+
+##### error()
+
+> **error**(`message`?, ...`optionalParams`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message`? | `unknown` |
+| ...`optionalParams`? | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:13](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L13)
+
+##### group()
+
+> **group**(...`label`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`label` | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:14](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L14)
+
+##### groupCollapsed()
+
+> **groupCollapsed**(...`label`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`label` | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:15](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L15)
+
+##### groupEnd()
+
+> **groupEnd**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:16](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L16)
+
+##### info()
+
+> **info**(`message`?, ...`optionalParams`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message`? | `unknown` |
+| ...`optionalParams`? | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:17](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L17)
+
+##### log()
+
+> **log**(`message`?, ...`optionalParams`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message`? | `unknown` |
+| ...`optionalParams`? | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:18](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L18)
+
+##### profile()
+
+> **profile**(`label`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `label`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:25](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L25)
+
+##### profileEnd()
+
+> **profileEnd**(`label`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `label`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:26](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L26)
+
+##### table()
+
+> **table**(`tabularData`, `properties`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `tabularData` | `unknown` |
+| `properties`? | `string`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:19](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L19)
+
+##### time()
+
+> **time**(`label`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `label`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:20](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L20)
+
+##### timeEnd()
+
+> **timeEnd**(`label`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `label`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:21](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L21)
+
+##### timeLog()
+
+> **timeLog**(`label`?, ...`data`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `label`? | `string` |
+| ...`data`? | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:22](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L22)
+
+##### timeStamp()
+
+> **timeStamp**(`label`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `label`? | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:27](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L27)
+
+##### trace()
+
+> **trace**(`message`?, ...`optionalParams`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message`? | `unknown` |
+| ...`optionalParams`? | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:23](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L23)
+
+##### warn()
+
+> **warn**(`message`?, ...`optionalParams`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message`? | `unknown` |
+| ...`optionalParams`? | `unknown`[] |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:24](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L24)
+
+***
+
+### CpuUsageFeature
+
+#### Methods
+
+##### averageCpuUsage()
+
+> **averageCpuUsage**(`interval`): `number`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `interval` | `number` |
+
+###### Returns
+
+`number`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/cpu-usage.ts:4](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/cpu-usage.ts#L4)
+
+##### disableCpuStats()
+
+> **disableCpuStats**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/cpu-usage.ts:3](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/cpu-usage.ts#L3)
+
+##### enableCpuStats()
+
+> **enableCpuStats**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/cpu-usage.ts:2](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/cpu-usage.ts#L2)
+
+***
+
+### CreateCanvasElementFeature
+
+#### Methods
+
+##### createCanvasElement()
+
+> **createCanvasElement**(): `CanvasElement`
+
+###### Returns
+
+`CanvasElement`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/create-canvas-element.ts:11](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/create-canvas-element.ts#L11)
+
+***
+
+### CreateVideoElementFeature
+
+#### Methods
+
+##### createVideoElement()
+
+> **createVideoElement**(): [`VideoElement`](types.mdx#videoelement)
+
+###### Returns
+
+[`VideoElement`](types.mdx#videoelement)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/create-video-element.ts:4](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/create-video-element.ts#L4)
+
+***
+
+### DebuggingFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `console` | [`Console`](adapter.mdx#console) |
+| `performance` | [`Performance`](adapter.mdx#performance) |
+
+***
+
+### Features
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `0` | [`ApplyConstrainsFeature`](adapter.mdx#applyconstrainsfeature) |
+| `1` | [`AudioContextFeature`](adapter.mdx#audiocontextfeature) |
+| `10` | [`LocalStorageFeature`](adapter.mdx#localstoragefeature) |
+| `11` | `MatchMediaFeature` |
+| `12` | [`MultiTouchFeature`](adapter.mdx#multitouchfeature) |
+| `13` | [`MediaDeviceFeature`](adapter.mdx#mediadevicefeature) |
+| `14` | [`MediaRecorderFeature`](adapter.mdx#mediarecorderfeature) |
+| `15` | [`MediaSourceFeature`](adapter.mdx#mediasourcefeature) |
+| `16` | [`MediaStreamFeature`](adapter.mdx#mediastreamfeature) |
+| `17` | [`NetworkInformationFeature`](adapter.mdx#networkinformationfeature) |
+| `18` | `URLLocationFeature` |
+| `19` | [`ScreenOrientationFeature`](adapter.mdx#screenorientationfeature) |
+| `2` | [`CpuUsageFeature`](adapter.mdx#cpuusagefeature) |
+| `20` | [`PermissionsFeature`](adapter.mdx#permissionsfeature) |
+| `21` | [`MpegtsFeature`](adapter.mdx#mpegtsfeature) |
+| `22` | `UrlSearchParamsFeature` |
+| `23` | `UserActivationFeature` |
+| `24` | [`UserAgentDataFeature`](adapter.mdx#useragentdatafeature) |
+| `25` | `WebrtcFeature` |
+| `3` | [`CreateCanvasElementFeature`](adapter.mdx#createcanvaselementfeature) |
+| `4` | [`CreateVideoElementFeature`](adapter.mdx#createvideoelementfeature) |
+| `5` | `CreateAudioElementFeature` |
+| `6` | `CreateScreenshotFeature` |
+| `7` | `DocumentFeature` |
+| `8` | [`DebuggingFeature`](adapter.mdx#debuggingfeature) |
+| `9` | [`HlsJsFeature`](adapter.mdx#hlsjsfeature) |
+
+***
+
+### FileSystemFileHandle
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `kind` | `"file"` \| `"directory"` |
+| `name` | `string` |
+
+#### Methods
+
+##### createWritable()
+
+> **createWritable**(`options`?): `Promise`\<`any`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options`? | `object` |
+| `options.keepExistingData`? | `boolean` |
+
+###### Returns
+
+`Promise`\<`any`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:96](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L96)
+
+##### getFile()
+
+> **getFile**(): `Promise`\<`File`\>
+
+###### Returns
+
+`Promise`\<`File`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:94](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L94)
+
+##### isSameEntry()
+
+> **isSameEntry**(`handle`): `boolean`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `handle` | [`FileSystemFileHandle`](adapter.mdx#filesystemfilehandle) |
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:88](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L88)
+
+##### queryPermission()
+
+> **queryPermission**(`opts`): `"granted"` \| `"denied"` \| `"prompt"`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `opts` | `object` |
+| `opts.mode` | `"read"` \| `"readwrite"` |
+
+###### Returns
+
+`"granted"` \| `"denied"` \| `"prompt"`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:90](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L90)
+
+##### requestPermission()
+
+> **requestPermission**(`opts`): `"granted"` \| `"denied"` \| `"prompt"`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `opts` | `object` |
+| `opts.mode` | `"read"` \| `"readwrite"` |
+
+###### Returns
+
+`"granted"` \| `"denied"` \| `"prompt"`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:92](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L92)
+
+***
+
+### FileSystemWritableFileStream
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `locked` | `boolean` |
+
+#### Methods
+
+##### abort()
+
+> **abort**(`reason`): `Promise`\<`string`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `reason` | `string` |
+
+###### Returns
+
+`Promise`\<`string`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:76](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L76)
+
+##### close()
+
+> **close**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:77](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L77)
+
+##### getWriter()
+
+> **getWriter**(): `any`
+
+###### Returns
+
+`any`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:78](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L78)
+
+##### seek()
+
+> **seek**(`position`): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `position` | `number` |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:80](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L80)
+
+##### truncate()
+
+> **truncate**(`size`?): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `size`? | `number` |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:81](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L81)
+
+##### write()
+
+> **write**(`data`): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `data` | `Blob` \| [`WriteDataObject`](adapter.mdx#writedataobject) |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:79](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L79)
+
+***
+
+### GainNode
+
+#### Extends
+
+- [`AudioNode`](adapter.mdx#audionode)
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `gain` | [`AudioParam`](adapter.mdx#audioparam) |
+
+#### Methods
+
+##### connect()
+
+###### connect(destinationNode, output, input)
+
+> **connect**(`destinationNode`, `output`?, `input`?): [`AudioNode`](adapter.mdx#audionode)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationNode` | [`AudioNode`](adapter.mdx#audionode) |
+| `output`? | `number` |
+| `input`? | `number` |
+
+###### Returns
+
+[`AudioNode`](adapter.mdx#audionode)
+
+###### Inherited from
+
+[`AudioNode`](adapter.mdx#audionode).[`connect`](adapter.mdx#connect-1)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:24](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L24)
+
+###### connect(destinationParam, output)
+
+> **connect**(`destinationParam`, `output`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationParam` | [`AudioParam`](adapter.mdx#audioparam) |
+| `output`? | `number` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`AudioNode`](adapter.mdx#audionode).[`connect`](adapter.mdx#connect-1)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:25](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L25)
+
+***
+
+### HlsJsFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `Hls` | *typeof* `Hls` |
+
+#### Methods
+
+##### isHlsLoaded()
+
+> **isHlsLoaded**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/hlsjs.ts:6](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/hlsjs.ts#L6)
+
+##### loadHlsScript()
+
+> **loadHlsScript**(`path`?): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `path`? | `string` |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/hlsjs.ts:7](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/hlsjs.ts#L7)
+
+***
+
+### InputDeviceInfo
+
+#### Extends
+
+- [`MediaDeviceInfo`](adapter.mdx#mediadeviceinfo)
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `deviceId` | `string` |
+| `groupId` | `string` |
+| `kind` | [`MediaDeviceKind`](adapter.mdx#mediadevicekind) |
+| `label` | `string` |
+
+#### Methods
+
+##### getCapabilities()
+
+> **getCapabilities**(): `unknown`
+
+###### Returns
+
+`unknown`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:37](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L37)
+
+##### toJSON()
+
+> **toJSON**(): `any`
+
+###### Returns
+
+`any`
+
+###### Inherited from
+
+[`MediaDeviceInfo`](adapter.mdx#mediadeviceinfo).[`toJSON`](adapter.mdx#tojson-1)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:10](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L10)
+
+***
+
+### LocalStorage
+
+#### Indexable
+
+ \[`name`: `string`\]: `unknown`
+
+#### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| `length` | `number` | Returns the number of key/value pairs currently present in the list associated with the object. |
+
+#### Methods
+
+##### clear()
+
+> **clear**(): `void`
+
+Empties the list associated with the object of all key/value pairs, if there are any.
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/local-storage.ts:10](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/local-storage.ts#L10)
+
+##### getItem()
+
+> **getItem**(`key`): `null` \| `string`
+
+Returns the current value associated with the given key, or null if the given key does not exist in the list associated with the object.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+
+###### Returns
+
+`null` \| `string`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/local-storage.ts:15](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/local-storage.ts#L15)
+
+##### key()
+
+> **key**(`index`): `null` \| `string`
+
+Returns the name of the nth key in the list, or null if n is greater than or equal to the number of key/value pairs in the object.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `index` | `number` |
+
+###### Returns
+
+`null` \| `string`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/local-storage.ts:20](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/local-storage.ts#L20)
+
+##### removeItem()
+
+> **removeItem**(`key`): `void`
+
+Removes the key/value pair with the given key from the list associated with the object, if a key/value pair with the given key exists.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/local-storage.ts:25](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/local-storage.ts#L25)
+
+##### setItem()
+
+> **setItem**(`key`, `value`): `void`
+
+Sets the value of the pair identified by key to value, creating a new key/value pair if none existed for key previously.
+
+Throws a "QuotaExceededError" DOMException exception if the new value couldn't be set. (Setting could fail if, e.g., the user has disabled storage for the site, or if the quota has been exceeded.)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+| `value` | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/local-storage.ts:32](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/local-storage.ts#L32)
+
+***
+
+### LocalStorageFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `localStorage` | [`LocalStorage`](adapter.mdx#localstorage) |
+
+***
+
+### MediaDeviceFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `mediaDevices` | [`MediaDevices`](adapter.mdx#mediadevices) |
+
+#### Methods
+
+##### isCodecSupported()
+
+> **isCodecSupported**(`codec`): `boolean`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `codec` | `string` |
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:68](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L68)
+
+***
+
+### MediaDeviceInfo
+
+#### Extended by
+
+- [`InputDeviceInfo`](adapter.mdx#inputdeviceinfo)
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `deviceId` | `string` |
+| `groupId` | `string` |
+| `kind` | [`MediaDeviceKind`](adapter.mdx#mediadevicekind) |
+| `label` | `string` |
+
+#### Methods
+
+##### toJSON()
+
+> **toJSON**(): `any`
+
+###### Returns
+
+`any`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:10](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L10)
+
+***
+
+### MediaDevices
+
+#### Extends
+
+- `EventTarget`
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `ondevicechange` | `null` \| (`this`, `ev`) => `any` |
+
+#### Methods
+
+##### addEventListener()
+
+> **addEventListener**(`type`, `listener`): `void`
+
+Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+
+The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+
+When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+
+When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+
+When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+
+The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `string` |
+| `listener` | `any` |
+
+###### Returns
+
+`void`
+
+###### Overrides
+
+`EventTarget.addEventListener`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:57](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L57)
+
+##### dispatchEvent()
+
+> **dispatchEvent**(`event`): `boolean`
+
+Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `event` | `Event` |
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`EventTarget.dispatchEvent`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:440](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L440)
+
+##### enumerateDevices()
+
+> **enumerateDevices**(): `Promise`\<[`MediaDeviceInfo`](adapter.mdx#mediadeviceinfo)[]\>
+
+###### Returns
+
+`Promise`\<[`MediaDeviceInfo`](adapter.mdx#mediadeviceinfo)[]\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:49](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L49)
+
+##### getDisplayMedia()
+
+> **getDisplayMedia**(`constraints`?): `Promise`\<[`MediaStream`](adapter.mdx#mediastream)\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `constraints`? | [`MediaStreamConstraints`](adapter.mdx#mediastreamconstraints) |
+
+###### Returns
+
+`Promise`\<[`MediaStream`](adapter.mdx#mediastream)\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:55](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L55)
+
+##### getSupportedConstraints()
+
+> **getSupportedConstraints**(): [`MediaTrackSupportedConstraints`](adapter.mdx#mediatracksupportedconstraints)
+
+###### Returns
+
+[`MediaTrackSupportedConstraints`](adapter.mdx#mediatracksupportedconstraints)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:51](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L51)
+
+##### getUserMedia()
+
+> **getUserMedia**(`constraints`?): `Promise`\<[`MediaStream`](adapter.mdx#mediastream)\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `constraints`? | [`MediaStreamConstraints`](adapter.mdx#mediastreamconstraints) |
+
+###### Returns
+
+`Promise`\<[`MediaStream`](adapter.mdx#mediastream)\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:53](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L53)
+
+##### removeEventListener()
+
+> **removeEventListener**(`type`, `listener`): `void`
+
+Removes the event listener in target's event listener list with the same type, callback, and options.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `string` |
+| `listener` | `any` |
+
+###### Returns
+
+`void`
+
+###### Overrides
+
+`EventTarget.removeEventListener`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:59](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L59)
+
+***
+
+### MediaDevicesConstructor
+
+#### Constructors
+
+##### new MediaDevicesConstructor()
+
+> **new MediaDevicesConstructor**(): [`MediaDevices`](adapter.mdx#mediadevices)
+
+###### Returns
+
+[`MediaDevices`](adapter.mdx#mediadevices)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:41](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L41)
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `prototype` | [`MediaDevices`](adapter.mdx#mediadevices) |
+
+***
+
+### MediaRecorder
+
+#### Extends
+
+- `EventTarget`
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `audioBitsPerSecond` | `number` |
+| `mimeType` | `string` |
+| `ondataavailable` | `null` \| (`this`, `ev`) => `any` |
+| `onerror` | `null` \| (`this`, `ev`) => `any` |
+| `onpause` | `null` \| (`this`, `ev`) => `any` |
+| `onresume` | `null` \| (`this`, `ev`) => `any` |
+| `onstart` | `null` \| (`this`, `ev`) => `any` |
+| `onstop` | `null` \| (`this`, `ev`) => `any` |
+| `state` | [`RecordingState`](adapter.mdx#recordingstate) |
+| `stream` | [`MediaStream`](adapter.mdx#mediastream) |
+| `videoBitsPerSecond` | `number` |
+
+#### Methods
+
+##### addEventListener()
+
+> **addEventListener**\<`K`\>(`type`, `listener`, `options`?): `void`
+
+Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+
+The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+
+When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+
+When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+
+When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+
+The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `MediaRecorderEventMap` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`this`, `ev`) => `any` |
+| `options`? | `unknown` |
+
+###### Returns
+
+`void`
+
+###### Overrides
+
+`EventTarget.addEventListener`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:36](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L36)
+
+##### dispatchEvent()
+
+> **dispatchEvent**(`event`): `boolean`
+
+Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `event` | `Event` |
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`EventTarget.dispatchEvent`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:440](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L440)
+
+##### pause()
+
+> **pause**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:31](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L31)
+
+##### removeEventListener()
+
+> **removeEventListener**\<`K`\>(`type`, `listener`, `options`?): `void`
+
+Removes the event listener in target's event listener list with the same type, callback, and options.
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* keyof `MediaRecorderEventMap` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`this`, `ev`) => `any` |
+| `options`? | `unknown` |
+
+###### Returns
+
+`void`
+
+###### Overrides
+
+`EventTarget.removeEventListener`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:41](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L41)
+
+##### requestData()
+
+> **requestData**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:32](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L32)
+
+##### resume()
+
+> **resume**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:33](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L33)
+
+##### start()
+
+> **start**(`timeslice`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `timeslice`? | `number` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:34](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L34)
+
+##### stop()
+
+> **stop**(): `void`
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:35](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L35)
+
+***
+
+### MediaRecorderConstructor
+
+#### Constructors
+
+##### new MediaRecorderConstructor()
+
+> **new MediaRecorderConstructor**(`steam`?, `options`?): [`MediaRecorder`](adapter.mdx#mediarecorder)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `steam`? | [`MediaStream`](adapter.mdx#mediastream) |
+| `options`? | [`MediaRecorderOptions`](adapter.mdx#mediarecorderoptions) |
+
+###### Returns
+
+[`MediaRecorder`](adapter.mdx#mediarecorder)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:56](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L56)
+
+#### Methods
+
+##### isTypeSupported()
+
+> **isTypeSupported**(`type`): `boolean`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `string` |
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:58](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L58)
+
+***
+
+### MediaRecorderFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `MediaRecorder` | [`MediaRecorderConstructor`](adapter.mdx#mediarecorderconstructor) |
+
+#### Methods
+
+##### confirmMessage()
+
+> **confirmMessage**(`message`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message` | `string` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:103](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L103)
+
+##### showSaveFilePicker()
+
+> **showSaveFilePicker**(`options`): [`FileSystemFileHandle`](adapter.mdx#filesystemfilehandle)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`SaveFilePickerOptions`](adapter.mdx#savefilepickeroptions) |
+
+###### Returns
+
+[`FileSystemFileHandle`](adapter.mdx#filesystemfilehandle)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:101](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L101)
+
+##### storageEstimate()?
+
+> `optional` **storageEstimate**(): `Promise`\<`object`\>
+
+###### Returns
+
+`Promise`\<`object`\>
+
+###### quota
+
+> **quota**: `number`
+
+###### usage
+
+> **usage**: `number`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:102](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L102)
+
+***
+
+### MediaSourceFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `MediaSource` | `any` |
+| `SourceBuffer` | `any` |
+
+***
+
+### MediaStreamAudioDestinationNode
+
+#### Extends
+
+- [`AudioNode`](adapter.mdx#audionode)
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `stream` | [`MediaStream`](adapter.mdx#mediastream) |
+
+#### Methods
+
+##### connect()
+
+###### connect(destinationNode, output, input)
+
+> **connect**(`destinationNode`, `output`?, `input`?): [`AudioNode`](adapter.mdx#audionode)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationNode` | [`AudioNode`](adapter.mdx#audionode) |
+| `output`? | `number` |
+| `input`? | `number` |
+
+###### Returns
+
+[`AudioNode`](adapter.mdx#audionode)
+
+###### Inherited from
+
+[`AudioNode`](adapter.mdx#audionode).[`connect`](adapter.mdx#connect-1)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:24](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L24)
+
+###### connect(destinationParam, output)
+
+> **connect**(`destinationParam`, `output`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationParam` | [`AudioParam`](adapter.mdx#audioparam) |
+| `output`? | `number` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+[`AudioNode`](adapter.mdx#audionode).[`connect`](adapter.mdx#connect-1)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:25](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L25)
+
+***
+
+### MediaStreamAudioSourceNode
+
+#### Methods
+
+##### connect()
+
+###### connect(destinationNode, output, input)
+
+> **connect**(`destinationNode`, `output`?, `input`?): [`AudioNode`](adapter.mdx#audionode)
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationNode` | [`AudioNode`](adapter.mdx#audionode) |
+| `output`? | `number` |
+| `input`? | `number` |
+
+###### Returns
+
+[`AudioNode`](adapter.mdx#audionode)
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:35](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L35)
+
+###### connect(destinationParam, output)
+
+> **connect**(`destinationParam`, `output`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destinationParam` | [`AudioParam`](adapter.mdx#audioparam) |
+| `output`? | `number` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:36](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L36)
+
+***
+
+### MediaTrackSupportedConstraints
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `aspectRatio?` | `boolean` |
+| `autoGainControl?` | `boolean` |
+| `channelCount?` | `boolean` |
+| `deviceId?` | `boolean` |
+| `echoCancellation?` | `boolean` |
+| `facingMode?` | `boolean` |
+| `frameRate?` | `boolean` |
+| `groupId?` | `boolean` |
+| `height?` | `boolean` |
+| `latency?` | `boolean` |
+| `noiseSuppression?` | `boolean` |
+| `resizeMode?` | `boolean` |
+| `sampleRate?` | `boolean` |
+| `sampleSize?` | `boolean` |
+| `width?` | `boolean` |
+
+***
+
+### MpegtsFeature
+
+#### Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| `mpegts` | `object` | - |
+| `mpegts.BaseLoader` | `BaseLoaderConstructor` | **Deprecated** Use `Mpegts.BaseLoaderConstructor` instead. Because it's not available on `mpegts` variable. **Desc** implement interface `BaseLoader` **Since** 1.4 |
+| `mpegts.ErrorDetails` | `Readonly`\<`ErrorDetails`\> | - |
+| `mpegts.ErrorTypes` | `Readonly`\<`ErrorTypes`\> | - |
+| `mpegts.Events` | `Readonly`\<`Events`\> | - |
+| `mpegts.LoaderErrors` | `LoaderErrors` | **Deprecated** Use `Mpegts.BaseLoaderConstructor` instead. Because it's not available on `mpegts` variable. **Since** 1.4 |
+| `mpegts.LoaderStatus` | `LoaderStatus` | **Deprecated** Use `Mpegts.BaseLoaderConstructor` instead. Because it's not available on `mpegts` variable. **Since** 1.4 |
+| `mpegts.LoggingControl` | `LoggingControl` | - |
+| `mpegts.MSEPlayer` | `PlayerConstructor` | - |
+| `mpegts.NativePlayer` | `PlayerConstructor` | - |
+| `mpegts.version` | `string` | - |
+| `mpegts.createPlayer` | `Player` | - |
+| `mpegts.getFeatureList` | `FeatureList` | - |
+| `mpegts.isSupported` | `boolean` | - |
+
+#### Methods
+
+##### isMpegtsLoaded()
+
+> **isMpegtsLoaded**(): `boolean`
+
+###### Returns
+
+`boolean`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/mpegts.ts:6](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/mpegts.ts#L6)
+
+##### loadMpegtsScript()
+
+> **loadMpegtsScript**(`path`?): `Promise`\<`void`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `path`? | `string` |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/mpegts.ts:7](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/mpegts.ts#L7)
+
+***
+
+### MultiTouchFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `maxTouchPoints` | `number` |
+
+***
+
+### NetworkInformation
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `downlink` | `number` |
+| `downlinkMax` | `number` |
+| `effectiveType` | `string` |
+| `rtt` | `number` |
+| `saveData` | `boolean` |
+| `type` | [`NetworkType`](adapter.mdx#networktype) |
+
+#### Methods
+
+##### addEventListener()
+
+> **addEventListener**(`type`, `listener`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `"change"` |
+| `listener` | (`val`) => `void` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/network-information.ts:11](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/network-information.ts#L11)
+
+##### removeEventListener()
+
+> **removeEventListener**(`type`, `listener`): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `"change"` |
+| `listener` | (`val`) => `void` |
+
+###### Returns
+
+`void`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/network-information.ts:13](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/network-information.ts#L13)
+
+***
+
+### NetworkInformationFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `connection` | [`NetworkInformation`](adapter.mdx#networkinformation) |
+
+***
+
+### Performance
+
+#### Methods
+
+##### now()
+
+> **now**(): `number`
+
+###### Returns
+
+`number`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/debugging.ts:2](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/debugging.ts#L2)
+
+***
+
+### Permissions
+
+#### Methods
+
+##### query()
+
+> **query**(`permissionDesc`): `Promise`\<[`PermissionStatus`](adapter.mdx#permissionstatus)\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `permissionDesc` | `PermissionDescriptor` |
+
+###### Returns
+
+`Promise`\<[`PermissionStatus`](adapter.mdx#permissionstatus)\>
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/permissions.ts:2](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/permissions.ts#L2)
+
+***
+
+### PermissionsFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `permissions` | [`Permissions`](adapter.mdx#permissions) |
+
+***
+
+### PermissionStatus
+
+#### Extends
+
+- `EventTarget`
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `name` | `PermissionName` |
+| `state` | [`PermissionState`](adapter.mdx#permissionstate) |
+
+#### Methods
+
+##### addEventListener()
+
+> **addEventListener**\<`K`\>(`type`, `listener`, `options`?): `void`
+
+Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+
+The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+
+When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+
+When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+
+When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+
+The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"change"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`this`, `ev`) => `any` |
+| `options`? | `boolean` |
+
+###### Returns
+
+`void`
+
+###### Overrides
+
+`EventTarget.addEventListener`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/permissions.ts:44](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/permissions.ts#L44)
+
+##### dispatchEvent()
+
+> **dispatchEvent**(`event`): `boolean`
+
+Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `event` | `Event` |
+
+###### Returns
+
+`boolean`
+
+###### Inherited from
+
+`EventTarget.dispatchEvent`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:440](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L440)
+
+##### removeEventListener()
+
+> **removeEventListener**\<`K`\>(`type`, `listener`, `options`?): `void`
+
+Removes the event listener in target's event listener list with the same type, callback, and options.
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* `"change"` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `K` |
+| `listener` | (`this`, `ev`) => `any` |
+| `options`? | `boolean` |
+
+###### Returns
+
+`void`
+
+###### Overrides
+
+`EventTarget.removeEventListener`
+
+###### Defined in
+
+[video-client/core/src/api/adapter/features/permissions.ts:49](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/permissions.ts#L49)
+
+***
+
+### PermissionStatusEvent
+
+#### Extends
+
+- `Event`
+
+#### Properties
+
+| Property | Type | Description | Overrides |
+| ------ | ------ | ------ | ------ |
+| `AT_TARGET` | `number` | - | - |
+| `bubbles` | `boolean` | Returns true or false depending on how event was initialized. True if event goes through its target's ancestors in reverse tree order, and false otherwise. | - |
+| `BUBBLING_PHASE` | `number` | - | - |
+| `cancelable` | `boolean` | Returns true or false depending on how event was initialized. Its return value does not always carry meaning, but true can indicate that part of the operation during which event was dispatched, can be canceled by invoking the preventDefault() method. | - |
+| `cancelBubble` | `boolean` | - | - |
+| `CAPTURING_PHASE` | `number` | - | - |
+| `composed` | `boolean` | Returns true or false depending on how event was initialized. True if event invokes listeners past a ShadowRoot node that is the root of its target, and false otherwise. | - |
+| `currentTarget` | `null` \| `EventTarget` | Returns the object whose event listener's callback is currently being invoked. | - |
+| `defaultPrevented` | `boolean` | Returns true if preventDefault() was invoked successfully to indicate cancelation, and false otherwise. | - |
+| `eventPhase` | `number` | Returns the event's phase, which is one of NONE, CAPTURING_PHASE, AT_TARGET, and BUBBLING_PHASE. | - |
+| `isTrusted` | `boolean` | Returns true if event was dispatched by the user agent, and false otherwise. | - |
+| `NONE` | `number` | - | - |
+| `returnValue` | `boolean` | - | - |
+| ~~`srcElement`~~ | `null` \| `EventTarget` | **Deprecated** | - |
+| `target` | [`PermissionStatus`](adapter.mdx#permissionstatus) | Returns the object to which event is dispatched (its target). | `Event.target` |
+| `timeStamp` | `number` | Returns the event's timestamp as the number of milliseconds measured relative to the time origin. | - |
+| `type` | `string` | Returns the type of event, e.g. "click", "hashchange", or "submit". | - |
+
+#### Methods
+
+##### composedPath()
+
+> **composedPath**(): `EventTarget`[]
+
+Returns the invocation target objects of event's path (objects on which listeners will be invoked), except for any nodes in shadow trees of which the shadow root's mode is "closed" that are not reachable from event's currentTarget.
+
+###### Returns
+
+`EventTarget`[]
+
+###### Inherited from
+
+`Event.composedPath`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:345](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L345)
+
+##### initEvent()
+
+> **initEvent**(`type`, `bubbles`?, `cancelable`?): `void`
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `string` |
+| `bubbles`? | `boolean` |
+| `cancelable`? | `boolean` |
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`Event.initEvent`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:346](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L346)
+
+##### preventDefault()
+
+> **preventDefault**(): `void`
+
+If invoked when the cancelable attribute value is true, and while executing a listener for the event with passive set to false, signals to the operation that caused event to be dispatched that it needs to be canceled.
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`Event.preventDefault`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:350](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L350)
+
+##### stopImmediatePropagation()
+
+> **stopImmediatePropagation**(): `void`
+
+Invoking this method prevents event from reaching any registered event listeners after the current one finishes running and, when dispatched in a tree, also prevents event from reaching any other objects.
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`Event.stopImmediatePropagation`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:354](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L354)
+
+##### stopPropagation()
+
+> **stopPropagation**(): `void`
+
+When dispatched in a tree, invoking this method prevents event from reaching any objects other than the current object.
+
+###### Returns
+
+`void`
+
+###### Inherited from
+
+`Event.stopPropagation`
+
+###### Defined in
+
+[video-client/core/typings/global.d.ts:358](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/typings/global.d.ts#L358)
+
+***
+
+### ScreenOrientation
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `angle` | `number` |
+
+***
+
+### ScreenOrientationFeature
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| `screenOrientation` | [`ScreenOrientation`](adapter.mdx#screenorientation) |
+
+## Type Aliases
+
+### AudioBufferSourceNode
+
+> **AudioBufferSourceNode**: `object`
+
+#### Type declaration
+
+##### buffer
+
+> **buffer**: `any`
+
+##### loop
+
+> **loop**: `boolean`
+
+##### connect()
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `destination` | [`AudioNode`](adapter.mdx#audionode) \| [`AudioParam`](adapter.mdx#audioparam) |
+| `outputIndex`? | `number` |
+| `inputIndex`? | `number` |
+
+###### Returns
+
+[`AudioNode`](adapter.mdx#audionode)
+
+##### start()
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `when`? | `number` |
+| `offset`? | `number` |
+| `duration`? | `number` |
+
+###### Returns
+
+`void`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/audio-context.ts:43](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/audio-context.ts#L43)
+
+***
+
+### ConstrainBoolean
+
+> **ConstrainBoolean**: `boolean` \| `ConstrainBooleanParameters`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:33](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L33)
+
+***
+
+### ConstrainDOMString
+
+> **ConstrainDOMString**: `string` \| `string`[] \| `ConstrainDOMStringParameters`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:34](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L34)
+
+***
+
+### ConstrainDouble
+
+> **ConstrainDouble**: `number` \| `ConstrainDoubleRange`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:32](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L32)
+
+***
+
+### ConstrainULong
+
+> **ConstrainULong**: `number` \| `ConstrainULongRange`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:31](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L31)
+
+***
+
+### HighEntropyValues
+
+> **HighEntropyValues**: `object`
+
+#### Type declaration
+
+##### architecture
+
+> **architecture**: `string`
+
+##### bitness
+
+> **bitness**: `string`
+
+##### brands
+
+> **brands**: [`UserAgentBrand`](adapter.mdx#useragentbrand)[]
+
+##### formFactor
+
+> **formFactor**: `string`
+
+##### fullVersionList
+
+> **fullVersionList**: [`UserAgentBrand`](adapter.mdx#useragentbrand)[]
+
+##### mobile
+
+> **mobile**: `boolean`
+
+##### model
+
+> **model**: `string`
+
+##### platform
+
+> **platform**: `string`
+
+##### platformVersion
+
+> **platformVersion**: `string`
+
+##### uaFullVersion
+
+> **uaFullVersion**: `string`
+
+##### wow64
+
+> **wow64**: `boolean`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/user-agent-data-feature.ts:6](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/user-agent-data-feature.ts#L6)
+
+***
+
+### MediaDeviceKind
+
+> **MediaDeviceKind**: `"audioinput"` \| `"audiooutput"` \| `"videoinput"`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:62](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L62)
+
+***
+
+### MediaRecorderOptions
+
+> **MediaRecorderOptions**: `object`
+
+#### Type declaration
+
+##### audioBitsPerSecond?
+
+> `optional` **audioBitsPerSecond**: `number`
+
+##### bitsPerSecond?
+
+> `optional` **bitsPerSecond**: `number`
+
+##### mimeType?
+
+> `optional` **mimeType**: `string`
+
+##### videoBitsPerSecond?
+
+> `optional` **videoBitsPerSecond**: `number`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:48](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L48)
+
+***
+
+### MediaStream
+
+> **MediaStream**: `object`
+
+#### Type declaration
+
+##### addTrack()
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `track` | [`MediaStreamTrack`](adapter.mdx#mediastreamtrack) |
+
+###### Returns
+
+`void`
+
+##### getAudioTracks()
+
+###### Returns
+
+[`MediaStreamTrack`](adapter.mdx#mediastreamtrack)[]
+
+##### getTracks()
+
+###### Returns
+
+[`MediaStreamTrack`](adapter.mdx#mediastreamtrack)[]
+
+##### getVideoTracks()
+
+###### Returns
+
+[`MediaStreamTrack`](adapter.mdx#mediastreamtrack)[]
+
+##### removeTrack()
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `track` | [`MediaStreamTrack`](adapter.mdx#mediastreamtrack) |
+
+###### Returns
+
+`void`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:115](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L115)
+
+***
+
+### MediaStreamConstraints
+
+> **MediaStreamConstraints**: `object`
+
+#### Type declaration
+
+##### audio?
+
+> `optional` **audio**: `boolean` \| [`MediaTrackConstraints`](adapter.mdx#mediatrackconstraints)
+
+##### peerIdentity?
+
+> `optional` **peerIdentity**: `string`
+
+##### video?
+
+> `optional` **video**: `boolean` \| [`MediaTrackConstraints`](adapter.mdx#mediatrackconstraints)
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:30](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L30)
+
+***
+
+### MediaStreamConstructor()
+
+> **MediaStreamConstructor**: (`tracks`?) => [`MediaStream`](adapter.mdx#mediastream)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `tracks`? | [`MediaStreamTrack`](adapter.mdx#mediastreamtrack)[] |
+
+#### Returns
+
+[`MediaStream`](adapter.mdx#mediastream)
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:111](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L111)
+
+***
+
+### MediaStreamFeature
+
+> **MediaStreamFeature**: `object`
+
+#### Type declaration
+
+##### MediaStream
+
+> **MediaStream**: [`MediaStreamConstructor`](adapter.mdx#mediastreamconstructor)
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:127](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L127)
+
+***
+
+### MediaStreamTrack
+
+> **MediaStreamTrack**: `object`
+
+#### Type declaration
+
+##### enabled
+
+> **enabled**: `boolean`
+
+##### id
+
+> `readonly` **id**: `string`
+
+##### kind
+
+> `readonly` **kind**: `"video"` \| `"audio"` \| `string`
+
+##### label
+
+> **label**: `string`
+
+##### muted
+
+> `readonly` **muted**: `boolean`
+
+##### readyState
+
+> `readonly` **readyState**: [`MediaStreamTrackState`](adapter.mdx#mediastreamtrackstate)
+
+##### addEventListener()
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `"ended"` |
+| `listener` | () => `void` |
+
+###### Returns
+
+`void`
+
+##### applyConstraints()
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `constraints` | [`MediaTrackConstraints`](adapter.mdx#mediatrackconstraints) |
+
+###### Returns
+
+`Promise`\<`void`\>
+
+##### clone()
+
+###### Returns
+
+[`MediaStreamTrack`](adapter.mdx#mediastreamtrack)
+
+##### getCapabilities()
+
+###### Returns
+
+`MediaTrackCapabilities`
+
+##### getConstraints()
+
+###### Returns
+
+[`MediaTrackConstraints`](adapter.mdx#mediatrackconstraints)
+
+##### getSettings()
+
+###### Returns
+
+[`MediaTrackSettings`](adapter.mdx#mediatracksettings)
+
+##### removeEventListener()
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `"ended"` |
+| `listener` | () => `void` |
+
+###### Returns
+
+`void`
+
+##### stop()
+
+###### Returns
+
+`void`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:85](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L85)
+
+***
+
+### MediaStreamTrackState
+
+> **MediaStreamTrackState**: `"ended"` \| `"live"`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:83](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L83)
+
+***
+
+### MediaTrackConstraints
+
+> **MediaTrackConstraints**: `object`
+
+#### Type declaration
+
+##### aspectRatio?
+
+> `optional` **aspectRatio**: [`ConstrainDouble`](adapter.mdx#constraindouble)
+
+##### autoGainControl?
+
+> `optional` **autoGainControl**: [`ConstrainBoolean`](adapter.mdx#constrainboolean)
+
+##### channelCount?
+
+> `optional` **channelCount**: [`ConstrainULong`](adapter.mdx#constrainulong)
+
+##### deviceId?
+
+> `optional` **deviceId**: [`ConstrainDOMString`](adapter.mdx#constraindomstring)
+
+##### echoCancellation?
+
+> `optional` **echoCancellation**: [`ConstrainBoolean`](adapter.mdx#constrainboolean)
+
+##### facingMode?
+
+> `optional` **facingMode**: [`ConstrainDOMString`](adapter.mdx#constraindomstring)
+
+##### frameRate?
+
+> `optional` **frameRate**: [`ConstrainDouble`](adapter.mdx#constraindouble)
+
+##### groupId?
+
+> `optional` **groupId**: [`ConstrainDOMString`](adapter.mdx#constraindomstring)
+
+##### height?
+
+> `optional` **height**: [`ConstrainULong`](adapter.mdx#constrainulong)
+
+##### latency?
+
+> `optional` **latency**: [`ConstrainDouble`](adapter.mdx#constraindouble)
+
+##### noiseSuppression?
+
+> `optional` **noiseSuppression**: [`ConstrainBoolean`](adapter.mdx#constrainboolean)
+
+##### resizeMode?
+
+> `optional` **resizeMode**: [`ConstrainDOMString`](adapter.mdx#constraindomstring)
+
+##### sampleRate?
+
+> `optional` **sampleRate**: [`ConstrainULong`](adapter.mdx#constrainulong)
+
+##### sampleSize?
+
+> `optional` **sampleSize**: [`ConstrainULong`](adapter.mdx#constrainulong)
+
+##### width?
+
+> `optional` **width**: [`ConstrainULong`](adapter.mdx#constrainulong)
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:47](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L47)
+
+***
+
+### MediaTrackSettings
+
+> **MediaTrackSettings**: `object`
+
+#### Type declaration
+
+##### aspectRatio?
+
+> `optional` **aspectRatio**: `number`
+
+##### autoGainControl?
+
+> `optional` **autoGainControl**: `boolean`
+
+##### channelCount?
+
+> `optional` **channelCount**: `number`
+
+##### deviceId?
+
+> `optional` **deviceId**: `string`
+
+##### echoCancellation?
+
+> `optional` **echoCancellation**: `boolean`
+
+##### facingMode?
+
+> `optional` **facingMode**: `string`
+
+##### frameRate?
+
+> `optional` **frameRate**: `number`
+
+##### groupId?
+
+> `optional` **groupId**: `string`
+
+##### height?
+
+> `optional` **height**: `number`
+
+##### latency?
+
+> `optional` **latency**: `number`
+
+##### noiseSuppression?
+
+> `optional` **noiseSuppression**: `boolean`
+
+##### resizeMode?
+
+> `optional` **resizeMode**: `string`
+
+##### sampleRate?
+
+> `optional` **sampleRate**: `number`
+
+##### sampleSize?
+
+> `optional` **sampleSize**: `number`
+
+##### width?
+
+> `optional` **width**: `number`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-stream.ts:65](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-stream.ts#L65)
+
+***
+
+### NavigatorUAData
+
+> **NavigatorUAData**: `object`
+
+#### Type declaration
+
+##### brands
+
+> **brands**: [`UserAgentBrand`](adapter.mdx#useragentbrand)[]
+
+##### mobile
+
+> **mobile**: `boolean`
+
+##### platform
+
+> **platform**: `string`
+
+##### getHighEntropyValues()
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `hints` | `string`[] |
+
+###### Returns
+
+`Promise`\<`Partial`\<[`HighEntropyValues`](adapter.mdx#highentropyvalues)\>\>
+
+##### toJSON()
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `data` | [`NavigatorUAData`](adapter.mdx#navigatoruadata) |
+
+###### Returns
+
+`JSON`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/user-agent-data-feature.ts:19](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/user-agent-data-feature.ts#L19)
+
+***
+
+### NetworkType
+
+> **NetworkType**: `"bluetooth"` \| `"cellular"` \| `"ethernet"` \| `"none"` \| `"wifi"` \| `"wimax"` \| `"other"` \| `"unknown"`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/network-information.ts:1](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/network-information.ts#L1)
+
+***
+
+### PermissionState
+
+> **PermissionState**: `"denied"` \| `"granted"` \| `"prompt"`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/permissions.ts:31](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/permissions.ts#L31)
+
+***
+
+### RecordingState
+
+> **RecordingState**: `"inactive"` \| `"paused"` \| `"recording"`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:3](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L3)
+
+***
+
+### RTCIceServer
+
+> **RTCIceServer**: `unknown`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:4](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L4)
+
+***
+
+### RTCIceTransportPolicy
+
+> **RTCIceTransportPolicy**: `"all"` \| `"relay"`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:65](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L65)
+
+***
+
+### RTCPeerConnectionState
+
+> **RTCPeerConnectionState**: `"closed"` \| `"connected"` \| `"connecting"` \| `"disconnected"` \| `"failed"` \| `"new"`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:64](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L64)
+
+***
+
+### SaveFilePickerOptions
+
+> **SaveFilePickerOptions**: `object`
+
+#### Type declaration
+
+##### excludeAcceptAllOption?
+
+> `optional` **excludeAcceptAllOption**: `boolean`
+
+##### suggestedName?
+
+> `optional` **suggestedName**: `string`
+
+##### types?
+
+> `optional` **types**: `object`[]
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:61](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L61)
+
+***
+
+### TransportDirection
+
+> **TransportDirection**: `"send"` \| `"recv"`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-device.ts:63](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-device.ts#L63)
+
+***
+
+### UserAgentBrand
+
+> **UserAgentBrand**: `object`
+
+#### Type declaration
+
+##### brand
+
+> **brand**: `string`
+
+##### version
+
+> **version**: `string`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/user-agent-data-feature.ts:1](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/user-agent-data-feature.ts#L1)
+
+***
+
+### UserAgentDataFeature
+
+> **UserAgentDataFeature**: `object`
+
+#### Type declaration
+
+##### highEntropyValues
+
+> **highEntropyValues**: `Partial`\<[`HighEntropyValues`](adapter.mdx#highentropyvalues)\> \| `null`
+
+##### userAgentData
+
+> `readonly` **userAgentData**: [`NavigatorUAData`](adapter.mdx#navigatoruadata)
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/user-agent-data-feature.ts:27](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/user-agent-data-feature.ts#L27)
+
+***
+
+### WriteDataObject
+
+> **WriteDataObject**: `object`
+
+#### Type declaration
+
+##### data
+
+> **data**: `Blob`
+
+##### position
+
+> **position**: `number`
+
+##### size
+
+> **size**: `number`
+
+##### type
+
+> **type**: `"write"` \| `"seek"` \| `"truncate"`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/features/media-recorder.ts:67](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/features/media-recorder.ts#L67)
+
+## Variables
+
+### device
+
+> **device**: [`DeviceAPI`](types.mdx#deviceapi)
+
+#### Defined in
+
+[video-client/core/src/api/adapter/index.ts:9](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/index.ts#L9)
+
+***
+
+### onceDeviceReady
+
+> `const` **onceDeviceReady**: `Promise`\<[`DeviceAPI`](types.mdx#deviceapi)\>
+
+#### Defined in
+
+[video-client/core/src/api/adapter/index.ts:12](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/index.ts#L12)
+
+## Functions
+
+### implement()
+
+> **implement**(`_device`): `void`
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `_device` | [`DeviceAPI`](types.mdx#deviceapi) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[video-client/core/src/api/adapter/index.ts:16](https://github.com/LivelyVideo/video-client/blob/4796cb39c4d2d36c10a774df7b85b98734dc1a3b/core/src/api/adapter/index.ts#L16)

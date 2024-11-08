@@ -38,7 +38,10 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.5.0",
     "cross-env": "^7.0.3",
+    "docusaurus-plugin-typedoc":"^1.0.5",
     "ts-node": "^10.9.2",
+    "typedoc": "^0.26.11",
+    "typedoc-plugin-markdown": "^4.2.10",
     "typescript": "~5.5.2"
   },
   "browserslist": {
