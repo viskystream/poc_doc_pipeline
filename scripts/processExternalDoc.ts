@@ -91,7 +91,7 @@ async function processExternalDoc(request: ExternalDocRequest): Promise<string> 
         // Save updated config
         await fs.writeFile(configPath, yaml.dump(config, { indent: 2 }));
         // Create template using Anthropic API
-        const apiKey = process.env.ANTHROPIC_API_KEY || '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';
+        const apiKey = process.env.ANTHROPIC_API_KEY;
         if (!apiKey) {
             throw new Error('ANTHROPIC_API_KEY environment variable must be set');
         }

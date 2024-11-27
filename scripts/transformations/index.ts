@@ -9,7 +9,7 @@ export abstract class Transformation {
 export class ProofreadTransformation extends Transformation {
     async transform(content: string): Promise<TransformationResult> {
         const anthropic = new Anthropic({
-            apiKey: process.env.ANTHROPIC_API_KEY || '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'
+            apiKey: process.env.ANTHROPIC_API_KEY,
         });
 
         const response = await anthropic.messages.create({

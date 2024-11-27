@@ -134,7 +134,7 @@ if (require.main === module) {
     const action = process.argv[2];
     if (action === 'create-templates') {
         const inputDir = process.argv[3] || 'input-docs';
-        const apiKey = process.env.ANTHROPIC_API_KEY || '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';
+        const apiKey = process.env.ANTHROPIC_API_KEY;
         const vendor = process.env.VENDOR || 'LivelyVideo';
         const company = process.env.COMPANY || 'lively';
 
