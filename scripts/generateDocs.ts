@@ -1,142 +1,199 @@
 import fs from 'fs-extra';
 import path from 'path';
 import yaml from 'js-yaml';
-
-interface Placeholder {
-    [key: string]: string;
-  }
-  
-  interface Product {
-    name: string;
-    template: string;
-    placeholders: Placeholder;
-  }
-  
-  interface Company {
-    name: string;
-    website: string;
-    email: string;
-    products: Product[];
-  }
-  
-  interface Config {
-    [vendor: string]: {
-      [company: string]: Company;
-    };
-  }
-
-  interface ProcessContext {
-    companyConfig: Company;
-    product: Product;
-    isInternal: boolean;
-  }
-
-  abstract class TransformationStep {
-    abstract transform(content: string, context: ProcessContext): Promise<string>;
-}
-
-class PlaceholderReplacement extends TransformationStep {
-    async transform(content: string, context: ProcessContext): Promise<string> {
-        const placeholders: { [key: string]: string } = {
-            COMPANY_NAME: context.companyConfig.name,
-            COMPANY_WEBSITE: context.companyConfig.website,
-            COMPANY_EMAIL: context.companyConfig.email,
-            PRODUCT_NAME: context.product.name,
-            ...context.product.placeholders
-        };
-        return content.replace(/\{\{(\w+)\}\}/g, (match, placeholder) => {
-            return placeholders[placeholder] || match;
-        });
-    }
-}
-
-class InternalContentFilter extends TransformationStep {
-    async transform(content: string, context: ProcessContext): Promise<string> {
-        if (context.isInternal) {
-            return content.replace(/<!-- INTERNAL_START -->|<!-- INTERNAL_END -->/g, '');
-        }
-        return content.replace(/<!-- INTERNAL_START -->[\s\S]*?<!-- INTERNAL_END -->/g, '');
-    }
-}
-
-class DocumentProcessor {
-    private steps: TransformationStep[] = [];
-
-    addStep(step: TransformationStep) {
-        this.steps.push(step);
-    }
-
-    async process(content: string, context: ProcessContext): Promise<string> {
-        for (const step of this.steps) {
-            content = await step.transform(content, context);
-        }
-        return content;
-    }
-}
+import { Config, Company, Product } from './types';
+import { getTransformation } from './transformations/registry';
 
 async function generateDocs() {
     const config = yaml.load(await fs.readFile('config/companies.yaml', 'utf8')) as Config;
-    const vendor = process.env.VENDOR;
-    const company = process.env.COMPANY;
-    const isInternal = process.env.GENERATE_INTERNAL === 'true';
+    
+    for (const [vendor, vendorConfig] of Object.entries(config)) {
+        for (const [company, companyConfig] of Object.entries(vendorConfig)) {
+            const docsDir = path.join('docs', vendor, company.toLowerCase());
+            await fs.ensureDir(docsDir);
+            
+            // Build nested sidebar structure
+            const sidebarCategory = {
+                type: 'category',
+                label: company,
+                items: [] as any[]
+            };
+            
+            const filesByFolder: { [key: string]: any[] } = { '.': [] };
 
-    if (!vendor || !company) {
-        console.error('VENDOR and COMPANY environment variables must be set');
-        process.exit(1);
-    }
+            for (const product of companyConfig.products) {
+                let content: string;
+                let outputPath: string;
+                const warnings: string[] = [];
+                const errors: string[] = [];
+                
+                try {
+                    if (product.template) {
+                        // Handle templated content
+                        content = await fs.readFile(
+                            path.join('templates', product.template),
+                            'utf8'
+                        );
+                        content = await processTemplatedContent(content, companyConfig, product);
+                        outputPath = path.join(docsDir, product.template);
+                    } else {
+                        if (!product.source) {
+                            throw new Error(`No source specified for product ${product.name}`);
+                        }
+                        // Handle non-templated content
+                        content = await fs.readFile(
+                            path.join('input-docs', vendor, company, path.basename(product.source)),
+                            'utf8'
+                        );
+                        const result = await processNonTemplatedContent(content, product);
+                        content = result.content;
+                        if (result.warnings) warnings.push(...result.warnings);
+                        if (result.errors) errors.push(...result.errors);
+                        outputPath = path.join(docsDir, path.basename(product.source));
+                    }
 
-    const companyConfig = config[vendor]?.[company];
-    if (!companyConfig) {
-        console.error(`Configuration not found for vendor ${vendor} and company ${company}`);
-        process.exit(1);
-    }
+                    // Apply internal content filter to all content
+                    const internalTransform = getTransformation('internal-content');
+                    if (internalTransform) {
+                        const result = await internalTransform.transform(content);
+                        content = result.content;
+                    }
 
-    const docsDir = path.join('docs', vendor, company.toLowerCase());
-    await fs.ensureDir(docsDir);
+                    // Write to Docusaurus structure
+                    await fs.outputFile(outputPath, content);
 
-    const sidebarItems = [];
+                    // Log any issues
+                    if (warnings.length > 0) {
+                        console.warn(`Warnings for ${product.name}:`, warnings);
+                    }
+                    if (errors.length > 0) {
+                        console.error(`Errors for ${product.name}:`, errors);
+                    }
 
-    // Create and configure the document processor
-    const processor = new DocumentProcessor();
-    processor.addStep(new PlaceholderReplacement());
-    processor.addStep(new InternalContentFilter());
+                } catch (error) {
+                    console.error(`Error processing ${product.name}:`, error);
+                }
+            }
+            // Build sidebar structure by walking through the docs directory
+            const getAllFiles = async (dir: string): Promise<string[]> => {
+                const dirents = await fs.readdir(dir, { withFileTypes: true });
+                const files = await Promise.all(dirents.map(async (dirent) => {
+                    const res = path.join(dir, dirent.name);
+                    return dirent.isDirectory() ? getAllFiles(res) : res;
+                }));
+                return files.flat();
+            };
+            
+            const allFiles = await getAllFiles(docsDir);
+            
+            for (const file of allFiles) {
+                if (file.endsWith('.md') || file.endsWith('.mdx')) {
+                    const relPath = path.relative(docsDir, file);
+                    const dirName = path.dirname(relPath);
+                    console.log('Processing file:', file, 'in directory:', dirName, 'relative path:', relPath, 'docsDir:', docsDir);
+                    const docId = `${vendor}/${company.toLowerCase()}/${relPath.replace(/\.[^/.]+$/, '')}`;
+                    
+                    if (dirName !== '.') {
+                        if (!filesByFolder[dirName]) {
+                            filesByFolder[dirName] = [];
+                        }
+                        filesByFolder[dirName].push(docId);
+                    } else {
+                        filesByFolder['.'].push(docId);
+                    }
+                }
+            }
+            // Build nested sidebar structure
+            for (const [folder, files] of Object.entries(filesByFolder)) {
+                if (folder === '.') {
+                    sidebarCategory.items.push(...files);
+                } else {
+                    sidebarCategory.items.push({
+                        type: 'category',
+                        label: folder,
+                        items: files
+                    });
+                }
+            }
+            // Generate sidebar configuration
+            const sidebarConfig = {
+                [`${vendor}${company}Sidebar`]: [sidebarCategory]
+            };
 
-    for (const product of companyConfig.products) {
-        const templateContent = await fs.readFile(`templates/${product.template}`, 'utf8');
-        const filledContent = await processor.process(templateContent, {
-            companyConfig,
-            product,
-            isInternal
-        });
-
-        const fileName = `${path.parse(product.template).name.toLowerCase().replace(/ /g, '-')}.mdx`;
-        const outputPath = path.join(docsDir, fileName);
-        await fs.outputFile(outputPath, filledContent);
-        console.log(`Generated: ${outputPath}`);
-
-        sidebarItems.push(`${vendor}/${company.toLowerCase()}/${fileName.replace('.mdx', '')}`);
-    }
-
-    // Generate sidebar configuration file
-    const sidebarConfig = {
-        [`${vendor}${company}Sidebar`]: sidebarItems,
-    };
-
-    const sidebarPath = path.join('sidebars', `${vendor}-${company}.ts`);
-    await fs.outputFile(
-        sidebarPath,
-        `module.exports = ${JSON.stringify(sidebarConfig, null, 2)};`
-    );
-    console.log(`Generated sidebar configuration: ${sidebarPath}`);
-
-    // Create an empty custom.css file if it doesn't exist
-    const customCssDir = path.join('src', 'css', vendor, company.toLowerCase());
-    const customCssPath = path.join(customCssDir, 'custom.css');
-    await fs.ensureDir(customCssDir);
-    if (!await fs.pathExists(customCssPath)) {
-        await fs.writeFile(customCssPath, '/* Custom styles */\n');
-        console.log(`Created empty custom CSS: ${customCssPath}`);
+            const sidebarPath = path.join('sidebars', `${vendor}-${company}.ts`);
+            console.log(`Attempting to write sidebar file to: ${sidebarPath}`);
+            try {
+                await fs.outputFile(
+                    sidebarPath,
+                    `module.exports = ${JSON.stringify(sidebarConfig, null, 2)};`
+                );
+                console.log(`Successfully wrote sidebar file to: ${sidebarPath}`);
+            } catch (error) {
+                console.error(`Failed to write sidebar file: ${error}`);
+                throw error; // Re-throw to be caught by outer try-catch
+            }
+        }
     }
 }
 
-generateDocs().catch(console.error);
+async function processTemplatedContent(
+    content: string,
+    companyConfig: Company,
+    product: Product
+): Promise<string> {
+    let processedContent = content;
+
+    // Replace placeholders
+    if (product.placeholders) {
+        for (const [key, value] of Object.entries(product.placeholders)) {
+            const placeholder = `{{${key}}}`;
+            processedContent = processedContent.replace(new RegExp(placeholder, 'g'), value);
+        }
+    }
+
+    return processedContent;
+}
+
+async function processNonTemplatedContent(
+    content: string,
+    product: Product
+): Promise<{ content: string; warnings?: string[]; errors?: string[] }> {
+    let processedContent = content;
+    const warnings: string[] = [];
+    const errors: string[] = [];
+
+    if (!product.transformations) {
+        return { content: processedContent };
+    }
+
+    // Apply each transformation in sequence
+    for (const transform of product.transformations) {
+        const transformer = getTransformation(transform.name, transform.config);
+        if (transformer) {
+            const result = await transformer.transform(processedContent);
+            processedContent = result.content;
+            if (result.warnings) warnings.push(...result.warnings);
+            if (result.errors) errors.push(...result.errors);
+        }
+    }
+
+    return {
+        content: processedContent,
+        warnings,
+        errors
+    };
+}
+
+// CLI interface
+if (require.main === module) {
+    generateDocs()
+        .then(() => {
+            console.log('Documentation generation completed successfully');
+        })
+        .catch(error => {
+            console.error('Error generating documentation:', error);
+            process.exit(1);
+        });
+}
+
+export { generateDocs };

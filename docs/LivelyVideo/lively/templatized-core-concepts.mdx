@@ -4,7 +4,7 @@
 route: /basic-operator-integration/video-client/core-concepts
 pageTitle: Core Concepts
 kind: concept
-uuid: f4bc7c47-5dc2-4105-bf11-9eebbe83e44d
+uuid: ea3178ec-219f-4d7f-9ea2-fe3d95868bbe
 ---
 
 ## How do I listen for a specific stats value?
@@ -66,7 +66,7 @@ import { LoggerGlobal } from "@video/log-client";
 
 const yourLogger = new LoggerGlobal();
 yourLogger.setOptions({
-  host: https://yourEndpoint,
+  host: yourEndpoint,
   interval: 5000, // This refers to the interval in which your logs will be sent, 5000 === 5000 Milliseconds.
   level: "debug", // Please refer to the list below for the available levels.
 });
@@ -81,7 +81,7 @@ Now that you have your global logger setup you can begin creating loggers using 
 ```ts
 import LoggerCore from "@video/log-client";
 //Create our new logger
-const logger = new LoggerCore("log");
+const logger = new LoggerCore("yourLogger");
 
 //Lets set some meta and aggregates for our logger
 logger.setLoggerMeta("component", "logger1");
