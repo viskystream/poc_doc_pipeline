@@ -1,5 +1,12 @@
 module.exports = {
   "vendor2company_bSidebar": [
-    "vendor2/company_b/product-template"
+    {
+      "type": "category",
+      "label": "company_b",
+      "items": [
+        "vendor2/company_b/product-template",
+        "vendor2/company_b/service-z"
+      ]
+    }
   ]
 };

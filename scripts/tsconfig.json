@@ -3,6 +3,7 @@
         "target": "ES2018",
         "module": "commonjs",
         "lib": [
+            "ES2020", "DOM",
             "es2018"
         ],
         "strict": true,
@@ -10,15 +11,17 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "outDir": "../dist",
-        "typeRoots": [
-            "../node_modules/@types"
-        ],
-        "types": [
-            "node",
-            "js-yaml"
-        ]
+        "rootDir": ".",
+        "resolveJsonModule": true,
+        "paths": {
+        "*": ["../node_modules/*"]
+        }
     },
     "include": [
         "./**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.test.ts"
     ]
 }

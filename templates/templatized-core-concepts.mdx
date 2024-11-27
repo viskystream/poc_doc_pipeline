@@ -1,10 +1,10 @@
 # core-concepts
 
 ---
-route: /basic-operator-integration/video-client/core-concepts
-pageTitle: Core Concepts
-kind: concept
-uuid: {{UUID}}
+route: {{ROUTE_PATH}}
+pageTitle: {{PAGE_TITLE}}
+kind: {{DOC_KIND}}
+uuid: {{DOC_UUID}}
 ---
 
 ## How do I listen for a specific stats value?
@@ -49,7 +49,7 @@ Example of listening to `videoOutboundBitrate` and performing an action when the
 
 ```js
 call.pvcCall.on('webrtc-stats', (data) => {
-  if (data.videoOutboundBitrate <= 4000000) {
+  if (data.videoOutboundBitrate <= {{BITRATE_THRESHOLD}}) {
     // Do something useful
   }
 }));
@@ -62,41 +62,41 @@ Sending Video Client logs to your environment's backend is important for helping
 First, create your new `LoggerGlobal` and set the options you would like (Note: This should only be done once per application!):
 
 ```ts
-import { LoggerGlobal } from "@video/log-client";
+import { LoggerGlobal } from "{{LOGGER_PACKAGE}}";
 
 const yourLogger = new LoggerGlobal();
 yourLogger.setOptions({
-  host: {{YOUR_ENDPOINT}},
-  interval: 5000, // This refers to the interval in which your logs will be sent, 5000 === 5000 Milliseconds.
-  level: "debug", // Please refer to the list below for the available levels.
+  host: {{HOST_VARIABLE}},
+  interval: {{INTERVAL_MS}}, // This refers to the interval in which your logs will be sent, 5000 === 5000 Milliseconds.
+  level: "{{LOG_LEVEL}}", // Please refer to the list below for the available levels.
 });
 
 // Here you can also add some Global Aggregate and Meta
-yourLogger.setGlobalAggregate("baz", "qux");
-yourLogger.setGlobalMeta("logId", "logIdOverride");
+yourLogger.setGlobalAggregate("{{AGGREGATE_KEY}}", "{{AGGREGATE_VALUE}}");
+yourLogger.setGlobalMeta("{{META_KEY}}", "{{META_VALUE}}");
 ```
 
 Now that you have your global logger setup you can begin creating loggers using `LoggerCore`. As opposed to your `LoggerGlobal` multiple `LoggerCore` can be created.
 
 ```ts
-import LoggerCore from "@video/log-client";
+import LoggerCore from "{{LOGGER_PACKAGE}}";
 //Create our new logger
 const logger = new LoggerCore("{{LOGGER_NAME}}");
 
 //Lets set some meta and aggregates for our logger
-logger.setLoggerMeta("component", "logger1");
+logger.setLoggerMeta("{{COMPONENT_KEY}}", "{{COMPONENT_VALUE}}");
 //This aggregate will be attached to the full payload of your logs when writing to the server, this is the preferred usage of an aggregate but does not offer as tight of control.
-logger.setLoggerAggregate("message", "myMessage");
+logger.setLoggerAggregate("{{MESSAGE_KEY}}", "{{MESSAGE_VALUE}}");
 //This aggregate will be applied to every message, this is not the preffered usage of an aggregate but does allow for tight control over addition/removal of aggregates.
-logger.setMessageAggregate("message", "myMessage");
+logger.setMessageAggregate("{{MESSAGE_KEY}}", "{{MESSAGE_VALUE}}");
 
 // Now that we have our Logger and all of it's aggregates and meta that we want set we can start logging.
-logger.warn("logging a warning", {
-  warning: "my warning",
+logger.warn("{{WARNING_MESSAGE}}", {
+  warning: "{{WARNING_CONTENT}}",
 });
 
-logger.debug("logging a debug", {
-  debug: "my debug",
+logger.debug("{{DEBUG_MESSAGE}}", {
+  debug: "{{DEBUG_CONTENT}}",
 });
 ```
 
@@ -131,4 +131,4 @@ const LEVELS = [
 ];
 ```
 
-{{FEEDBACK_PLACEHOLDER}}
+feedback
